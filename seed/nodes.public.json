@@ -1,0 +1,17 @@
+{
+  "_origin": "public",
+  "_license": "本项目自行整理的公开地理实体名称与层级关系，不含第三方数据集内容；许可随本仓库（仓库尚未选定许可证）；ISO 3166 编码仅作标识引用",
+  "_version": 1,
+  "_stamp": "2026-11-10T00:00:00Z",
+  "_note": "M0 最小种子，仅用于跑通导入与校验；两条深度不同的通用示例路径（中国→陕西省→西安市→未央区；法国止于国家）只表达层级深度，不记录任何关注偏好。其余大洲与底图在 M3 补充。path 由导入器按父链计算，不在此文件中书写。",
+  "nodes": [
+    { "id": "geo.world",  "parent_id": null,        "realm": "geo", "kind": "world",     "name": "世界",   "sort_order": 0 },
+    { "id": "geo.asia",   "parent_id": "geo.world", "realm": "geo", "kind": "continent", "name": "亚洲",   "sort_order": 10 },
+    { "id": "geo.europe", "parent_id": "geo.world", "realm": "geo", "kind": "continent", "name": "欧洲",   "sort_order": 20 },
+    { "id": "geo.cn",     "parent_id": "geo.asia",  "realm": "geo", "kind": "country",   "name": "中国",   "code": "CN",    "sort_order": 0 },
+    { "id": "geo.cn-sn",  "parent_id": "geo.cn",    "realm": "geo", "kind": "admin1",    "name": "陕西省", "code": "CN-SN", "sort_order": 0 },
+    { "id": "geo.cn-sn-xa", "parent_id": "geo.cn-sn", "realm": "geo", "kind": "city",     "name": "西安市", "sort_order": 0 },
+    { "id": "geo.cn-sn-xa-wy", "parent_id": "geo.cn-sn-xa", "realm": "geo", "kind": "district", "name": "未央区", "sort_order": 0 },
+    { "id": "geo.fr",     "parent_id": "geo.europe", "realm": "geo", "kind": "country",  "name": "法国",   "code": "FR",    "sort_order": 0 }
+  ]
+}
