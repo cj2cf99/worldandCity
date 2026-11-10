@@ -1,0 +1,30 @@
+# 公开仓库：禁止提交个人数据和私密数据（见 README.md）
+
+# 凭据与密钥
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.dev.vars
+secrets/
+
+# 私有运行数据、数据库、备份与导出
+private/
+data/private/
+*.db
+*.sqlite
+*.sqlite3
+backup/
+backups/
+export/
+exports/
+*.bak
+
+# 个人上传的图片与附件
+uploads/
+
+# 日志与本地环境
+*.log
+node_modules/
+.wrangler/
