@@ -66,7 +66,7 @@ flowchart LR
 - 本地用 Node 内置 `node:sqlite`，由本项目**自行实现**一层与 D1 同形的薄封装（`prepare / bind / all / first / run / batch`），并按编号顺序执行迁移。
 - 不引用、不复制其他项目的代码或数据文件；开发库是本项目**新建的空库**。
 - 开发库入 git，因此使用 `journal_mode=DELETE`，让写入落在单一主文件。
-- 本地 SQLite 与 D1 的 SQLite 版本、编译选项可能不同，涉及 FTS5、触发器、`json_*` 函数时先做 §13 验证。
+- 本地 SQLite 与 D1 的 SQLite 版本、编译选项可能不同，涉及触发器、`json_*` 函数时先做 §13 验证（FTS5 仅为可选升级）。
 
 ---
 
@@ -78,7 +78,7 @@ flowchart LR
 worldAndcity/
 ├── README.md                   # 含公开仓库声明
 ├── docs/                       # 需求、设计、决策记录
-├── migrations/                 # NNNN_*.sql，表结构，无数据
+├── migrations/                 # wc_NNNN_*.sql，表结构，无数据
 ├── seed/                       # 公开通用种子（L1）
 │   ├── nodes.public.json       #   世界、大洲，及两条深度不同的通用示例路径（中国→陕西省→西安市→未央区；法国）
 │   ├── categories.json         #   一级四类、二级起始集合
@@ -255,7 +255,7 @@ erDiagram
 | `pinned_at` | |
 
 - **【决定】置顶名额按节点计**：每个节点最多 5 条置顶（触发器保证）；满额时拒绝并返回 `E_PIN_LIMIT`，不替换（PRD §10）。
-- **祖先视图【暂定 Q14】**：先显示该节点自己的置顶；名额有余再按 `pinned_at` 补入后代节点的置顶，总数仍 ≤ 5（PRD §7.2、§10 "跨层展示去重"）。详见 §7.4。
+- **祖先视图（Q14 已确认）**：先显示该节点自己的置顶；名额有余再按 `pinned_at` 补入后代节点的置顶，总数仍 ≤ 5（PRD §7.2、§10 "跨层展示去重"）。详见 §7.4。
 
 #### `wc_node_links`
 
@@ -290,7 +290,7 @@ PRD 只强制两项数量约束必须在保存端验证：**历史最多 3 个�
 
 触发器抛出的消息以错误码开头，Worker 解析后映射为统一错误响应。迁移文件包含触发器定义，本地开发库、内存测试库与线上 D1 使用同一份。【验证 S2：D1 与本地均支持触发器及 `RAISE`】
 
-展示层防循环：关联展开使用 `visited` 集合，跳数上限 3，节点上限 50（FR-L4）。
+展示层防循环：关联展开由客户端逐跳进行，使用 `visited` 集合，已展开的节点不再展开（FR-L4）；服务端只返回一跳。
 
 ### 4.4 索引（只为真实查询建立）
 
@@ -355,7 +355,7 @@ PRD 只强制两项数量约束必须在保存端验证：**历史最多 3 个�
 
 ### 4.8 Free 计划额度预算（Q9 已确认：Workers Free）
 
-单人使用下，**日常读写远低于上限**，结论与用户判断一致。但 Free 有几项限制与日常用量无关，会直接影响某些功能的**实现方式**，需在设计中提前规避。数值取自 Cloudflare 官方文档（2026-10-29／30 更新），上线前再核对一次。
+单人使用下，**日常读写远低于上限**，结论与用户判断一致。但 Free 有几项限制与日常用量无关，会直接影响某些功能的**实现方式**，需在设计中提前规避。数值取自 Cloudflare 官方文档（2026-10-29／30 更新），仅作设计约束参考，不做额度实测（T2）。
 
 | 资源 | Free 限制 | 单人日常用量 | 判断 |
 |---|---|---|---|
@@ -395,7 +395,7 @@ PRD 只强制两项数量约束必须在保存端验证：**历史最多 3 个�
 | `region` | `{ref: {code?, node_id?, dataset?}, text}` | 至少给出 `ref` 或 `raw_location` 之一；**不写入坐标** |
 | `point` | `{lon, lat}` | 范围合法 |
 | `radius` | `{lon, lat, radius_m}` | `radius_m > 0` 且 ≤ 上限（建议 2×10⁷） |
-| `line` | `{coords: [[lon,lat],…]}` | ≥ 2 点；点数超阈值走 `geometry_ref` |
+| `line` | `{coords: [[lon,lat],…]}` | ≥ 2 点；总大小受内联 64 KB 上限约束，超出拒绝 |
 | `polygon` | `{rings: [[[lon,lat],…],…]}` | 环闭合、≥ 4 点、外环＋洞；相邻点经度差 > 180 视为跨经线需拆分 |
 
 - **服务端不做地理编码**。任何时候只保存用户（或来源）提供的坐标；"某岛国东北部"只能是 `region` ＋ 原文（PRD §0-11、§7.4.2）。
@@ -424,8 +424,8 @@ flowchart TD
   E -- 是 --> F[按 code 匹配已配置节点]
   F -- 命中 --> D
   F -- 未命中 --> G[沿 code 的上级回退到已有祖先]
-  E -- 否 --> H[attach_status=none，仅按 bbox 可见]
-  G --> I[fallback 或 root]
+  E -- 否 --> H[node_id 为空＝未挂靠，仅按 bbox 可见]
+  G --> I[attach_status=fallback，最差挂地球根]
   D --> J[计算 bbox 与可选 anchor]
   I --> J
   H --> J
@@ -449,7 +449,7 @@ flowchart TD
 - 人物与地点（PRD §8.1）与其他内容同走此接口：有几何则按几何呈现；只绑定节点而无几何的，以其挂靠节点的区域级标记呈现，并保持"位置示意"语义。
 - 服务端先用 bbox 与时效过滤，再 `GROUP BY item_id` 去重（FR-A10 多国新闻只占一个名额）。
 - 超过 `limit`（默认 300）时返回**网格聚合计数**（按 zoom 决定的网格）而非全部候选，并带 `truncated: true`；客户端据此显示聚合标记，放大后再取明细。
-- 响应只含摘要和几何的轻量版；`line/polygon` 大几何仅在被点开或进入近景时按 `geometry_ref` 单独获取。
+- 响应只含摘要和几何的轻量版；完整几何在点开某条内容时随 `GET /items/{id}` 取得（`geometry_ref` 大几何首版后置，复审 M15）。
 
 ### 5.6 底图与节点的映射
 
@@ -485,7 +485,7 @@ flowchart TD
 
 - 基路径 `/api/v1`，JSON，UTF-8。
 - **全部端点需鉴权**（§9）。非 `GET` 要求 `Origin` 与 `PUBLIC_ORIGIN` 一致。
-- 响应缓存：含私有数据的响应一律 `Cache-Control: private`；带 `ETag`，客户端可 `If-None-Match`。
+- 响应缓存：含私有数据的响应一律 `Cache-Control: private`；不做服务端 `ETag`（单用户，复审 R2-M1）。
 - 分页：游标式 `cursor` ＋ `limit`（默认 20，上限 100）。
 - 错误格式：`{"error": {"code": "E_…", "message": "…", "details": {…}}}`。日志**不记录** `message` 中的用户正文。
 - 幂等：客户端生成 ULID 作为 `id`，重复提交由主键冲突识别并返回已存在资源；不另设 `Idempotency-Key`（复审 M4）。
@@ -509,14 +509,14 @@ flowchart TD
 | 内容 | `POST /items`、`GET /items/{id}`、`PATCH /items/{id}`、`DELETE /items/{id}` | 硬删除（§7.7） | P3 |
 | | `PUT /items/{id}/locations/{loc_id}`、`DELETE …` | 位置写入（§5.3） | P2 |
 | | `POST /items/{id}/relations`、`DELETE /relations/{id}` | 关系；触发器兜底（§4.3） | P3 |
-| | `GET /items/{id}/related?depth≤3` | 关联展开，带 visited 防环 | P3 |
-| | `GET /items/lookup?q&type&from&to&node&cursor` | 关联时的条件检索（分页，FR-L5） | P3 |
+| | `GET /items/{id}/related` | 直接关联（仅一跳，双向）；多跳展开由客户端逐跳点击，带 visited 防环（复审 R2-M2） | P3 |
+| | `GET /items/lookup?q&type&from&to&node&object&cursor` | 关联时的条件检索（分页，FR-L5） | P3 |
 | 分类 | `GET /categories`、`POST /categories`（仅二级）、`PUT /items/{id}/categories` | | P3 |
 | 附件 | `POST /items/{id}/attachments`、`GET /attachments/{id}/(thumb\|orig)`、`DELETE …` | 流式读写 R2 | P3 |
 | 置顶 | `POST /nodes/{id}/news-pins`、`DELETE /nodes/{id}/news-pins/{item_id}` | 第 6 条返回 `E_PIN_LIMIT` | P3 |
 | 搜索 | `GET /search?q&types&limit&cursor` | 统一搜索，结果含 `node_id` 供直达 | P2 |
 | 直达 | `GET /nodes/{id}/context` | 一次返回目标节点、祖先链、必要邻近信息，供跨层跳转（PRD §15.2） | P2 |
-| 管理 | `PUT /admin/config/{key}` | 写 KV，校验 schema，递增版本 | P1 |
+| 管理 | `PUT /admin/config/{key}` | `key` 仅限 `public`（`cfg:public:v1`）；写 KV，校验 schema，递增版本。`cfg:adapters:v1` 只由部署脚本写 | P1 |
 | | `POST /admin/export`、`GET /admin/backups`、`GET /admin/backups/{id}`、`POST /admin/restore?dry_run=1` | §10 | P5 |
 | 重绑 | `POST /nodes/{id}/rebind-suggestions` | §5.3 | P2 |
 
@@ -531,7 +531,7 @@ flowchart TD
 | 适配器 | 输入 | 输出 | 失败策略 |
 |---|---|---|---|
 | Markets | 节点绑定的 `ref` | `{label, value, change_pct, state, as_of, link}` | 超时 3 秒，返回 `unavailable`，不阻塞面板 |
-| News | 节点的源列表 | 标题、短摘要、来源、`published_at`、链接 | 每源独立超时，部分成功即可；边缘缓存按 `cfg:news` |
+| News | 节点的源列表 | 标题、短摘要、来源、`published_at`、链接 | 每源独立超时，部分成功即可；缓存时长取 `cfg:public` 的 `news` 分节 |
 | Attachments（既有系统） | 引用 | 缩略图／原图地址 | 接口协议待用户提供（Q8）；当前只定义 `storage='external'` 的占位 |
 
 适配器相关密钥放 Worker secret。适配器不写 D1，除非用户显式"置顶／收藏"。
@@ -559,7 +559,7 @@ flowchart TD
 ### 7.4 新闻
 
 - 候选＝该节点的置顶 ∪ 各启用源（`wc_node_links.kind='feed'`）的外部条目（经去重）。
-- 祖先视图（Q14 暂定）：先显示本节点自己的置顶；名额有余再按 `pinned_at` 补入后代节点的置顶；仍总数 ≤ 5，超出部分提示"另有 n 条置顶"。名额**按节点计**，拒绝第 6 条的规则不变。
+- 祖先视图（Q14 已确认）：先显示本节点自己的置顶；名额有余再按 `pinned_at` 补入后代节点的置顶；仍总数 ≤ 5，超出部分提示"另有 n 条置顶"。名额**按节点计**，拒绝第 6 条的规则不变。
 - 排序：置顶永远在前；其余按
   `score = w_i·importance + w_f·freshness(published_at) + w_g·geo_relevance(depth_gap)`，权重在 `cfg:public` 的 `news` 分节，默认值待原型调参。**重要程度来源未定（PRD §20）：缺省为 0，即只按新鲜度与相关度排序**，不伪造评分。
 - 总数 ≤ 5；置顶满 5 时不展示外部条目。
@@ -619,7 +619,7 @@ src/
 |---|---|
 | 分阶段 | ①壳与配置 → ②地球仪 → ③进入地图时并行：几何、节点导航、基础介绍 → ④异步：标注候选与四模块 → ⑤展开时：全文、关联、精细几何、图片 |
 | 取消与乱序 | 每次导航生成递增的 `navSeq`；请求携带 `AbortController`；响应落地前核对 `navSeq`，不一致丢弃 |
-| 缓存 | 内存 LRU：节点（含子节点页）、几何文件、面板摘要；同键并发请求合并（in-flight 去重）；`ETag` 重验证 |
+| 缓存 | 内存 LRU：节点（含子节点页）、几何文件、面板摘要；同键并发请求合并（in-flight 去重）；按需重新请求 |
 | 预取 | 空闲时仅预取：当前节点的父节点与已展开子节点的**元数据**；不预取全部几何、图片、历史 |
 | 跨层 | 直接调用 `context`，只取目标节点及祖先链元数据与目标几何 |
 | 模块失败 | 各模块独立状态：`loading / empty / error / unavailable`；一个失败不影响其他（PRD §15.2） |
@@ -744,7 +744,7 @@ src/
 |---|---|---|
 | 约束测试 | 触发器与 CHECK：第 4 个对象被拒；自环、重复边被拒；第 6 条置顶被拒。服务层校验：`type` 不可变、一级分类锁定、天体位置不带几何 | 本地内存库 |
 | 服务测试 | 回退链、重绑不改原始数据、时效过滤、去重、跨经线查询 | 同上 |
-| API 契约 | 状态码、错误码、分页、`ETag`、鉴权失败 | 本地 Worker 模拟 |
+| API 契约 | 状态码、错误码、分页、鉴权失败 | 本地 Worker 模拟 |
 | 查询计划 | 主要查询 `EXPLAIN QUERY PLAN` 不出现全表扫描 | 本地＋dev |
 | 隐私守卫 | 守卫脚本对"放入违禁文件／违禁内容"的夹具能拒绝；日志脱敏测试 | CI |
 | 一致性 | 本地与 dev 对同一夹具得到相同结果（防 SQLite 版本差异） | CI |
@@ -779,7 +779,7 @@ src/
 | FR-A1–A5 | §5.1、§5.3、§4.2 `wc_item_locations` |
 | FR-A6 | §5.4 |
 | FR-A7、A8 | §5.2、§5.5、§8.5 |
-| FR-A9 | §4.2 `geometry_ref`、§4.7 |
+| FR-A9 | 首版后置（复审 M15）：§4.2 仅预留 `geometry_ref` 列，内联几何上限见 §5.1 |
 | FR-A10 | §5.7、§11 |
 | FR-L1 | §4.2 `wc_categories` |
 | FR-L2 | §4.2 `happened_text/happened_sort` |
@@ -856,8 +856,8 @@ src/
 
 ## 15. 下一步（仍属设计阶段）
 
-0. ✅ 已完成合规复审：[`04-compliance-review.md`](04-compliance-review.md)（偏离 D1–D8、遗漏 O1–O10、最简化 M1–M18），处置已同步到本文。
-1. 用户评审本设计与 §14 未决项（Q1、Q2、Q9、Q10 及开发库入库已确认；Q14、Q15 待确认）。
+0. ✅ 已完成合规复审：[`04-compliance-review.md`](04-compliance-review.md)（第一轮：偏离 D1–D8、遗漏 O1–O10、最简化 M1–M18；第二轮：文字不一致 R2-D1–D8、最简化 R2-M1–M2），处置已同步到本文。
+1. 用户评审本设计与 §14 未决项（Q1、Q2、Q9、Q10、Q14、Q15 及开发库入库均已确认）。
 2. ✅ 已完成：P0–P5 拆成里程碑，见 [`03-milestones.md`](03-milestones.md)，含每个里程碑的范围、验收、数据合规检查点，以及 S1–S12 的排期（S8、S9、S10、S12 已取消）。
 3. ✅ 里程碑待决事项 T1–T5 已答复，见 [`03-milestones.md`](03-milestones.md) §7。
 4. **何时进入编码由用户指定**（T5）；在此之前不写代码。
