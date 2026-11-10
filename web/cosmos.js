@@ -234,7 +234,7 @@ function buildSolar(uPR) {
   // 黄道面与坐标轴（默认隐藏）
   const ref = new THREE.Group(), plane = new THREE.Mesh(new THREE.CircleGeometry(1, 96).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0x6f86c8, transparent: true, opacity: 0.07, side: THREE.DoubleSide, depthWrite: false })); plane.material.userData.base = 0.07;
   const axis = (v, c) => new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(0, 0, 0), v]), lineMat(c, 0.55)); ref.add(plane, axis(V(1, 0, 0), 0xffb070), axis(V(0, 0, -1), 0x80c0ff), axis(V(0, 1, 0), 0xa0ffb0)); ref.visible = false; g.add(ref);
-  const place = () => { const R = fd(33); plane.scale.setScalar(R); ref.children.slice(1).forEach((ln, k) => ln.scale.setScalar(R)); sun.scale.setScalar(mode === 0 ? 1 : 0.12); sunGl[0].scale.setScalar(mode === 0 ? 1 : 0.35); sunGl[1].scale.setScalar(mode === 0 ? 1 : 0.35); bodies.forEach((b) => b.scale.setScalar(mode === 0 ? 1 : 0.45)); orbits[0].forEach((o) => (o.visible = mode === 0)); orbits[1].forEach((o) => (o.visible = mode === 1)); setBelt(); };
+  const place = () => { const R = fd(33); plane.scale.setScalar(R); ref.children.slice(1).forEach((ln, k) => ln.scale.setScalar(R)); sun.scale.setScalar(mode === 0 ? 1 : 0.12); sunGl[0].scale.setScalar(mode === 0 ? 3.0 : 0.5); sunGl[1].scale.setScalar(mode === 0 ? 1.2 : 0.2); bodies.forEach((b) => b.scale.setScalar(mode === 0 ? 1 : 0.45)); orbits[0].forEach((o) => (o.visible = mode === 0)); orbits[1].forEach((o) => (o.visible = mode === 1)); setBelt(); };
   place();
   const YR = 0.12; let yr = 0; // 模拟时间：1 秒 ≈ 0.12 年（地球约 8 秒一圈；水星约 2 秒，海王星约 23 分钟）
   const tmp = V(0, 0, 0);
@@ -466,7 +466,7 @@ export async function createCosmos(host, { level, node, rings = false } = {}) {
     const live = [], fitR = FILL * 9.5 * Math.tan((camera.fov * Math.PI) / 360) * Math.min(1, camera.aspect); // 适配后的内容半径（世界单位）
     for (const l of levels) {
       const d = l.L - L, tgt = l.x ? (cur === l.id ? 1 : 0) : 1; l.a += Math.sign(tgt - l.a) * Math.min(Math.abs(tgt - l.a), dt / 1.2);
-      const w = Math.max(0, (Math.exp(-(d * d) / (2 * 0.28 * 0.28)) - 0.06) / 0.94) * ease(l.a); // 截断尾巴：非当前层级彻底隐去，不留巨大的鬼影
+      const w = Math.max(0, (Math.exp(-(d * d) / (2 * 0.28 * 0.28)) - 0.15) / 0.85) * ease(l.a); // 截断尾巴：非当前层级彻底隐去，不留巨大的鬼影
       if (!l.g) { if (Math.abs(d) > 1.2 || (l.x && cur !== l.id)) continue; l.g = l.build(PR); scene.add(l.g); l.g.updateMatrixWorld(true); l.R = contentRadius(l.g); } // 按需构建：靠近该层级、且（独占组）是当前节点才生成
       { const zm = l.g.userData.zoom, base = (fitR / l.R) * Math.pow(SCALE, d); if (zm && l.w > 0.5 && cur === l.id) { const tg = zsel >= 0 ? zm[zsel] : null, kk = Math.min(1, dt * 2.4); if (tg) { zc.lerp(tg.p, zk < 0.02 ? 1 : kk); zs += (tg.s - zs) * kk; } zk += ((tg ? 1 : 0) - zk) * kk; const sc = base * (1 + (zs - 1) * zk); l.g.position.set(0, 0, 0); l.g.scale.setScalar(sc); l.g.updateMatrixWorld(); l.g.position.copy(wp.copy(zc).applyMatrix4(l.g.matrixWorld)).multiplyScalar(-zk); } else l.g.scale.setScalar(base); } setAlpha(l.g, w); l.w = w; if (l.g.userData.tick) l.g.userData.tick(t, w);
       if (l.g.userData.labels && w > 0.5) live.push(l);

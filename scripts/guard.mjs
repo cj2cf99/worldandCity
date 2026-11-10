@@ -114,6 +114,7 @@ export function checkFiles(paths, read) {
   for (const path of paths) {
     const add = (rule, line) => out.push(line ? { path, line, rule } : { path, rule });
     checkPath(path).forEach((r) => add(r));
+    if (path === 'package-lock.json') continue; // 内容是 npm 的完整性哈希（sha512），会被“长随机串”规则误报；路径规则上面已检查
     const buf = read(path);
     if (path === DEV_DB) {
       checkDevDb(buf).forEach((r) => add(r));
