@@ -15,6 +15,8 @@ data/private/
 *.db
 *.sqlite
 *.sqlite3
+# 例外：仅此一个本地开发库允许入库，只能含通用/示例数据，严禁真实数据
+!data/local/worldandcity-dev.sqlite
 backup/
 backups/
 export/
