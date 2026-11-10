@@ -22,7 +22,9 @@
 - [需求分析](docs/01-requirements-analysis.md)
 - [详细设计](docs/02-detailed-design.md)
 - [里程碑与验证排期](docs/03-milestones.md)
-- [合规复审（遗漏／偏离／最简化）](docs/\n## 部署与数据约束（2026-11-10 确认）
+- [合规复审（遗漏／偏离／最简化，两轮）](docs/04-compliance-review.md)
+
+## 部署与数据约束（2026-11-10 确认）
 
 - 线上：Cloudflare D1（SQLite）存结构化数据，KV 存恒定设置，R2（私有桶）存文件。
 - 本地：开发库为仓库内的 `data/local/worldandcity-dev.sqlite`（本项目新建的空库，允许入库，只放通用／示例数据；真实数据严禁写入）。测试在内存库上运行。
