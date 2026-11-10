@@ -1,0 +1,3 @@
+#!/bin/sh
+# 提交守卫：与 CI 共用 scripts/guard.mjs（设计 §3.3）。启用：npm run hooks:install
+exec node scripts/guard.mjs --staged
