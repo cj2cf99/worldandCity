@@ -1,0 +1,10 @@
+{
+  "name": "worldandcity",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.13" },
+  "scripts": {
+    "test": "node --test",
+    "db:migrate": "node scripts/db.mjs migrate"
+  }
+}
