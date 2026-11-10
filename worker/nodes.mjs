@@ -80,3 +80,10 @@ export async function getAncestors(db, id) {
   const byId = new Map(results.map((r) => [r.id, r]));
   return ids.map((x) => toNode(byId.get(x)));
 }
+
+/** 按 kind 列出节点（如已配置的国家，供前端把底图国家映射到节点）。结果量小，不分页；kind 格式同写入校验。 */
+export async function listByKind(db, kind) {
+  if (typeof kind !== 'string' || !/^[a-z][a-z0-9_]{0,31}$/.test(kind)) throw new AppError('E_VALIDATION', 'kind 无效', { field: 'kind' });
+  const { results } = await db.prepare(`SELECT ${PUBLIC_COLS}, ${CHILD_COUNT} FROM wc_nodes n WHERE n.kind = ? ORDER BY n.sort_order, n.id LIMIT 300`).bind(kind).all();
+  return { items: results.map(toNode) };
+}

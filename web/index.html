@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>World &amp; City</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div id="cstage"></div>
+<div id="stage"></div>
+
+<header id="top">
+  <div class="brand"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg><b>World<i>&amp;</i>City</b></div>
+  <div class="chips">
+    <span class="chip" id="clock" title="东京时间 (Asia/Tokyo)">--:--:-- JST</span>
+    <button class="chip btn" id="qBtn" title="画质档位"><svg viewBox="0 0 24 24"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg><span id="qTxt">–</span></button>
+    <button class="chip btn" id="zenBtn" title="纯观赏模式"><svg viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+    <button class="chip btn accent" id="backBtn" title="返回地球仪"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg><span>地球仪</span></button>
+  </div>
+</header>
+
+<div id="hint"><span class="ping"></span>点击地球仪，展开世界</div>
+
+<aside id="nav" class="panel">
+  <div class="ph"><svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5zM3 13l9 5 9-5"/></svg>层级导航</div>
+  <ul id="tree"></ul>
+</aside>
+
+<section id="card" class="panel"></section>
+
+<div id="elem">
+  <svg class="el wind" viewBox="0 0 48 48"><path d="M4 18h24a6 6 0 10-6-6M4 26h34a6 6 0 11-6 6M4 34h16"/></svg>
+  <svg class="el earth" viewBox="0 0 48 48"><path d="M6 38l12-20 8 12 6-8 10 16z"/><path d="M24 12v-5M17 14l-3-4M31 14l3-4"/></svg>
+  <svg class="el water" viewBox="0 0 48 48"><path d="M4 24c5-6 9 6 14 0s9 6 14 0 9 6 12 2M4 34c5-6 9 6 14 0s9 6 14 0 9 6 12 2"/></svg>
+  <svg class="el fire" viewBox="0 0 48 48"><path d="M24 5c2 8 11 11 11 22a11 11 0 01-22 0c0-5 3-7 4-11 3 2 4 4 4 6 3-4 3-10 3-17z"/></svg>
+</div>
+
+<div id="tip"></div>
+<div id="loader"><div class="orb"></div><p>正在唤醒地球仪…</p></div>
+<script type="module" src="/main.js"></script>
+</body>
+</html>

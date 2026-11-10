@@ -1,0 +1,171 @@
+:root{
+  --bg:#03040c; --ink:#e9f1ff; --mute:#8fa3c4; --line:rgba(150,190,255,.18);
+  --glass:rgba(10,18,38,.52); --a:#5de0ff; --b:#a47bff; --c:#ffc46b; --ok:#6bf0b0;
+  --panel:250px; --r:16px;
+  font-family:"Segoe UI","Microsoft YaHei",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;background:var(--bg);color:var(--ink);overflow:hidden}
+#stage{position:fixed;inset:0;touch-action:none}
+svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+
+/* 顶栏 */
+#top{position:fixed;inset:0 0 auto 0;display:flex;justify-content:space-between;align-items:center;padding:14px 18px;z-index:5;pointer-events:none}
+#top>*{pointer-events:auto}
+.brand{display:flex;gap:9px;align-items:center;font-size:19px;letter-spacing:.5px}
+.brand svg{font-size:26px;color:var(--a);filter:drop-shadow(0 0 8px var(--a));animation:spin 3s linear infinite}
+.brand i{font-style:normal;color:var(--c);margin:0 3px;font-weight:300}
+.chips{display:flex;gap:8px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:99px;font-size:12.5px;color:var(--mute);background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px);font-variant-numeric:tabular-nums}
+.chip svg{font-size:15px}
+.btn:hover{color:var(--ink);border-color:var(--a);box-shadow:0 0 14px -2px var(--a)}
+.accent{color:var(--ink);border-color:rgba(93,224,255,.5)}
+#backBtn{display:none}
+body.map #backBtn{display:inline-flex;animation:pop 1.2s .9s both}
+
+/* 提示 */
+#hint{position:fixed;left:50%;bottom:7vh;transform:translateX(-50%);z-index:4;font-size:14px;letter-spacing:2px;color:var(--ink);padding:9px 20px;border-radius:99px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(12px);display:flex;gap:10px;align-items:center;pointer-events:none;transition:opacity 1.2s,transform 1.2s}
+body.map #hint,body.zen #hint{opacity:0;transform:translate(-50%,16px)}
+.ping{width:9px;height:9px;border-radius:50%;background:var(--a);box-shadow:0 0 0 0 var(--a);animation:ping 1.8s infinite}
+
+/* 面板（现实系：清晰的信息卡片） */
+.panel{position:fixed;left:16px;width:var(--panel);z-index:4;background:rgba(10,18,38,.42);border:1px solid var(--line);border-radius:var(--r);backdrop-filter:blur(18px) saturate(1.3);box-shadow:0 10px 40px -10px #000a, inset 0 1px 0 #ffffff14;
+  opacity:0;transform:translateX(-40px);pointer-events:none;transition:opacity 1.2s,transform 1.4s cubic-bezier(.2,.8,.2,1),width 1s ease}
+body.map .panel{opacity:1;transform:none;pointer-events:auto;transition-delay:1.3s}
+body.zen .panel{opacity:0;transform:translateX(-30px);pointer-events:none;transition-delay:0s}
+#nav{top:60px;max-height:calc(100vh - 300px);min-height:140px;display:flex;flex-direction:column}
+#card{bottom:14px;max-height:210px;overflow:auto}
+body.map #card{transition-delay:1.5s}
+.ph{display:flex;gap:8px;align-items:center;padding:11px 14px 6px;font-size:12px;letter-spacing:2px;color:var(--mute)}
+.ph svg{color:var(--a);font-size:15px}
+#crumbs{display:flex;flex-wrap:wrap;gap:4px;padding:0 12px 6px;font-size:12px}
+#crumbs a{color:var(--mute);cursor:pointer;padding:2px 7px;border-radius:99px;background:#ffffff0a}
+#crumbs a:hover{color:var(--ink);background:#ffffff18}
+#crumbs a+a::before{content:"›";margin-right:6px;color:var(--line)}
+#tree,#tree ul{list-style:none;padding:0}
+#tree{overflow:auto;overflow-x:auto;padding:2px 8px 10px;scrollbar-width:thin;scrollbar-color:#4a5d86 transparent}
+#tree ul{margin-left:14px;border-left:1px dashed var(--line);padding-left:4px}
+.row{display:flex;align-items:center;gap:7px;padding:4px 7px;border-radius:9px;cursor:pointer;font-size:13px;position:relative;transition:background 1s}
+.row:hover{background:#ffffff10}
+.row.sel{background:linear-gradient(90deg,#5de0ff26,#a47bff18);box-shadow:inset 2px 0 var(--a)}
+.row .ic{font-size:16px;color:var(--a);flex:none}
+.row[data-k=country] .ic{color:var(--c)} .row[data-k=continent] .ic{color:var(--b)}
+.row .nm{flex:1;white-space:nowrap}
+.row .cnt{font-size:11px;color:var(--mute);background:#ffffff10;border-radius:99px;padding:1px 7px}
+.row .chev{font-size:14px;color:var(--mute);transition:transform 1s;flex:none}
+.row.open .chev{transform:rotate(90deg)}
+.row .dot{width:14px;flex:none;text-align:center;color:var(--line)}
+.row.loading .chev{animation:spin 1s linear infinite}
+.row.err .nm{color:#ff8a8a}
+.kids{animation:drop 1s ease both}
+
+/* 详情卡 */
+.cardhead{padding:11px 14px 2px}
+.cardhead h2{font-size:18px;font-weight:600;letter-spacing:1px;display:flex;align-items:center;gap:10px}
+.cardhead h2 svg{color:var(--c);font-size:22px}
+.cardhead small{display:block;color:var(--mute);margin-top:2px;font-size:13px}
+.tags{display:flex;flex-wrap:wrap;gap:5px;padding:6px 14px 10px}
+.tag{display:inline-flex;gap:5px;align-items:center;font-size:12px;padding:3px 9px;border-radius:99px;border:1px solid var(--line);color:var(--mute)}
+.tag svg{font-size:13px}
+.tag.ok{color:var(--ok);border-color:#6bf0b055}.tag.warn{color:var(--c);border-color:#ffc46b55}.tag.info{color:var(--a);border-color:#5de0ff55}
+.kv{padding:2px 16px 14px;font-size:13px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;color:var(--mute)}
+.kv b{color:var(--ink);font-weight:500}
+.card-in{animation:rise 1s both}
+.skel{height:14px;border-radius:7px;margin:10px 16px;background:linear-gradient(90deg,#ffffff0a,#ffffff22,#ffffff0a);background-size:200% 100%;animation:sh 1.2s infinite}
+
+/* 提示气泡 */
+#tip{position:fixed;z-index:9;pointer-events:none;padding:5px 11px;border-radius:9px;font-size:13px;background:#0b1530ee;border:1px solid var(--a);box-shadow:0 0 18px -4px var(--a);opacity:0;transform:translate(14px,14px);transition:opacity 1s}
+#tip.on{opacity:1}
+
+/* 四元素装饰（仅桌面地图） */
+#elem{position:fixed;inset:0;pointer-events:none;z-index:3;opacity:0;transition:opacity 1.2s 1.6s}
+body.map #elem{opacity:1} body.zen #elem{opacity:0}
+.el{position:absolute;width:54px;height:54px;font-size:54px;stroke-width:1.2;filter:drop-shadow(0 0 10px currentColor);opacity:.8}
+.wind{right:22px;top:70px;color:#9fe8ff;stroke-dasharray:6 5;animation:flow 2.4s linear infinite}
+.earth{left:calc(var(--panel) + 34px);top:70px;color:#b9d37a;transform-origin:50% 90%;animation:sway 3s ease-in-out infinite}
+.water{left:calc(var(--panel) + 34px);bottom:22px;color:#6bb8ff;animation:bob 3s ease-in-out infinite}
+.fire{right:22px;bottom:22px;color:#ff9a4d;transform-origin:50% 100%;animation:flick 1.4s ease-in-out infinite}
+
+/* 加载 */
+#loader{position:fixed;inset:0;z-index:20;display:grid;place-content:center;justify-items:center;gap:18px;background:var(--bg);transition:opacity 1.4s,visibility 1.4s;color:var(--mute);letter-spacing:3px;font-size:13px}
+#loader.done{opacity:0;visibility:hidden}
+.orb{width:74px;height:74px;border-radius:50%;background:conic-gradient(from 0deg,#5de0ff,#a47bff,#ff6fb5,#5de0ff);-webkit-mask:radial-gradient(circle,transparent 52%,#000 54%);mask:radial-gradient(circle,transparent 52%,#000 54%);animation:spin 1.6s linear infinite;filter:drop-shadow(0 0 16px #5de0ff88)}
+
+@keyframes spin{to{transform:rotate(1turn)}}
+@keyframes ping{70%{box-shadow:0 0 0 12px #5de0ff00}100%{box-shadow:0 0 0 0 #5de0ff00}}
+@keyframes pop{from{opacity:0;transform:scale(.8)}}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}}
+@keyframes drop{from{opacity:0;transform:translateY(-6px)}}
+@keyframes sh{to{background-position:-200% 0}}
+@keyframes flow{to{stroke-dashoffset:-22}}
+@keyframes sway{50%{transform:rotate(5deg)}}
+@keyframes bob{50%{transform:translateY(-6px)}}
+@keyframes flick{0%,100%{transform:scale(1,1)}40%{transform:scale(.92,1.1)}70%{transform:scale(1.05,.95)}}
+
+#nav.min #tree{display:none}
+#nav.min{min-height:0}
+.ph{cursor:pointer;user-select:none}
+.ph::after{content:"";margin-left:auto;width:7px;height:7px;border:solid var(--mute);border-width:0 2px 2px 0;transform:rotate(45deg);transition:transform 1s}
+#nav.min .ph::after{transform:rotate(-135deg)}
+@media (max-width:820px){
+  :root{--panel:calc(100vw - 24px)}
+  .panel{left:12px}
+  #nav{top:56px;max-height:30vh;min-height:0}
+  #card{bottom:10px;max-height:15vh}
+  #card .kv,#card .tags .tag:nth-child(n+3){display:none}
+  #elem{display:none}
+  #qTxt,#clock{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important;transition-delay:0s!important}
+}
+
+/* 平面局部地图（国家及以下）：正对屏幕的静态 SVG；描边不随缩放变粗，任何缩放下边缘锐利 */
+#layers{position:fixed;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;opacity:0;visibility:hidden;transform:scale(1.07);transition:opacity 1.6s,visibility 0s 1.6s,transform 1.6s;
+  background:radial-gradient(ellipse at 55% 45%,#1d4766 0%,#143453 55%,#0c2036 100%)}
+body.local #layers{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition:opacity 2s var(--ld,0s),visibility 0s var(--ld,0s),transform 2.4s cubic-bezier(.2,.7,.2,1) var(--ld,0s)}
+body.local #stage{opacity:0;transition:opacity 2s var(--ld,0s)}
+#stage{transition:opacity 1.6s}
+#layers g:first-of-type{transform-origin:0 0;transition:transform 1.6s cubic-bezier(.4,0,.2,1)}
+#layers path{vector-effect:non-scaling-stroke;stroke:rgba(235,245,255,.5);stroke-width:1;stroke-linejoin:round;fill:rgba(255,255,255,.04)}
+#layers path.self{stroke:rgba(235,245,255,.7)}
+#layers path.hit{cursor:pointer;stroke:rgba(245,250,255,.85);stroke-width:1.3}
+#layers path.hit:hover{stroke:#fff;stroke-width:2.2}
+#layers path.glow{fill:none;stroke:#ffd36b;stroke-width:8;stroke-opacity:.28;pointer-events:none}
+#layers path.edge{fill:none;stroke:#ffeeb5;stroke-width:2.4;pointer-events:none}
+
+#layers{touch-action:none}
+@keyframes lvin{from{opacity:0}to{opacity:1}}
+#layers g{opacity:1;transition:opacity 1.4s ease}
+#layers g.pre,#layers g.out{opacity:0}
+#layers g.out{pointer-events:none}
+#layers path{transition:fill 1.2s,stroke 1s,stroke-width 1s}
+
+
+/* ===== 宇宙系（地球以外）：与现实系区分的视觉语言——古典天文仪器：黄铜细线、暖金与紫、衬线字体 ===== */
+#cstage{position:fixed;inset:0;opacity:0;transition:opacity 2s ease}
+body.incosmos #cstage{opacity:1}
+body.incosmos #stage{opacity:0;transition:opacity 2s ease;pointer-events:none}
+body.cosmic{--bg:#020208;--ink:#f1e8d6;--mute:#b3a78c;--line:rgba(214,182,120,.3);--glass:rgba(14,10,28,.5);--a:#e2c27e;--b:#a58bff;--c:#ffd9a0;--r:4px;transition:background 2s}
+body.cosmic .brand b,body.cosmic .cardhead h2,body.cosmic .ph{font-family:"Noto Serif SC","Songti SC","STSong",Georgia,serif;letter-spacing:.14em}
+body.cosmic .panel{border-radius:4px;box-shadow:0 0 0 4px rgba(214,182,120,.05),0 14px 44px -12px #000c,inset 0 0 0 1px rgba(214,182,120,.08);opacity:1;transform:none;pointer-events:auto;transition-delay:.4s}
+body.cosmic.zen .panel{opacity:0;transform:translateX(-30px);pointer-events:none;transition-delay:0s}
+body.cosmic .row.sel{background:linear-gradient(90deg,rgba(226,194,126,.2),rgba(165,139,255,.1));box-shadow:inset 2px 0 var(--a)}
+body.cosmic .tag.warn{color:var(--c);border-color:rgba(255,217,160,.4)}
+body.cosmic #elem,body.cosmic #hint,body.cosmic #qBtn{display:none}
+body.cosmic #backBtn{display:inline-flex;animation:pop 1.2s .6s both}
+body.cosmic .brand svg{color:var(--a);filter:drop-shadow(0 0 8px var(--a))}
+body.incosmos #cstage::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 48%,transparent 52%,rgba(1,1,10,.62) 100%)}
+#cstage{touch-action:none}
+#cstage canvas{cursor:grab}
+#cstage canvas:active{cursor:grabbing}
+
+.intro{margin:2px 16px 8px;font-size:13px;line-height:1.7;color:var(--ink);opacity:.92}
+#card{max-height:340px}
+
+/* 宇宙系标注（DOM 层，随三维位置投影）；可缩放的星系名称可点击 */
+.clabels{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:2}
+.clabel{position:absolute;left:0;top:0;white-space:nowrap;font-size:12px;letter-spacing:.06em;color:#dbe6ff;text-shadow:0 0 6px #000,0 0 2px #000;opacity:0;transition:opacity .4s;will-change:transform}
+.clabel.zoomable{pointer-events:auto;cursor:zoom-in;padding:1px 7px;border:1px solid rgba(214,182,120,.45);border-radius:10px;background:rgba(10,10,24,.45)}
+.clabel.zoomable:hover,.clabel.zoomable.on{border-color:var(--a);background:rgba(40,30,70,.6);cursor:zoom-out}

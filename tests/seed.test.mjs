@@ -33,12 +33,12 @@ test('导入后节点齐全，path 由父链计算，origin 全为 seed', async 
   const r = await importNodeSeed(db, SEED);
   assert.equal(r.skipped, false);
   const rows = await dump(db);
-  assert.equal(rows.length, 8);
+  assert.equal(rows.length, 47); // 8 个地理节点 + 39 个宇宙系天体节点
   const by = Object.fromEntries(rows.map((x) => [x.id, x]));
   assert.equal(by['geo.cn-sn-xa-wy'].path, '/geo.world/geo.asia/geo.cn/geo.cn-sn/geo.cn-sn-xa/geo.cn-sn-xa-wy/');
   assert.equal(by['geo.fr'].path, '/geo.world/geo.europe/geo.fr/');
   assert.ok(rows.every((x) => x.origin === 'seed'));
-  assert.equal(await db.prepare("SELECT value FROM wc_meta WHERE key='seed_version'").first('value'), '1');
+  assert.equal(await db.prepare("SELECT value FROM wc_meta WHERE key='seed_version'").first('value'), String(JSON.parse(readFileSync(SEED, 'utf8'))._version));
 });
 
 test('深度差异：陕西路径深入到区，法国止于国家；节点表无关注类字段（FR-N3）', async () => {
@@ -68,14 +68,14 @@ test('版本升级时更新 seed 行，但不改动 user 节点', async () => {
     .run();
   await withSeedFile(
     (d) => {
-      d._version = 2;
+      d._version += 1; // 比随库种子版本高一版
       d.nodes.find((n) => n.id === 'geo.fr').name = '法兰西';
     },
     (f) => importNodeSeed(db, f),
   );
   assert.equal(await db.prepare("SELECT name FROM wc_nodes WHERE id='geo.fr'").first('name'), '法兰西');
   assert.equal(await db.prepare("SELECT name FROM wc_nodes WHERE id='u1'").first('name'), '我的节点');
-  assert.equal(await db.prepare("SELECT value FROM wc_meta WHERE key='seed_version'").first('value'), '2');
+  assert.equal(await db.prepare("SELECT value FROM wc_meta WHERE key='seed_version'").first('value'), String(JSON.parse(readFileSync(SEED, 'utf8'))._version + 1));
 });
 
 test('版本升级不覆盖与种子 id 冲突的 user 节点', async () => {

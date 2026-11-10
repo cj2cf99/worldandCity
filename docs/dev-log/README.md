@@ -49,4 +49,5 @@
 | F3.1 | 节点读取服务（getNode／listChildren／getAncestors），不含路由与写入 | ✅ 完成 | [F3.1](F3.1-node-read-service.md) |
 | F3.2 | 节点写入服务（createNode／patchNode／deleteNode），不含路由与 kind 值域校验 | ✅ 完成 | [F3.2](F3.2-node-write-service.md) |
 | — | 范围调整：许可证 MIT；视觉后置到 M8；受阻步骤遗留说明 | ✅ 记录完成 | [R1](R1-scope-adjustments.md)、[决定 0004](../decisions/0004-visual-deferred.md)、[0003 §5](../decisions/0003-wrangler-blocked-steps.md) |
+| F3.3 | 前端壳＋地球仪＋球→平面展开＋层级导航（视觉不再后置，见 0005） | ⚠️ 首版可用，移动端／性能未验证 | [F3.3](F3.3-ui-shell-globe.md) |
 | V1 | 阶段校验轮：三项合规复核与记录更正（F0.4～F3.2、R1） | ✅ 完成 | [V1](V1-compliance-audit.md) |

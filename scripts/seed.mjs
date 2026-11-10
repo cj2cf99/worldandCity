@@ -44,18 +44,18 @@ export async function importNodeSeed(db, file) {
   if (current === String(version)) return { skipped: true, count: 0 };
 
   const upsert = `INSERT INTO wc_nodes
-      (id, parent_id, path, realm, kind, name, name_local, code, sort_order, origin, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'seed', ?, ?)
+      (id, parent_id, path, realm, kind, name, name_local, code, sort_order, detail, origin, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'seed', ?, ?)
     ON CONFLICT(id) DO UPDATE SET
       parent_id = excluded.parent_id, path = excluded.path, realm = excluded.realm, kind = excluded.kind,
       name = excluded.name, name_local = excluded.name_local, code = excluded.code,
-      sort_order = excluded.sort_order, updated_at = excluded.updated_at
+      sort_order = excluded.sort_order, detail = excluded.detail, updated_at = excluded.updated_at
     WHERE wc_nodes.origin = 'seed'`;
   await db.batch([
     ...nodes.map((n) =>
       db
         .prepare(upsert)
-        .bind(n.id, n.parent_id ?? null, n.path, n.realm, n.kind, n.name, n.name_local ?? null, n.code ?? null, n.sort_order ?? 0, stamp, stamp),
+        .bind(n.id, n.parent_id ?? null, n.path, n.realm, n.kind, n.name, n.name_local ?? null, n.code ?? null, n.sort_order ?? 0, JSON.stringify(n.detail ?? {}), stamp, stamp),
     ),
     db.prepare("INSERT INTO wc_meta (key, value) VALUES ('seed_version', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value").bind(String(version)),
   ]);

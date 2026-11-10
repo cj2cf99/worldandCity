@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { openDb, migrate } from '../scripts/local-d1.mjs';
 import { importNodeSeed } from '../scripts/seed.mjs';
-import { getNode, listChildren, getAncestors } from '../worker/nodes.mjs';
+import { getNode, listChildren, getAncestors, listByKind } from '../worker/nodes.mjs';
 import { AppError, ERROR_CODES } from '../worker/errors.mjs';
 
 const fromRoot = (p) => new URL(`../${p}`, import.meta.url).pathname.replace(/^\/(\w:)/, '$1');
@@ -96,4 +96,11 @@ test('查询计划：子节点列表与祖先查询不做全表扫描（设计 �
   assert.doesNotMatch(kids, /SCAN n\b(?! USING)/);
   const anc = await plan('SELECT id FROM wc_nodes n WHERE n.id IN (?,?)', 'a', 'b');
   assert.doesNotMatch(anc, /SCAN/);
+});
+
+test('listByKind：列出国家；非法 kind 拒绝', async () => {
+  const db = await seeded();
+  const { items } = await listByKind(db, 'country');
+  assert.deepEqual(items.map((n) => n.code).sort(), ['CN', 'FR']);
+  assert.equal(await code(listByKind(db, 'Bad Kind')), 'E_VALIDATION');
 });
