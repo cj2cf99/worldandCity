@@ -16,6 +16,7 @@
 4. **验证证据**：记录测试命令与结果摘要；未能验证的事项如实写"未验证"及原因，**不得写成已验证**。
 5. **提交前**：运行 `node --test` 与 `node scripts/guard.mjs --staged`（钩子安装后自动执行），均通过才提交。
 6. **发现问题的处置**：检查中发现的问题在同一功能内修复，并在记录"检查中发现并处置"一节留痕；发现设计文档需要修订时，同步修订并在记录中引用。
+7. **视觉债务**（用户决定，[决定 0004](../decisions/0004-visual-deferred.md)）：视觉效果统一后置到 M8，现阶段用静态内容替代。凡涉及前端的功能，“需求偏移”一节必须写明：本功能是否新增视觉债务、是否使用占位、占位是否带“视觉占位”标注；PRD §18.1 的视觉条目在 M8 之前不得勾选。
 
 ## 2. 单个功能记录模板
 
@@ -43,4 +44,9 @@
 | F0.1 | 本地 D1 形封装与迁移执行器、迁移 0001 | ✅ 完成 | [F0.1](F0.1-local-d1-migrations.md) |
 | F0.2 | 种子导入（幂等） | ✅ 完成 | [F0.2](F0.2-seed-import.md) |
 | F0.3 | 提交守卫（本地钩子＋CI 共用脚本） | ✅ 完成 | [F0.3](F0.3-commit-guard.md) |
-| F0.4 | 验证 S1／S2／S4／S11 结论 | 待办 | — |
+| F0.4 | 验证 S1／S2／S4／S11 结论 | ⚠️ 部分（S1、S2 本地部分；S4、S11 因无 wrangler 挂起） | [F0.4](F0.4-spikes-local.md)、[阻塞清单](../decisions/0003-wrangler-blocked-steps.md) |
+| — | M0 验收与总合规检查 | ⚠️ 本机可做部分完成，整体未通过 | [M0 验收](M0-acceptance.md) |
+| F3.1 | 节点读取服务（getNode／listChildren／getAncestors），不含路由与写入 | ✅ 完成 | [F3.1](F3.1-node-read-service.md) |
+| F3.2 | 节点写入服务（createNode／patchNode／deleteNode），不含路由与 kind 值域校验 | ✅ 完成 | [F3.2](F3.2-node-write-service.md) |
+| — | 范围调整：许可证 MIT；视觉后置到 M8；受阻步骤遗留说明 | ✅ 记录完成 | [R1](R1-scope-adjustments.md)、[决定 0004](../decisions/0004-visual-deferred.md)、[0003 §5](../decisions/0003-wrangler-blocked-steps.md) |
+| V1 | 阶段校验轮：三项合规复核与记录更正（F0.4～F3.2、R1） | ✅ 完成 | [V1](V1-compliance-audit.md) |

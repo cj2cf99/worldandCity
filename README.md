@@ -23,6 +23,7 @@
 - [详细设计](docs/02-detailed-design.md)
 - [里程碑与验证排期](docs/03-milestones.md)
 - [合规复审（遗漏／偏离／最简化，两轮）](docs/04-compliance-review.md)
+- [决定记录（验证结论、受阻步骤、视觉后置）](docs/decisions/)
 - [**开发记录**（每个功能一份，含需求遗漏／偏移／最简化检查，供审核）](docs/dev-log/README.md)
 
 ## 开发命令
@@ -42,3 +43,8 @@
 - 线上：Cloudflare D1（SQLite）存结构化数据，KV 存恒定设置，R2（私有桶）存文件。
 - 本地：开发库为仓库内的 `data/local/worldandcity-dev.sqlite`（本项目新建的空库，允许入库，只放通用／示例数据；真实数据严禁写入）。测试在内存库上运行。
 - 本项目不依赖、不引用、不复制任何其他项目的代码或数据文件。
+
+## 许可证
+
+代码与本项目自行整理的数据采用 [MIT](LICENSE)。**将来引入的第三方数据（如 Natural Earth、OpenStreetMap 衍生数据）不在此列**，各按其自身许可与归属要求处理，并登记在 `geo/SOURCES.md`（PRD §22.3）。
+

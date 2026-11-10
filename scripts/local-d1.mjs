@@ -44,7 +44,7 @@ class Statement {
   }
 }
 
-export class LocalD1 {
+class LocalD1 {
   #db;
   constructor(db) {
     this.#db = db;

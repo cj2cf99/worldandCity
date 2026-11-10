@@ -573,7 +573,7 @@ flowchart TD
 ### 7.6 搜索
 
 - 范围：节点名、item 标题／正文、位置 `raw_location`（含人物与地点，PRD §12）。
-- 实现：各表的 `search_norm` 列（§4.2）+ `LIKE`，结果限量分页；FTS5 仅在 S1 通过且数据量超过约 2 万可检索行时升级。
+- 实现：各表的 `search_norm` 列（§4.2）+ `LIKE`，结果限量分页；FTS5 仅在数据量超过约 2 万可检索行时升级。S1 本地结果（[`decisions/0001`](decisions/0001-s1-search.md)）：FTS5 trigram 对 2 字中文词零结果，故升级后 ≤2 字的查询仍须走 `LIKE`，trigram 只加速 ≥3 字查询；规范化须在绑定参数前去除 `%`、`_`，避免用户输入变成通配符。D1 侧限制未验证（[`decisions/0003`](decisions/0003-wrangler-blocked-steps.md) B4）。
 - 结果项：`{kind, id, title, snippet, node_id, path_text}`，点击后调用 `GET /nodes/{id}/context` 直达（FR-S2）。
 
 ### 7.7 删除
@@ -589,6 +589,8 @@ flowchart TD
 ---
 
 ## 8. 前端设计
+
+> **2026-11-10 范围调整**（[决定 0004](decisions/0004-visual-deferred.md)）：视觉效果（§8.2 地球仪与展开、§8.8 四元素与聚焦动画、§8.6 的 3D 降级、§8.7 的 3D 帧率）后置到里程碑 M8，现阶段以带“视觉占位”标注的静态内容替代。本章的契约（场景接口、`waveState`、`projection` 策略、内部数据始终为经纬度）**保持不变**，M8 再落成代码。
 
 ### 8.1 模块与场景管理
 
