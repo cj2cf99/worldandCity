@@ -139,7 +139,7 @@ body.local #stage{opacity:0;transition:opacity 2s var(--ld,0s)}
 #layers g{opacity:1;transition:opacity 1.4s ease}
 #layers g.pre,#layers g.out{opacity:0}
 #layers g.out{pointer-events:none}
-#layers path{transition:fill 1.2s,stroke 1s,stroke-width 1s}
+#layers path{transition:fill 1.2s,stroke 1s,stroke-width 1s,fill-opacity .6s}
 
 
 /* ===== 宇宙系（地球以外）：与现实系区分的视觉语言——古典天文仪器：黄铜细线、暖金与紫、衬线字体 ===== */
@@ -185,4 +185,15 @@ body.incosmos #cstage::after{content:'';position:absolute;inset:0;pointer-events
 #fxPop small{grid-column:1/-1;opacity:.6;font-size:10.5px;line-height:1.35}
 @media (max-width:420px){#fxPop{grid-template-columns:1fr}}
 /* 主动放大滑块同样作用于平面局部地图：以可用区域中心为原点缩放（--zo 由 layers.js 设置） */
-#layers{scale:var(--zf,1);transform-origin:var(--zo,50% 50%)}
+#layers g.zoomg{transform:translate(var(--px,0px),var(--py,0px)) scale(var(--zf,1));transition:transform .35s ease-out}
+#layers.dragging g.zoomg{transition:none}
+#layers{cursor:grab}
+#layers.dragging,#layers.dragging path{cursor:grabbing}
+/* 进入下一层：笔把内部 SVG 的边缘画出来（画的过程中区域不填色，画完淡入） */
+#layers g.inking path{fill-opacity:0;transition:none}
+#layers g.pen{pointer-events:none;opacity:1}
+#layers g.pen *{pointer-events:none}
+#layers path{fill-opacity:1}
+/* 地球内部地图：触屏不弹长按菜单、不选中文字、不触发浏览器手势（长按＝进入下一层） */
+#stage,#stage canvas,#layers,#layers *{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+#stage canvas{touch-action:none}

@@ -12,6 +12,7 @@ async function seeded() {
   const db = openDb();
   migrate(db, fromRoot('migrations'));
   await importNodeSeed(db, fromRoot('seed/nodes.public.json'));
+  await db.prepare("DELETE FROM wc_nodes WHERE parent_id = 'geo.fr'").run(); // 测试专用：让法国成为“止于国家”的稀疏分支（种子里法国已有一级行政区）
   return db;
 }
 // 固定的合法 ULID 样本（Crockford base32，26 位）

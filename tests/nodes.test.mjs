@@ -10,6 +10,7 @@ async function seeded() {
   const db = openDb();
   migrate(db, fromRoot('migrations'));
   await importNodeSeed(db, fromRoot('seed/nodes.public.json'));
+  await db.prepare("DELETE FROM wc_nodes WHERE parent_id = 'geo.fr'").run(); // 测试专用：让法国成为“止于国家”的稀疏分支（种子里法国已有一级行政区）
   return db;
 }
 const code = (p) => p.then(() => null, (e) => (e instanceof AppError ? e.code : `非 AppError：${e.message}`));
@@ -102,7 +103,7 @@ test('listByKind：列出国家；非法 kind 拒绝', async () => {
   const db = await seeded();
   const { items } = await listByKind(db, 'country');
   const codes = items.map((n) => n.code);
-  assert.equal(codes.length, 196);
+  assert.equal(codes.length, 197);
   assert.ok(['CN', 'FR', 'JP', 'US', 'BR'].every((c) => codes.includes(c)));
   assert.equal(await code(listByKind(db, 'Bad Kind')), 'E_VALIDATION');
 });

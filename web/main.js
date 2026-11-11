@@ -27,8 +27,10 @@ const ICON = {
   nebula: '<path d="M5 15c0-5 5-9 9-7 4 1 6 6 3 9-3 3-8 2-12-2z"/>',
   star_cluster: '<circle cx="8" cy="9" r="1"/><circle cx="14" cy="7" r="1"/><circle cx="16" cy="13" r="1.2"/><circle cx="10" cy="15" r="1.2"/><circle cx="12" cy="11" r="1"/>',
   district: '<path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+  town: '<path d="M4 20V11l8-6 8 6v9z"/><path d="M9 20v-5h6v5"/>',
+  village: '<path d="M3 20l5-8 4 5 3-4 6 7z"/><circle cx="17" cy="7" r="2"/>',
 };
-const KIND_ZH = { galactic_region: '银河区域', black_hole: '黑洞', nebula: '星云', star_cluster: '星团', void: '空洞', cosmic_web: '宇宙网', planet: '行星', dwarf_planet: '矮行星', asteroid_belt: '小行星带', comet_group: '彗星', comet: '彗星', shell: '球壳层', bubble: '星际泡', galactic_arm: '旋臂', superstructure: '超级结构', supercluster_complex: '超星系团复合体', supercluster: '超星系团', great_wall: '巨型长城', galaxy_group: '星系群', galaxy_cluster: '星系团', universe: '宇宙', galaxy: '星系', stellar_neighborhood: '恒星邻域', star_system: '恒星系统', star: '恒星', system: '天体系统', moon: '卫星', world: '世界', continent: '大洲', country: '国家', admin1: '一级行政区', city: '城市', district: '区' };
+const KIND_ZH = { galactic_region: '银河区域', black_hole: '黑洞', nebula: '星云', star_cluster: '星团', void: '空洞', cosmic_web: '宇宙网', planet: '行星', dwarf_planet: '矮行星', asteroid_belt: '小行星带', comet_group: '彗星', comet: '彗星', shell: '球壳层', bubble: '星际泡', galactic_arm: '旋臂', superstructure: '超级结构', supercluster_complex: '超星系团复合体', supercluster: '超星系团', great_wall: '巨型长城', galaxy_group: '星系群', galaxy_cluster: '星系团', universe: '宇宙', galaxy: '星系', stellar_neighborhood: '恒星邻域', star_system: '恒星系统', star: '恒星', system: '天体系统', moon: '卫星', world: '世界', continent: '大洲', country: '国家', admin1: '一级行政区', city: '城市', district: '区', town: '街道／乡镇／町', village: '村／社区／丁目' };
 const icon = (k) => `<svg class="ic" viewBox="0 0 24 24">${ICON[k] || '<circle cx="12" cy="12" r="3"/>'}</svg>`;
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
@@ -46,11 +48,16 @@ function api(path, signal) {
   return inflight.get(path);
 }
 const getNode = (id, s) => api(`/nodes/${encodeURIComponent(id)}`, s);
-const getKids = (id) => api(`/nodes/${encodeURIComponent(id)}/children?limit=100`);
+const getKids = async (id) => { // 取全部子节点（接口每页最多 100 个，英国等有二百多个一级行政区，需要翻页）
+  const items = []; let cursor = null;
+  do { const r = await api(`/nodes/${encodeURIComponent(id)}/children?limit=100${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ''}`); items.push(...r.items); cursor = r.next_cursor; } while (cursor);
+  return { items, next_cursor: null };
+};
 const getAnc = (id, s) => api(`/nodes/${encodeURIComponent(id)}/ancestors`, s).then((r) => r.items);
 
 // ---- 状态 ----
-let realm = 'geo', cosmos = null, scene = null, layers = null, navSeq = 0, selId = null, ac = null;
+let realm = 'geo', cosmos = null, scene = null, layers = null, layersOpts = null, layersP = null, navSeq = 0, selId = null, ac = null;
+const ensureLayers = () => (layers ? Promise.resolve(layers) : layersOpts ? (layersP ??= import('./layers.js').then(({ createLayers }) => (layers = createLayers(layersOpts)))) : Promise.resolve(null));
 const rows = new Map(); // id → {li, row, kids, state}
 
 // ---- 层级导航 ----
@@ -101,8 +108,12 @@ function renderCard(n, anc, hasGeom) {
 }
 
 document.addEventListener('cosmos-go', (e) => select(e.detail, { push: true })); // 宇宙场景里的标签点击 → 跳转到对应节点
-async function select(id, { push = false } = {}) {
-  const seq = ++navSeq; ac?.abort(); ac = new AbortController();
+const tri = (n) => (n.name_local ? `${n.name} / ${n.name_local}` : n.name); // 地图互动展示位用三语（中文 / English / 日本語）；导航菜单固定中文
+let enterAt = 0;
+const enterOnce = (id) => { const now = performance.now(); if (now - enterAt < 900) return; enterAt = now; select(id, { push: true }); }; // 触屏上连点／长按可能连发多个事件：900ms 内只进入一次
+let peeked = null; // 平面世界图上“单击聚焦、尚未进入”的国家节点 id
+async function select(id, { push = false, peek = false } = {}) {
+  const seq = ++navSeq; if (!peek) peeked = null; ac?.abort(); ac = new AbortController();
   selId = id;
   document.querySelectorAll('.row.sel').forEach((r) => r.classList.remove('sel'));
   rows.get(id)?.row.classList.add('sel');
@@ -124,9 +135,16 @@ async function select(id, { push = false } = {}) {
       history[push ? 'pushState' : 'replaceState']({}, '', `/n/${encodeURIComponent(id)}`);
       return;
     }
+    if (peek && n.kind === 'country' && !document.body.classList.contains('local')) { // 单击：只聚焦（平移到屏幕正中、国家占约 50%），不进入国家内部
+      document.body.classList.add('map'); peeked = n.id; scene?.select(num || null, null, 0.5);
+      await revealPath(anc.map((a) => a.id)); rows.get(id)?.row.classList.add('sel'); rows.get(id)?.row.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      history[push ? 'pushState' : 'replaceState']({}, '', `/n/${encodeURIComponent(id)}?s=geo`);
+      return;
+    }
     // 显示分工：世界／大洲在地球仪上；国家及以下一律自动展开为平面地图
     if (n.kind !== 'world' && n.kind !== 'continent') document.body.classList.add('map'); // 不展开 3D 世界图：由 setLocal 俯冲接替
-    const lay = layers && (await layers.update([...anc, n]));
+    if (peek) peeked = n.id;
+    const lay = n.kind === 'world' || n.kind === 'continent' ? null : await (await ensureLayers())?.update([...anc, n], { peek }); // 局部地图模块与下一级几何：只有真正进入国家及以下时才加载
     if (seq !== navSeq) return;
     scene?.select(num || null);
     setLocal(!!lay?.local);
@@ -157,6 +175,10 @@ async function step(dir) {
   if (!cur || now - stepAt < 1500) return; // 一次手势只走一级（滚轮惯性、连续事件合并）
   stepAt = now;
   if (dir > 0) {
+    if (cur.realm === 'geo' && cur.id !== 'geo.world' || (cur.id === 'geo.world' && document.body.classList.contains('map'))) { // 地球内部地图：聚焦选中时向前滚＝进入；没有聚焦对象时无效
+      if (peeked && cur.id === peeked) return enterOnce(cur.id);
+      return;
+    }
     if (cur.id === 'cel.earth-moon') return select('geo.world', { push: true }); // 向内放大回到地球
     if (cur.id === 'geo.world' && !document.body.classList.contains('map')) return enterMap(); // 地球仪 → 先展开成世界平面图，再逐级进入
     if (cur.children.state === 'none') return;
@@ -193,7 +215,7 @@ function setLocal(on) {
   clearTimeout(pauseT);
   if (on) {
     b.style.setProperty('--ld', '0s');
-    const go = () => { if (tok !== localTok) return; b.classList.add('local'); pauseT = setTimeout(() => b.classList.contains('local') && scene?.pause(), 2400); };
+    const go = () => { if (tok !== localTok) return; b.classList.add('local'); layers?.playPending(); pauseT = setTimeout(() => b.classList.contains('local') && scene?.pause(), 2400); };
     if (b.classList.contains('local')) return go(); // 局部地图内换级：直接重排
     if (scene.progress <= 0.95) scene.dive(true);   // 在地球仪上：俯冲；已在世界平面图：等镜头缩放落定
     scene.settled(go);
@@ -221,25 +243,28 @@ const hover = (txt, x, y) => { if (!txt) { tip.classList.remove('on'); return; }
 
 async function initEarth() { // 地球侧：3D 地球仪＋局部地图图层（懒加载）
   const countriesP = countryNodes.length ? null : api('/nodes?kind=country');
-  const [{ createScene }, { createLayers }] = await Promise.all([import('./globe.js'), import('./layers.js')]);
-  layers = createLayers({
+  const { createScene } = await import('./globe.js'); // 平铺地图阶段只需要地球仪与国家级底图
+  layersOpts = {
     getKids,
     countryIdByNum: (num) => countryNodes.find((c) => ISO2_TO_NUM[c.code] === num)?.id,
-    onPick: (id) => select(id, { push: true }),
+    countryNameByNum: (num) => { const c = countryNodes.find((n) => ISO2_TO_NUM[n.code] === num); return c && tri(c); },
+    onPick: (id) => select(id, { push: true, peek: true }), // 单击：聚焦选中
+    onEnter: (id) => enterOnce(id), // 双击／连点／长按：进入下一层
     onHover: (h, x, y) => hover(h && (h.hit ? h.name : `${h.name}（暂无数据）`), x, y),
-  });
+  };
   scene = await createScene($('#stage'), {
     onEnter: enterMap,
     onQuality: (q) => { $('#qTxt').textContent = q; },
-    onHover: (num, x, y) => hover(num && countryNodes.find((n) => ISO2_TO_NUM[n.code] === num)?.name, x, y),
-    onPick: (num) => { tip.classList.remove('on'); const c = num && countryNodes.find((n) => ISO2_TO_NUM[n.code] === num); if (c) select(c.id, { push: true }); },
+    onHover: (num, x, y) => hover(num && (c => c && tri(c))(countryNodes.find((n) => ISO2_TO_NUM[n.code] === num)), x, y),
+    onPick: (num) => { tip.classList.remove('on'); const c = num && countryNodes.find((n) => ISO2_TO_NUM[n.code] === num); if (c) select(c.id, { push: true, peek: true }); }, // 单击：聚焦
+    onEnterCountry: (num) => { tip.classList.remove('on'); const c = countryNodes.find((n) => ISO2_TO_NUM[n.code] === num); if (c) enterOnce(c.id); }, // 双击：进入国家内部
   });
   $('#qTxt').textContent = scene.quality();
   if (countriesP) countryNodes = (await countriesP).items;
   scene.setConfigured(countryNodes.map((n) => ISO2_TO_NUM[n.code]).filter(Boolean));
 }
 function disposeEarth() { // 释放地球侧：场景、纹理、图层、局部地图缓存
-  scene?.dispose(); layers?.dispose(); scene = layers = null;
+  scene?.dispose(); layers?.dispose(); scene = layers = layersP = null;
   clearTimeout(pauseT); localTok++;
   document.body.classList.remove('map', 'local');
 }
@@ -306,8 +331,8 @@ document.addEventListener('visibilitychange', () => {
 let rz = 0; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => document.body.classList.contains('local') && layers?.refresh(), 250); });
 boot().catch((e) => { $('#loader p').textContent = `启动失败：${e.message}`; console.error(e); });
 
-// 主动放大滑块（右侧竖向，-50%…+200%）；点数值复位
-{ const rng = $("#zoomRng"), val = $("#zoomVal"); const set = (v) => { rng.value = v; viewZoom.f = 1 + v / 100; document.documentElement.style.setProperty('--zf', viewZoom.f); val.textContent = (v > 0 ? "+" : "") + v + "%"; rng.style.setProperty("--p", ((v + 50) / 250) * 100 + "%"); }; rng.addEventListener("input", () => set(+rng.value)); val.addEventListener("click", () => set(0)); set(0); }
+// 主动放大滑块（右侧竖向，-200%…+200%；正：放大 1…3 倍，负：缩小 1…1/3，对称）；点数值复位
+{ const rng = $("#zoomRng"), val = $("#zoomVal"); const set = (v) => { rng.value = v; viewZoom.f = v >= 0 ? 1 + v / 100 : 1 / (1 - v / 100); document.documentElement.style.setProperty('--zf', viewZoom.f); val.textContent = (v > 0 ? "+" : "") + v + "%"; rng.style.setProperty("--p", ((v + 200) / 400) * 100 + "%"); }; rng.addEventListener("input", () => set(+rng.value)); val.addEventListener("click", () => set(0)); set(0); }
 
 // 视觉特效设置面板：参考系统（预设/标签/距离环/坐标轴/网格…）、模式、星云、辉光、闪烁、动态强度、质量（记住上次设置）
 { const pop = $('#fxPop'), btn = $('#fxBtn'); const row = (k, name) => '<div class="r"><span>' + name + '</span><button data-k="' + k + '"></button></div>';

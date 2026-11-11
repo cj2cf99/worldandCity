@@ -33,7 +33,7 @@ test('导入后节点齐全，path 由父链计算，origin 全为 seed', async 
   const r = await importNodeSeed(db, SEED);
   assert.equal(r.skipped, false);
   const rows = await dump(db);
-  assert.equal(rows.length, 944); // 834 个地理节点（世界／6 大洲／196 国／中国 34 省＋地级／日本 47 都道府县＋主要城市）+ 110 个宇宙系天体节点
+  assert.equal(rows.length, 8015); // 7905 个地理节点（世界／6 大洲／197 国／中国 34 省＋363 地级＋2840 区县／日本 47 都道府县＋主要城市／其余各国 4343 个一级行政区）+ 110 个宇宙系天体节点
   const by = Object.fromEntries(rows.map((x) => [x.id, x]));
   assert.equal(by['geo.cn-sn-xa-wy'].path, '/geo.world/geo.asia/geo.cn/geo.cn-sn/geo.cn-sn-xa/geo.cn-sn-xa-wy/');
   assert.equal(by['geo.fr'].path, '/geo.world/geo.europe/geo.fr/');
@@ -41,12 +41,12 @@ test('导入后节点齐全，path 由父链计算，origin 全为 seed', async 
   assert.equal(await db.prepare("SELECT value FROM wc_meta WHERE key='seed_version'").first('value'), String(JSON.parse(readFileSync(SEED, 'utf8'))._version));
 });
 
-test('深度差异：陕西路径深入到区，法国止于国家；节点表无关注类字段（FR-N3）', async () => {
+test('深度差异：陕西路径深入到区，未央区是叶子；节点表无关注类字段（FR-N3）', async () => {
   const db = fresh();
   await importNodeSeed(db, SEED);
   const kids = async (id) => (await db.prepare('SELECT id FROM wc_nodes WHERE parent_id=?').bind(id).all()).results.length;
-  assert.equal(await kids('geo.fr'), 0, '法国无子节点（稀疏树）');
-  assert.equal(await kids('geo.cn-sn-xa'), 1);
+  assert.equal(await kids('geo.cn-sn-xa-wy'), 0, '未央区无子节点（叶子）');
+  assert.equal(await kids('geo.cn-sn-xa'), 13); // 西安 13 个区县（含沿用的未央区）
   const cols = (await db.prepare('PRAGMA table_info(wc_nodes)').all()).results.map((c) => c.name);
   assert.ok(!cols.some((c) => /follow|favorite|focus/i.test(c)));
 });

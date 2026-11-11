@@ -5,8 +5,9 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { viewZoom } from './zoom.js';
+import { bindGestures } from './gesture.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { drawLand, drawMask, countryView, hitCountry, mollweide, mollweideInv, MOLL_W, MOLL_H, FS, viewRect } from './geo.js';
+import { drawLand, drawMask, countryView, hitCountry, flatXY, flatInv, FLAT_W, FLAT_H, FS, viewRect } from './geo.js';
 
 const TAU = Math.PI * 2;
 const WATER_Y = -1 / 3; // 球内约 1/3 高度（PRD §4.1）
@@ -156,7 +157,7 @@ function earthGeometry(W = 256, H = 128) {
     for (let i = 0; i <= W; i++) {
       const lon = (i / W) * TAU - Math.PI, lat = (j / H) * Math.PI - Math.PI / 2;
       pos.push(Math.cos(lat) * Math.sin(lon), Math.sin(lat), Math.cos(lat) * Math.cos(lon));
-      const [x, y] = mollweide(lon, lat);
+      const [x, y] = flatXY(lon, lat);
       flat.push(x * FS, y * FS, 0);
       ll.push(lon, lat);
       uv.push(i / W, j / H);
@@ -374,7 +375,9 @@ export async function createScene(host, hooks = {}) {
   const earthU = { uMap: { value: landT }, uMask: { value: maskT }, uU: { value: 0 }, uTime: uni.uTime, uHasSel: { value: 0 } };
   const earth = new THREE.Mesh(earthGeometry(), new THREE.ShaderMaterial({ vertexShader: EARTH.vs, fragmentShader: EARTH.fs, transparent: true, depthWrite: false, side: THREE.DoubleSide, uniforms: earthU }));
   earth.renderOrder = 4; earth.frustumCulled = false;
-  const earthG = new THREE.Group(); earthG.add(earth); earthG.scale.setScalar(1.006); scene.add(earthG);
+  const earthG = new THREE.Group(); earthG.add(earth);
+  // 左右各一份拷贝：展平后地图横向无限拼接（拖到边缘时自动接上），仅平面状态可见
+  const wrapCopies = [-1, 1].map((k) => { const m = new THREE.Mesh(earth.geometry, earth.material); m.position.x = k * 2 * FLAT_W * FS; m.visible = false; earthG.add(m); return m; }); earthG.scale.setScalar(1.006); scene.add(earthG);
 
   // 选中标记（仅展开后的地图使用）
   const marker = new THREE.Mesh(new THREE.RingGeometry(0.9, 1, 64), new THREE.ShaderMaterial({
@@ -393,7 +396,7 @@ export async function createScene(host, hooks = {}) {
   // ---- 状态 ----
   const S = {
     dragT: -1e9, vYaw: 0, vTilt: 0, p: 0, pTarget: 0, dive: 0, diveT: 0, diveDist: 2.4, off: { dx: 0, dy: 0 }, cb: null, vo: false, baseYaw: 0.5, baseTilt: 0.18, focus: null, // 地球仪朝向
-    mapView: { s: 1, cx: 0, cy: 0 }, mapTween: null, panelPx: 0,
+    mapView: { s: 1, cx: 0, cy: 0 }, mapTween: null, panelPx: 0, sc: 1, k: 1, maxCy: 1,
     pointer: { x: 0, y: 0 }, camYaw: 0, camPitch: 0,
     swellT: 6, swellPhase: 0, swell: 0, running: false, ids: new Set(), frames: 0, acc: 0,
   };
@@ -413,13 +416,14 @@ export async function createScene(host, hooks = {}) {
   function flatDist() { // 让整幅地图恰好放进右侧可用区域
     const tan = Math.tan((camera.fov * Math.PI) / 360);
     const availW = 1 - S.panelPx / host.clientWidth;
-    const needW = (2 * MOLL_W * FS) * 1.0, needH = (2 * MOLL_H * FS) * 1.0;
+    const needW = (2 * FLAT_W * FS) * 1.0, needH = (2 * FLAT_H * FS) * 1.0;
     return Math.max(needW / (2 * tan * S.aspect * availW), needH / (2 * tan));
   }
   function visExtent(d) { const h = 2 * d * Math.tan((camera.fov * Math.PI) / 360); return { h, w: h * S.aspect * (1 - S.panelPx / host.clientWidth) }; }
   const offsetX = (d) => (S.panelPx / host.clientWidth) * (2 * d * Math.tan((camera.fov * Math.PI) / 360) * S.aspect) / 2;
 
-  const tween = (to, ms = 1400) => { const f = { ...S.mapView }; S.mapTween = { f, to, t0: performance.now(), ms: reduce ? 1 : ms }; };
+  // tween：左右拼接时走最短的一边
+  const tween = (to, ms = 1400) => { const f = { ...S.mapView }; const W2 = 2 * FLAT_W * FS; to = { ...to, cx: to.cx - W2 * Math.round((to.cx - f.cx) / W2) }; S.mapTween = { f, to, t0: performance.now(), ms: reduce ? 1 : ms }; };
 
   // ---- 对外 API ----
   const api = {
@@ -435,7 +439,7 @@ export async function createScene(host, hooks = {}) {
     get mode() { return S.pTarget >= 0.5 ? 'map' : 'globe'; },
     get progress() { return S.p; },
     /** 选中国家（数字编码）或清除；center 为无独立几何的节点沿用父国家。 */
-    select(numId, view) {
+    select(numId, view, fill = 'auto') { // fill：国家范围占可用区域的比例（单击聚焦 0.5；进入国家内部 'auto'）
       drawMask(maskC, numId); maskT.needsUpdate = true; earthU.uHasSel.value = numId ? 1 : 0;
       const v = view || (numId && countryView(numId));
       if (!v) { S.focus = null; marker.visible = false; tween({ s: 1, cx: 0, cy: 0 }); return false; }
@@ -447,11 +451,14 @@ export async function createScene(host, hooks = {}) {
         S.diveDist = Math.min(4.4, Math.max(1.3, Math.max(need(hl, rc.hw), need(hv, rc.hh))));
         S.off = { dx: rc.cx - W / 2, dy: rc.cy - H / 2 };
       }
-      const [fx, fy] = mollweide(S.focus.lon, S.focus.lat);
-      const [x0, y0] = mollweide((v.w * Math.PI) / 180, (v.s * Math.PI) / 180), [x1, y1] = mollweide(((v.e > 180 ? v.e - 360 : v.e) * Math.PI) / 180, (v.n * Math.PI) / 180);
+      const [fx, fy] = flatXY(S.focus.lon, S.focus.lat);
+      const [x0, y0] = flatXY((v.w * Math.PI) / 180, (v.s * Math.PI) / 180), [x1, y1] = flatXY(((v.e > 180 ? v.e - 360 : v.e) * Math.PI) / 180, (v.n * Math.PI) / 180);
       const spanX = Math.max(Math.abs(x1 - x0), 0.02) * FS, spanY = Math.max(Math.abs(y1 - y0), 0.02) * FS;
       const ext = visExtent(flatDist());
-      const s = Math.min(60, Math.max(1.6, 0.66 * Math.min(ext.w / spanX, ext.h / spanY)));
+      const rx = spanX / ext.w, ry = spanY / ext.h, kmax = Math.max(rx, ry);
+      // 'auto'：国家占可用区域 50%，扁长的最多 80%（与局部地图 layers.js 的 showFrac 一致）；数字：固定占比（单击聚焦用 0.5）
+      const m = fill === 'auto' ? Math.min(0.8, Math.max(0.5, 0.5 / Math.max(1e-3, Math.min(rx, ry) / kmax))) : fill;
+      const s = Math.min(60, Math.max(0.5, m / kmax));
       tween({ s, cx: fx * FS, cy: fy * FS }, 1400);
       marker.position.set(fx * FS, fy * FS, 0.02);
       return true;
@@ -476,7 +483,7 @@ export async function createScene(host, hooks = {}) {
     const o = ray.ray.origin.clone().applyMatrix4(inv), d = ray.ray.direction.clone().transformDirection(inv);
     if (Math.abs(d.z) < 1e-6) return null;
     const t = -o.z / d.z; const x = o.x + d.x * t, y = o.y + d.y * t;
-    const ll = mollweideInv(x / FS, y / FS);
+    const ll = flatInv(x / FS, y / FS);
     return ll ? { lon: ll[0], lat: ll[1] } : null;
   }
   function onMove(ev) {
@@ -487,30 +494,35 @@ export async function createScene(host, hooks = {}) {
       const id = ll && hitCountry((ll.lon * 180) / Math.PI, (ll.lat * 180) / Math.PI, S.ids);
       renderer.domElement.style.cursor = id ? 'pointer' : 'default';
       hooks.onHover?.(id || null, ev.clientX, ev.clientY);
-    } else if (S.p < 0.05) renderer.domElement.style.cursor = 'pointer';
+    } else if (S.p < 0.05) renderer.domElement.style.cursor = 'grab';
   }
   addEventListener('pointermove', onMove);
   // 拖拽 = 对应方向的旋转（仅地球仪状态；展开后是平面地图，不旋转）
   let drag = null;
-  renderer.domElement.addEventListener('pointerdown', (e) => { if (e.isPrimary) drag = { x: e.clientX, y: e.clientY }; });
+  renderer.domElement.addEventListener('pointerdown', (e) => { if (e.isPrimary) drag = { x: e.clientX, y: e.clientY, x0: e.clientX, y0: e.clientY, moved: false }; });
   const onDrag = (e) => {
     if (!drag || !e.isPrimary) return;
+    const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+    if (S.p > 0.97 && S.dive < 0.05 && !S.diveT) { // 展开后：拖拽平移地图（横向无限拼接、纵向限制在极区截断内）
+      if (Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 6 && !drag.moved) return;
+      drag.moved = true; drag.x = e.clientX; drag.y = e.clientY; S.mapTween = null;
+      const kk = S.k * S.sc, W = FLAT_W * FS;
+      let cx = S.mapView.cx - dx / kk, cy = S.mapView.cy + dy / kk;
+      cx -= 2 * W * Math.round(cx / (2 * W)); cy = Math.max(-S.maxCy, Math.min(S.maxCy, cy));
+      S.mapView = { ...S.mapView, cx, cy }; S.userPan = true; return;
+    }
     if (S.p > 0.05 || S.dive > 0.05 || S.diveT) { drag = null; return; }
-    const dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY;
+    drag.x = e.clientX; drag.y = e.clientY;
     S.vYaw = dx * 0.006; S.vTilt = dy * 0.006;
     S.baseYaw += S.vYaw; S.baseTilt = Math.max(-1.25, Math.min(1.25, S.baseTilt + S.vTilt)); S.dragT = performance.now();
   };
   const endDrag = () => { drag = null; };
   addEventListener('pointermove', onDrag); addEventListener('pointerup', endDrag); addEventListener('pointercancel', endDrag);
-  let down = null;
-  renderer.domElement.addEventListener('pointerdown', (e) => { down = [e.clientX, e.clientY]; });
-  renderer.domElement.addEventListener('click', (e) => {
-    if (down && Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 6) return;
-    if (S.pTarget < 0.5) { hooks.onEnter?.(); return; }
-    if (S.p < 0.97) return;
-    const ll = mapPick(e);
-    hooks.onPick?.(ll ? hitCountry((ll.lon * 180) / Math.PI, (ll.lat * 180) / Math.PI, S.ids) : null);
-  });
+  // 球态：点击展开成平铺世界图；平铺后的单击／双击／连点／长按见 gesture.js
+  // 球态：双击（触屏连点／长按）展开成平铺世界图；单击不做事；拖拽只旋转（拖动超过 6 像素不算点击）
+  bindGestures(renderer.domElement, { hit: () => (S.pTarget < 0.5 ? 'globe' : null), ready: () => S.pTarget < 0.5, focus: () => {}, enter: () => hooks.onEnter?.() });
+  const pickId = (e) => { const ll = S.p > 0.97 ? mapPick(e) : null; return ll ? hitCountry((ll.lon * 180) / Math.PI, (ll.lat * 180) / Math.PI, S.ids) : null; };
+  bindGestures(renderer.domElement, { hit: pickId, ready: () => S.pTarget >= 0.5 && S.p >= 0.97, focus: (id) => hooks.onPick?.(id), enter: (id) => hooks.onEnterCountry?.(id), moved: () => !!(drag && drag.moved) });
 
   // ---- 主循环 ----
   const q = new THREE.Quaternion();
@@ -579,7 +591,7 @@ export async function createScene(host, hooks = {}) {
     if (S.mapTween) {
       const k = clamp01((now - S.mapTween.t0) / S.mapTween.ms), e = ease(k), { f: a, to } = S.mapTween;
       S.mapView = { s: a.s + (to.s - a.s) * e, cx: a.cx + (to.cx - a.cx) * e, cy: a.cy + (to.cy - a.cy) * e };
-      if (k >= 1) S.mapTween = null;
+      if (k >= 1) { S.mapTween = null; const W2 = 2 * FLAT_W * FS; S.mapView.cx -= W2 * Math.round(S.mapView.cx / W2); } // 落定后折回一圈内（有拷贝，视觉不变）
     }
     const fd = flatDist();
     const base = 4.4 + (fd - 4.4) * ease(seg(p, 0.08, 1));
@@ -589,6 +601,8 @@ export async function createScene(host, hooks = {}) {
     if (S.cb && !S.mapTween && Math.abs(S.dive - S.diveT) < 0.002 && Math.abs(S.p - S.pTarget) < 0.002) { const cb = S.cb; S.cb = null; cb(); }
     const sc = 1.006 + (S.mapView.s - 1.006) * u;
     earthG.scale.setScalar(sc);
+    S.sc = sc; S.k = (host.clientHeight / 2) / (dist * Math.tan((camera.fov * Math.PI) / 360)); S.maxCy = Math.max(0.15, FLAT_H * FS - 0.25 * visExtent(fd).h / sc);
+    for (const m of wrapCopies) m.visible = u > 0.98;
     earthG.position.set(offsetX(fd) * u - S.mapView.cx * sc * u, -S.mapView.cy * sc * u, 0);
     if (hooks.onFrame && p > 0.3) { // 供 SVG 图层同步：正视相机下世界→屏幕为仿射变换
       const k = (host.clientHeight / 2) / (dist * Math.tan((camera.fov * Math.PI) / 360));

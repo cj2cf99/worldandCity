@@ -1,11 +1,14 @@
 // 底图数据与投影工具。内部数据始终为经纬度（设计 §8.2）；Mollweide 只在渲染层使用，最终投影未锁定，可替换。
 import { feature } from 'topojson-client';
-import { geoEquirectangular, geoPath, geoContains, geoCentroid, geoBounds, geoGraticule10 } from 'd3-geo';
+import { geoEquirectangular, geoPath, geoContains, geoCentroid, geoBounds, geoGraticule10, geoArea } from 'd3-geo';
 import topo from 'world-atlas/countries-50m.json';
 import { ISO2_TO_NUM } from './iso.js';
 
 // 底图：world-atlas（Natural Earth 派生），来源登记于 web/SOURCES.md。去掉南极洲以保持展平后的轮廓整洁。
-export const countries = feature(topo, topo.objects.countries).features.filter((f) => f.id !== '010');
+// 去掉南极洲；底图里个别要素共用同一个数字编码（澳大利亚与“阿什莫尔和卡捷岛”都是 036，后者在 Map 里会顶掉澳大利亚，导致点不了、取景错）：同编码只留面积最大的一个
+const all = feature(topo, topo.objects.countries).features.filter((f) => f.id !== '010'), big = new Map();
+for (const f of all) if (f.id != null && (!big.has(f.id) || geoArea(f) > geoArea(big.get(f.id)))) big.set(f.id, f);
+export const countries = all.filter((f) => f.id == null || big.get(f.id) === f);
 // 节点 code(ISO 3166-1 alpha-2) → 底图数字编码；随种子国家增加而补充。
 export { ISO2_TO_NUM };
 const byId = new Map(countries.map((f) => [f.id, f]));
@@ -16,7 +19,7 @@ const hash = (s) => [...s].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7)
 function landColor(id) {
   const h = hash(String(id ?? ""));
   const hue = [95, 110, 75, 130, 48, 36][h % 6];
-  return `hsl(${hue} ${28 + (h >> 3) % 14}% ${34 + (h >> 5) % 14}%)`;
+  return `hsl(${hue} ${28 + (h >>> 3) % 14}% ${34 + (h >>> 5) % 14}%)`;
 }
 
 export function drawLand(canvas) {
@@ -54,8 +57,15 @@ export function drawMask(canvas, numId) {
 }
 
 /** 国家视图：质心（度）与包围盒跨度（度）。无几何返回 null。 */
+/** 取国家的“主体”：去掉面积不足最大一块 0.5% 的远方小岛（澳大利亚的麦夸里岛、法国的海外领地碎片等），用于取景范围，避免主体被拉小、偏离中心。 */
+export function mainFeature(f) {
+  if (f.geometry.type !== 'MultiPolygon') return f;
+  const a = f.geometry.coordinates.map((p) => geoArea({ type: 'Polygon', coordinates: p })), top = Math.max(...a);
+  const keep = f.geometry.coordinates.filter((_, i) => a[i] >= top * 0.005);
+  return keep.length === f.geometry.coordinates.length ? f : { type: 'Feature', id: f.id, properties: f.properties, geometry: { type: 'MultiPolygon', coordinates: keep } };
+}
 export function countryView(numId) {
-  const f = byId.get(numId);
+  const f0 = byId.get(numId), f = f0 && mainFeature(f0);
   if (!f) return null;
   const [lon, lat] = geoCentroid(f);
   const [[w, s], [e, n]] = geoBounds(f);
@@ -68,26 +78,19 @@ export function hitCountry(lon, lat, ids) {
   return null;
 }
 
-// ---- Mollweide（两端窄、中间宽）----
+// ---- 平面地图投影：墨卡托（等角，局部形状不拉伸、不扭曲；横向可无限左右拼接）----
 export const FS = 0.78; // 平面地图缩放（单位球半径 = 1），3D 与 SVG 图层共用
-export const MOLL_W = 2 * Math.SQRT2, MOLL_H = Math.SQRT2; // 半宽、半高（单位球）
-export function mollweide(lon, lat) {
-  let th = lat;
-  for (let i = 0; i < 12 && Math.abs(Math.abs(lat) - Math.PI / 2) > 1e-6; i++) {
-    const d = (2 * th + Math.sin(2 * th) - Math.PI * Math.sin(lat)) / (2 + 2 * Math.cos(2 * th));
-    th -= d;
-    if (Math.abs(d) < 1e-9) break;
-  }
-  if (Math.abs(Math.abs(lat) - Math.PI / 2) <= 1e-6) th = Math.sign(lat) * Math.PI / 2;
-  return [(MOLL_W / Math.PI) * lon * Math.cos(th), MOLL_H * Math.sin(th)];
+const KM = 0.9, LATMAX = (80 * Math.PI) / 180; // 极区截断在 ±80°
+export const FLAT_W = Math.PI * KM, FLAT_H = KM * Math.log(Math.tan(Math.PI / 4 + LATMAX / 2)); // 半宽、半高（单位球）
+export function flatXY(lon, lat) {
+  const p = Math.max(-LATMAX, Math.min(LATMAX, lat));
+  return [KM * lon, KM * Math.log(Math.tan(Math.PI / 4 + p / 2))];
 }
-export function mollweideInv(x, y) {
-  const s = y / MOLL_H;
-  if (Math.abs(s) > 1) return null;
-  const th = Math.asin(s);
-  const lat = Math.asin((2 * th + Math.sin(2 * th)) / Math.PI);
-  const lon = (Math.PI * x) / (MOLL_W * Math.cos(th));
-  return Math.abs(lon) <= Math.PI ? [lon, lat] : null;
+/** 平面坐标 → 经纬度（弧度）。x 超出一圈时按世界宽度折回（左右拼接）。 */
+export function flatInv(x, y) {
+  if (Math.abs(y) > FLAT_H) return null;
+  const xw = x - 2 * FLAT_W * Math.round(x / (2 * FLAT_W));
+  return [xw / KM, 2 * Math.atan(Math.exp(y / KM)) - Math.PI / 2];
 }
 
 /** 地图可用区域（像素）：左侧面板半透明压在上面，顶部留出顶栏。3D 俯冲收尾与局部 SVG 地图共用，保证对齐。 */
