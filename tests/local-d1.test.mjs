@@ -12,9 +12,9 @@ const tables = (db) =>
 test('迁移在空库上建立 wc_ 表与记录表', async () => {
   const db = openDb();
   const applied = migrate(db, MIGRATIONS);
-  assert.deepEqual(applied, ['wc_0001_meta_nodes.sql']);
+  assert.deepEqual(applied, ['wc_0001_meta_nodes.sql', 'wc_0002_labels.sql']);
   const names = (await tables(db)).filter((n) => !n.startsWith('sqlite_'));
-  assert.deepEqual(names, [MIGRATIONS_TABLE, 'wc_meta', 'wc_nodes'].sort());
+  assert.deepEqual(names, [MIGRATIONS_TABLE, 'wc_labels', 'wc_meta', 'wc_nodes'].sort());
   assert.ok(names.every((n) => n.startsWith('wc_')), '所有表必须带 wc_ 前缀（设计 §4.1）');
 });
 
@@ -23,7 +23,7 @@ test('迁移幂等：重复执行不再应用、不报错', async () => {
   migrate(db, MIGRATIONS);
   assert.deepEqual(migrate(db, MIGRATIONS), []);
   const n = await db.prepare(`SELECT count(*) c FROM ${MIGRATIONS_TABLE}`).first('c');
-  assert.equal(n, 1);
+  assert.equal(n, 2);
 });
 
 test('失败的迁移整体回滚且不记入记录表', async () => {

@@ -1,7 +1,7 @@
 {
   "_origin": "public",
   "_license": "MIT（随本仓库，见根目录 LICENSE）；内容为本项目自行整理的公开地理实体名称与层级关系，不含第三方数据集内容；ISO 3166 编码仅作标识引用",
-  "_version": 54,
+  "_version": 62,
   "_stamp": "2026-11-10T00:00:00Z",
   "_note": "M0 最小种子，仅用于跑通导入与校验；两条深度不同的通用示例路径（中国→陕西省→西安市→未央区；法国止于国家）只表达层级深度，不记录任何关注偏好。其余大洲与底图在 M3 补充。path 由导入器按父链计算，不在此文件中书写。 v2 增加宇宙系天体链（更大尺度宇宙→银河系→恒星邻域→太阳系→太阳／地月系统→月球），仅表达浏览尺度，不是严格科学包含关系；天文数值为通用公开数据，均注明性质。",
   "nodes": [
@@ -4599,1142 +4599,6 @@
         "小知识": "阶段比例只用于播放控制，不是真实时间比例。",
         "画面说明": "导航阶段：点击跳到时间轴对应位置；重建为简化模型。"
       }
-    },
-    {
-      "id": "geo.jp-01",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "北海道",
-      "name_local": "Hokkaido / 北海道",
-      "code": "JP-01",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-02",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "青森县",
-      "name_local": "Aomori / 青森県",
-      "code": "JP-02",
-      "sort_order": 1
-    },
-    {
-      "id": "geo.jp-03",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "岩手县",
-      "name_local": "Iwate / 岩手県",
-      "code": "JP-03",
-      "sort_order": 2
-    },
-    {
-      "id": "geo.jp-04",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "宫城县",
-      "name_local": "Miyagi / 宮城県",
-      "code": "JP-04",
-      "sort_order": 3
-    },
-    {
-      "id": "geo.jp-05",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "秋田县",
-      "name_local": "Akita / 秋田県",
-      "code": "JP-05",
-      "sort_order": 4
-    },
-    {
-      "id": "geo.jp-06",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "山形县",
-      "name_local": "Yamagata / 山形県",
-      "code": "JP-06",
-      "sort_order": 5
-    },
-    {
-      "id": "geo.jp-07",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "福岛县",
-      "name_local": "Fukushima / 福島県",
-      "code": "JP-07",
-      "sort_order": 6
-    },
-    {
-      "id": "geo.jp-08",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "茨城县",
-      "name_local": "Ibaraki / 茨城県",
-      "code": "JP-08",
-      "sort_order": 7
-    },
-    {
-      "id": "geo.jp-09",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "栃木县",
-      "name_local": "Tochigi / 栃木県",
-      "code": "JP-09",
-      "sort_order": 8
-    },
-    {
-      "id": "geo.jp-10",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "群马县",
-      "name_local": "Gunma / 群馬県",
-      "code": "JP-10",
-      "sort_order": 9
-    },
-    {
-      "id": "geo.jp-11",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "埼玉县",
-      "name_local": "Saitama / 埼玉県",
-      "code": "JP-11",
-      "sort_order": 10
-    },
-    {
-      "id": "geo.jp-12",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "千叶县",
-      "name_local": "Chiba / 千葉県",
-      "code": "JP-12",
-      "sort_order": 11
-    },
-    {
-      "id": "geo.jp-13",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "东京都",
-      "name_local": "Tokyo / 東京都",
-      "code": "JP-13",
-      "sort_order": 12
-    },
-    {
-      "id": "geo.jp-14",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "神奈川县",
-      "name_local": "Kanagawa / 神奈川県",
-      "code": "JP-14",
-      "sort_order": 13
-    },
-    {
-      "id": "geo.jp-15",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "新潟县",
-      "name_local": "Niigata / 新潟県",
-      "code": "JP-15",
-      "sort_order": 14
-    },
-    {
-      "id": "geo.jp-16",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "富山县",
-      "name_local": "Toyama / 富山県",
-      "code": "JP-16",
-      "sort_order": 15
-    },
-    {
-      "id": "geo.jp-17",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "石川县",
-      "name_local": "Ishikawa / 石川県",
-      "code": "JP-17",
-      "sort_order": 16
-    },
-    {
-      "id": "geo.jp-18",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "福井县",
-      "name_local": "Fukui / 福井県",
-      "code": "JP-18",
-      "sort_order": 17
-    },
-    {
-      "id": "geo.jp-19",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "山梨县",
-      "name_local": "Yamanashi / 山梨県",
-      "code": "JP-19",
-      "sort_order": 18
-    },
-    {
-      "id": "geo.jp-20",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "长野县",
-      "name_local": "Nagano / 長野県",
-      "code": "JP-20",
-      "sort_order": 19
-    },
-    {
-      "id": "geo.jp-21",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "岐阜县",
-      "name_local": "Gifu / 岐阜県",
-      "code": "JP-21",
-      "sort_order": 20
-    },
-    {
-      "id": "geo.jp-22",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "静冈县",
-      "name_local": "Shizuoka / 静岡県",
-      "code": "JP-22",
-      "sort_order": 21
-    },
-    {
-      "id": "geo.jp-23",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "爱知县",
-      "name_local": "Aichi / 愛知県",
-      "code": "JP-23",
-      "sort_order": 22
-    },
-    {
-      "id": "geo.jp-24",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "三重县",
-      "name_local": "Mie / 三重県",
-      "code": "JP-24",
-      "sort_order": 23
-    },
-    {
-      "id": "geo.jp-25",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "滋贺县",
-      "name_local": "Shiga / 滋賀県",
-      "code": "JP-25",
-      "sort_order": 24
-    },
-    {
-      "id": "geo.jp-26",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "京都府",
-      "name_local": "Kyoto / 京都府",
-      "code": "JP-26",
-      "sort_order": 25
-    },
-    {
-      "id": "geo.jp-27",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "大阪府",
-      "name_local": "Osaka / 大阪府",
-      "code": "JP-27",
-      "sort_order": 26
-    },
-    {
-      "id": "geo.jp-28",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "兵库县",
-      "name_local": "Hyogo / 兵庫県",
-      "code": "JP-28",
-      "sort_order": 27
-    },
-    {
-      "id": "geo.jp-29",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "奈良县",
-      "name_local": "Nara / 奈良県",
-      "code": "JP-29",
-      "sort_order": 28
-    },
-    {
-      "id": "geo.jp-30",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "和歌山县",
-      "name_local": "Wakayama / 和歌山県",
-      "code": "JP-30",
-      "sort_order": 29
-    },
-    {
-      "id": "geo.jp-31",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "鸟取县",
-      "name_local": "Tottori / 鳥取県",
-      "code": "JP-31",
-      "sort_order": 30
-    },
-    {
-      "id": "geo.jp-32",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "岛根县",
-      "name_local": "Shimane / 島根県",
-      "code": "JP-32",
-      "sort_order": 31
-    },
-    {
-      "id": "geo.jp-33",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "冈山县",
-      "name_local": "Okayama / 岡山県",
-      "code": "JP-33",
-      "sort_order": 32
-    },
-    {
-      "id": "geo.jp-34",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "广岛县",
-      "name_local": "Hiroshima / 広島県",
-      "code": "JP-34",
-      "sort_order": 33
-    },
-    {
-      "id": "geo.jp-35",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "山口县",
-      "name_local": "Yamaguchi / 山口県",
-      "code": "JP-35",
-      "sort_order": 34
-    },
-    {
-      "id": "geo.jp-36",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "德岛县",
-      "name_local": "Tokushima / 徳島県",
-      "code": "JP-36",
-      "sort_order": 35
-    },
-    {
-      "id": "geo.jp-37",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "香川县",
-      "name_local": "Kagawa / 香川県",
-      "code": "JP-37",
-      "sort_order": 36
-    },
-    {
-      "id": "geo.jp-38",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "爱媛县",
-      "name_local": "Ehime / 愛媛県",
-      "code": "JP-38",
-      "sort_order": 37
-    },
-    {
-      "id": "geo.jp-39",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "高知县",
-      "name_local": "Kochi / 高知県",
-      "code": "JP-39",
-      "sort_order": 38
-    },
-    {
-      "id": "geo.jp-40",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "福冈县",
-      "name_local": "Fukuoka / 福岡県",
-      "code": "JP-40",
-      "sort_order": 39
-    },
-    {
-      "id": "geo.jp-41",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "佐贺县",
-      "name_local": "Saga / 佐賀県",
-      "code": "JP-41",
-      "sort_order": 40
-    },
-    {
-      "id": "geo.jp-42",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "长崎县",
-      "name_local": "Nagasaki / 長崎県",
-      "code": "JP-42",
-      "sort_order": 41
-    },
-    {
-      "id": "geo.jp-43",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "熊本县",
-      "name_local": "Kumamoto / 熊本県",
-      "code": "JP-43",
-      "sort_order": 42
-    },
-    {
-      "id": "geo.jp-44",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "大分县",
-      "name_local": "Oita / 大分県",
-      "code": "JP-44",
-      "sort_order": 43
-    },
-    {
-      "id": "geo.jp-45",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "宫崎县",
-      "name_local": "Miyazaki / 宮崎県",
-      "code": "JP-45",
-      "sort_order": 44
-    },
-    {
-      "id": "geo.jp-46",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "鹿儿岛县",
-      "name_local": "Kagoshima / 鹿児島県",
-      "code": "JP-46",
-      "sort_order": 45
-    },
-    {
-      "id": "geo.jp-47",
-      "parent_id": "geo.jp",
-      "realm": "geo",
-      "kind": "admin1",
-      "name": "冲绳县",
-      "name_local": "Okinawa / 沖縄県",
-      "code": "JP-47",
-      "sort_order": 46
-    },
-    {
-      "id": "geo.jp-01-sapporo",
-      "parent_id": "geo.jp-01",
-      "realm": "geo",
-      "kind": "city",
-      "name": "札幌市",
-      "name_local": "Sapporo / 札幌市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-04-sendai",
-      "parent_id": "geo.jp-04",
-      "realm": "geo",
-      "kind": "city",
-      "name": "仙台市",
-      "name_local": "Sendai / 仙台市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-11-saitama",
-      "parent_id": "geo.jp-11",
-      "realm": "geo",
-      "kind": "city",
-      "name": "埼玉市",
-      "name_local": "Saitama / さいたま市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-12-chiba",
-      "parent_id": "geo.jp-12",
-      "realm": "geo",
-      "kind": "city",
-      "name": "千叶市",
-      "name_local": "Chiba / 千葉市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-14-yokohama",
-      "parent_id": "geo.jp-14",
-      "realm": "geo",
-      "kind": "city",
-      "name": "横滨市",
-      "name_local": "Yokohama / 横浜市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-14-kawasaki",
-      "parent_id": "geo.jp-14",
-      "realm": "geo",
-      "kind": "city",
-      "name": "川崎市",
-      "name_local": "Kawasaki / 川崎市",
-      "sort_order": 1
-    },
-    {
-      "id": "geo.jp-14-sagamihara",
-      "parent_id": "geo.jp-14",
-      "realm": "geo",
-      "kind": "city",
-      "name": "相模原市",
-      "name_local": "Sagamihara / 相模原市",
-      "sort_order": 2
-    },
-    {
-      "id": "geo.jp-15-niigata",
-      "parent_id": "geo.jp-15",
-      "realm": "geo",
-      "kind": "city",
-      "name": "新潟市",
-      "name_local": "Niigata / 新潟市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-22-shizuoka",
-      "parent_id": "geo.jp-22",
-      "realm": "geo",
-      "kind": "city",
-      "name": "静冈市",
-      "name_local": "Shizuoka / 静岡市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-22-hamamatsu",
-      "parent_id": "geo.jp-22",
-      "realm": "geo",
-      "kind": "city",
-      "name": "滨松市",
-      "name_local": "Hamamatsu / 浜松市",
-      "sort_order": 1
-    },
-    {
-      "id": "geo.jp-23-nagoya",
-      "parent_id": "geo.jp-23",
-      "realm": "geo",
-      "kind": "city",
-      "name": "名古屋市",
-      "name_local": "Nagoya / 名古屋市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-26-kyoto",
-      "parent_id": "geo.jp-26",
-      "realm": "geo",
-      "kind": "city",
-      "name": "京都市",
-      "name_local": "Kyoto / 京都市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-27-osaka",
-      "parent_id": "geo.jp-27",
-      "realm": "geo",
-      "kind": "city",
-      "name": "大阪市",
-      "name_local": "Osaka / 大阪市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-27-sakai",
-      "parent_id": "geo.jp-27",
-      "realm": "geo",
-      "kind": "city",
-      "name": "堺市",
-      "name_local": "Sakai / 堺市",
-      "sort_order": 1
-    },
-    {
-      "id": "geo.jp-28-kobe",
-      "parent_id": "geo.jp-28",
-      "realm": "geo",
-      "kind": "city",
-      "name": "神户市",
-      "name_local": "Kobe / 神戸市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-33-okayama",
-      "parent_id": "geo.jp-33",
-      "realm": "geo",
-      "kind": "city",
-      "name": "冈山市",
-      "name_local": "Okayama / 岡山市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-34-hiroshima",
-      "parent_id": "geo.jp-34",
-      "realm": "geo",
-      "kind": "city",
-      "name": "广岛市",
-      "name_local": "Hiroshima / 広島市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-40-kitakyushu",
-      "parent_id": "geo.jp-40",
-      "realm": "geo",
-      "kind": "city",
-      "name": "北九州市",
-      "name_local": "Kitakyushu / 北九州市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-40-fukuoka",
-      "parent_id": "geo.jp-40",
-      "realm": "geo",
-      "kind": "city",
-      "name": "福冈市",
-      "name_local": "Fukuoka / 福岡市",
-      "sort_order": 1
-    },
-    {
-      "id": "geo.jp-43-kumamoto",
-      "parent_id": "geo.jp-43",
-      "realm": "geo",
-      "kind": "city",
-      "name": "熊本市",
-      "name_local": "Kumamoto / 熊本市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-02-aomori",
-      "parent_id": "geo.jp-02",
-      "realm": "geo",
-      "kind": "city",
-      "name": "青森市",
-      "name_local": "Aomori / 青森市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-03-morioka",
-      "parent_id": "geo.jp-03",
-      "realm": "geo",
-      "kind": "city",
-      "name": "盛冈市",
-      "name_local": "Morioka / 盛岡市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-05-akita",
-      "parent_id": "geo.jp-05",
-      "realm": "geo",
-      "kind": "city",
-      "name": "秋田市",
-      "name_local": "Akita / 秋田市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-06-yamagata",
-      "parent_id": "geo.jp-06",
-      "realm": "geo",
-      "kind": "city",
-      "name": "山形市",
-      "name_local": "Yamagata / 山形市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-07-fukushima",
-      "parent_id": "geo.jp-07",
-      "realm": "geo",
-      "kind": "city",
-      "name": "福岛市",
-      "name_local": "Fukushima / 福島市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-08-mito",
-      "parent_id": "geo.jp-08",
-      "realm": "geo",
-      "kind": "city",
-      "name": "水户市",
-      "name_local": "Mito / 水戸市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-09-utsunomiya",
-      "parent_id": "geo.jp-09",
-      "realm": "geo",
-      "kind": "city",
-      "name": "宇都宫市",
-      "name_local": "Utsunomiya / 宇都宮市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-10-maebashi",
-      "parent_id": "geo.jp-10",
-      "realm": "geo",
-      "kind": "city",
-      "name": "前桥市",
-      "name_local": "Maebashi / 前橋市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-16-toyama",
-      "parent_id": "geo.jp-16",
-      "realm": "geo",
-      "kind": "city",
-      "name": "富山市",
-      "name_local": "Toyama / 富山市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-17-kanazawa",
-      "parent_id": "geo.jp-17",
-      "realm": "geo",
-      "kind": "city",
-      "name": "金泽市",
-      "name_local": "Kanazawa / 金沢市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-18-fukui",
-      "parent_id": "geo.jp-18",
-      "realm": "geo",
-      "kind": "city",
-      "name": "福井市",
-      "name_local": "Fukui / 福井市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-19-kofu",
-      "parent_id": "geo.jp-19",
-      "realm": "geo",
-      "kind": "city",
-      "name": "甲府市",
-      "name_local": "Kofu / 甲府市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-20-nagano",
-      "parent_id": "geo.jp-20",
-      "realm": "geo",
-      "kind": "city",
-      "name": "长野市",
-      "name_local": "Nagano / 長野市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-21-gifu",
-      "parent_id": "geo.jp-21",
-      "realm": "geo",
-      "kind": "city",
-      "name": "岐阜市",
-      "name_local": "Gifu / 岐阜市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-24-tsu",
-      "parent_id": "geo.jp-24",
-      "realm": "geo",
-      "kind": "city",
-      "name": "津市",
-      "name_local": "Tsu / 津市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-25-otsu",
-      "parent_id": "geo.jp-25",
-      "realm": "geo",
-      "kind": "city",
-      "name": "大津市",
-      "name_local": "Otsu / 大津市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-29-nara",
-      "parent_id": "geo.jp-29",
-      "realm": "geo",
-      "kind": "city",
-      "name": "奈良市",
-      "name_local": "Nara / 奈良市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-30-wakayama",
-      "parent_id": "geo.jp-30",
-      "realm": "geo",
-      "kind": "city",
-      "name": "和歌山市",
-      "name_local": "Wakayama / 和歌山市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-31-tottori",
-      "parent_id": "geo.jp-31",
-      "realm": "geo",
-      "kind": "city",
-      "name": "鸟取市",
-      "name_local": "Tottori / 鳥取市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-32-matsue",
-      "parent_id": "geo.jp-32",
-      "realm": "geo",
-      "kind": "city",
-      "name": "松江市",
-      "name_local": "Matsue / 松江市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-35-yamaguchi",
-      "parent_id": "geo.jp-35",
-      "realm": "geo",
-      "kind": "city",
-      "name": "山口市",
-      "name_local": "Yamaguchi / 山口市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-36-tokushima",
-      "parent_id": "geo.jp-36",
-      "realm": "geo",
-      "kind": "city",
-      "name": "德岛市",
-      "name_local": "Tokushima / 徳島市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-37-takamatsu",
-      "parent_id": "geo.jp-37",
-      "realm": "geo",
-      "kind": "city",
-      "name": "高松市",
-      "name_local": "Takamatsu / 高松市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-38-matsuyama",
-      "parent_id": "geo.jp-38",
-      "realm": "geo",
-      "kind": "city",
-      "name": "松山市",
-      "name_local": "Matsuyama / 松山市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-39-kochi",
-      "parent_id": "geo.jp-39",
-      "realm": "geo",
-      "kind": "city",
-      "name": "高知市",
-      "name_local": "Kochi / 高知市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-41-saga",
-      "parent_id": "geo.jp-41",
-      "realm": "geo",
-      "kind": "city",
-      "name": "佐贺市",
-      "name_local": "Saga / 佐賀市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-42-nagasaki",
-      "parent_id": "geo.jp-42",
-      "realm": "geo",
-      "kind": "city",
-      "name": "长崎市",
-      "name_local": "Nagasaki / 長崎市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-44-oita",
-      "parent_id": "geo.jp-44",
-      "realm": "geo",
-      "kind": "city",
-      "name": "大分市",
-      "name_local": "Oita / 大分市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-45-miyazaki",
-      "parent_id": "geo.jp-45",
-      "realm": "geo",
-      "kind": "city",
-      "name": "宫崎市",
-      "name_local": "Miyazaki / 宮崎市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-46-kagoshima",
-      "parent_id": "geo.jp-46",
-      "realm": "geo",
-      "kind": "city",
-      "name": "鹿儿岛市",
-      "name_local": "Kagoshima / 鹿児島市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-47-naha",
-      "parent_id": "geo.jp-47",
-      "realm": "geo",
-      "kind": "city",
-      "name": "那霸市",
-      "name_local": "Naha / 那覇市",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-13-chiyoda",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "千代田区",
-      "name_local": "Chiyoda / 千代田区",
-      "sort_order": 0
-    },
-    {
-      "id": "geo.jp-13-chuo",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "中央区",
-      "name_local": "Chuo / 中央区",
-      "sort_order": 1
-    },
-    {
-      "id": "geo.jp-13-minato",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "港区",
-      "name_local": "Minato / 港区",
-      "sort_order": 2
-    },
-    {
-      "id": "geo.jp-13-shinjuku",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "新宿区",
-      "name_local": "Shinjuku / 新宿区",
-      "sort_order": 3
-    },
-    {
-      "id": "geo.jp-13-bunkyo",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "文京区",
-      "name_local": "Bunkyo / 文京区",
-      "sort_order": 4
-    },
-    {
-      "id": "geo.jp-13-taito",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "台东区",
-      "name_local": "Taito / 台東区",
-      "sort_order": 5
-    },
-    {
-      "id": "geo.jp-13-sumida",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "墨田区",
-      "name_local": "Sumida / 墨田区",
-      "sort_order": 6
-    },
-    {
-      "id": "geo.jp-13-koto",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "江东区",
-      "name_local": "Koto / 江東区",
-      "sort_order": 7
-    },
-    {
-      "id": "geo.jp-13-shinagawa",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "品川区",
-      "name_local": "Shinagawa / 品川区",
-      "sort_order": 8
-    },
-    {
-      "id": "geo.jp-13-meguro",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "目黑区",
-      "name_local": "Meguro / 目黒区",
-      "sort_order": 9
-    },
-    {
-      "id": "geo.jp-13-ota",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "大田区",
-      "name_local": "Ota / 大田区",
-      "sort_order": 10
-    },
-    {
-      "id": "geo.jp-13-setagaya",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "世田谷区",
-      "name_local": "Setagaya / 世田谷区",
-      "sort_order": 11
-    },
-    {
-      "id": "geo.jp-13-shibuya",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "涩谷区",
-      "name_local": "Shibuya / 渋谷区",
-      "sort_order": 12
-    },
-    {
-      "id": "geo.jp-13-nakano",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "中野区",
-      "name_local": "Nakano / 中野区",
-      "sort_order": 13
-    },
-    {
-      "id": "geo.jp-13-suginami",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "杉并区",
-      "name_local": "Suginami / 杉並区",
-      "sort_order": 14
-    },
-    {
-      "id": "geo.jp-13-toshima",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "丰岛区",
-      "name_local": "Toshima / 豊島区",
-      "sort_order": 15
-    },
-    {
-      "id": "geo.jp-13-kita",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "北区",
-      "name_local": "Kita / 北区",
-      "sort_order": 16
-    },
-    {
-      "id": "geo.jp-13-arakawa",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "荒川区",
-      "name_local": "Arakawa / 荒川区",
-      "sort_order": 17
-    },
-    {
-      "id": "geo.jp-13-itabashi",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "板桥区",
-      "name_local": "Itabashi / 板橋区",
-      "sort_order": 18
-    },
-    {
-      "id": "geo.jp-13-nerima",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "练马区",
-      "name_local": "Nerima / 練馬区",
-      "sort_order": 19
-    },
-    {
-      "id": "geo.jp-13-adachi",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "足立区",
-      "name_local": "Adachi / 足立区",
-      "sort_order": 20
-    },
-    {
-      "id": "geo.jp-13-katsushika",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "葛饰区",
-      "name_local": "Katsushika / 葛飾区",
-      "sort_order": 21
-    },
-    {
-      "id": "geo.jp-13-edogawa",
-      "parent_id": "geo.jp-13",
-      "realm": "geo",
-      "kind": "district",
-      "name": "江户川区",
-      "name_local": "Edogawa / 江戸川区",
-      "sort_order": 22
     },
     {
       "id": "geo.ad-07",
@@ -102984,6 +101848,3545 @@
       "kind": "district",
       "name": "圣方济各堂区",
       "sort_order": 7
+    },
+    {
+      "id": "geo.jp-01",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "北海道",
+      "name_local": "Hokkaido / 北海道",
+      "code": "JP-01",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-02",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "青森县",
+      "name_local": "Aomori / 青森県",
+      "code": "JP-02",
+      "sort_order": 1
+    },
+    {
+      "id": "geo.jp-03",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "岩手县",
+      "name_local": "Iwate / 岩手県",
+      "code": "JP-03",
+      "sort_order": 2
+    },
+    {
+      "id": "geo.jp-04",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "宫城县",
+      "name_local": "Miyagi / 宮城県",
+      "code": "JP-04",
+      "sort_order": 3
+    },
+    {
+      "id": "geo.jp-05",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "秋田县",
+      "name_local": "Akita / 秋田県",
+      "code": "JP-05",
+      "sort_order": 4
+    },
+    {
+      "id": "geo.jp-06",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "山形县",
+      "name_local": "Yamagata / 山形県",
+      "code": "JP-06",
+      "sort_order": 5
+    },
+    {
+      "id": "geo.jp-07",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "福岛县",
+      "name_local": "Fukushima / 福島県",
+      "code": "JP-07",
+      "sort_order": 6
+    },
+    {
+      "id": "geo.jp-08",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "茨城县",
+      "name_local": "Ibaraki / 茨城県",
+      "code": "JP-08",
+      "sort_order": 7
+    },
+    {
+      "id": "geo.jp-09",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "栃木县",
+      "name_local": "Tochigi / 栃木県",
+      "code": "JP-09",
+      "sort_order": 8
+    },
+    {
+      "id": "geo.jp-10",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "群马县",
+      "name_local": "Gunma / 群馬県",
+      "code": "JP-10",
+      "sort_order": 9
+    },
+    {
+      "id": "geo.jp-11",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "埼玉县",
+      "name_local": "Saitama / 埼玉県",
+      "code": "JP-11",
+      "sort_order": 10
+    },
+    {
+      "id": "geo.jp-12",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "千叶县",
+      "name_local": "Chiba / 千葉県",
+      "code": "JP-12",
+      "sort_order": 11
+    },
+    {
+      "id": "geo.jp-13",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "东京都",
+      "name_local": "Tokyo / 東京都",
+      "code": "JP-13",
+      "sort_order": 12
+    },
+    {
+      "id": "geo.jp-14",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "神奈川县",
+      "name_local": "Kanagawa / 神奈川県",
+      "code": "JP-14",
+      "sort_order": 13
+    },
+    {
+      "id": "geo.jp-15",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "新潟县",
+      "name_local": "Niigata / 新潟県",
+      "code": "JP-15",
+      "sort_order": 14
+    },
+    {
+      "id": "geo.jp-16",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "富山县",
+      "name_local": "Toyama / 富山県",
+      "code": "JP-16",
+      "sort_order": 15
+    },
+    {
+      "id": "geo.jp-17",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "石川县",
+      "name_local": "Ishikawa / 石川県",
+      "code": "JP-17",
+      "sort_order": 16
+    },
+    {
+      "id": "geo.jp-18",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "福井县",
+      "name_local": "Fukui / 福井県",
+      "code": "JP-18",
+      "sort_order": 17
+    },
+    {
+      "id": "geo.jp-19",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "山梨县",
+      "name_local": "Yamanashi / 山梨県",
+      "code": "JP-19",
+      "sort_order": 18
+    },
+    {
+      "id": "geo.jp-20",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "长野县",
+      "name_local": "Nagano / 長野県",
+      "code": "JP-20",
+      "sort_order": 19
+    },
+    {
+      "id": "geo.jp-21",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "岐阜县",
+      "name_local": "Gifu / 岐阜県",
+      "code": "JP-21",
+      "sort_order": 20
+    },
+    {
+      "id": "geo.jp-22",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "静冈县",
+      "name_local": "Shizuoka / 静岡県",
+      "code": "JP-22",
+      "sort_order": 21
+    },
+    {
+      "id": "geo.jp-23",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "爱知县",
+      "name_local": "Aichi / 愛知県",
+      "code": "JP-23",
+      "sort_order": 22
+    },
+    {
+      "id": "geo.jp-24",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "三重县",
+      "name_local": "Mie / 三重県",
+      "code": "JP-24",
+      "sort_order": 23
+    },
+    {
+      "id": "geo.jp-25",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "滋贺县",
+      "name_local": "Shiga / 滋賀県",
+      "code": "JP-25",
+      "sort_order": 24
+    },
+    {
+      "id": "geo.jp-26",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "京都府",
+      "name_local": "Kyoto / 京都府",
+      "code": "JP-26",
+      "sort_order": 25
+    },
+    {
+      "id": "geo.jp-27",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "大阪府",
+      "name_local": "Osaka / 大阪府",
+      "code": "JP-27",
+      "sort_order": 26
+    },
+    {
+      "id": "geo.jp-28",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "兵库县",
+      "name_local": "Hyogo / 兵庫県",
+      "code": "JP-28",
+      "sort_order": 27
+    },
+    {
+      "id": "geo.jp-29",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "奈良县",
+      "name_local": "Nara / 奈良県",
+      "code": "JP-29",
+      "sort_order": 28
+    },
+    {
+      "id": "geo.jp-30",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "和歌山县",
+      "name_local": "Wakayama / 和歌山県",
+      "code": "JP-30",
+      "sort_order": 29
+    },
+    {
+      "id": "geo.jp-31",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "鸟取县",
+      "name_local": "Tottori / 鳥取県",
+      "code": "JP-31",
+      "sort_order": 30
+    },
+    {
+      "id": "geo.jp-32",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "岛根县",
+      "name_local": "Shimane / 島根県",
+      "code": "JP-32",
+      "sort_order": 31
+    },
+    {
+      "id": "geo.jp-33",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "冈山县",
+      "name_local": "Okayama / 岡山県",
+      "code": "JP-33",
+      "sort_order": 32
+    },
+    {
+      "id": "geo.jp-34",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "广岛县",
+      "name_local": "Hiroshima / 広島県",
+      "code": "JP-34",
+      "sort_order": 33
+    },
+    {
+      "id": "geo.jp-35",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "山口县",
+      "name_local": "Yamaguchi / 山口県",
+      "code": "JP-35",
+      "sort_order": 34
+    },
+    {
+      "id": "geo.jp-36",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "德岛县",
+      "name_local": "Tokushima / 徳島県",
+      "code": "JP-36",
+      "sort_order": 35
+    },
+    {
+      "id": "geo.jp-37",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "香川县",
+      "name_local": "Kagawa / 香川県",
+      "code": "JP-37",
+      "sort_order": 36
+    },
+    {
+      "id": "geo.jp-38",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "爱媛县",
+      "name_local": "Ehime / 愛媛県",
+      "code": "JP-38",
+      "sort_order": 37
+    },
+    {
+      "id": "geo.jp-39",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "高知县",
+      "name_local": "Kochi / 高知県",
+      "code": "JP-39",
+      "sort_order": 38
+    },
+    {
+      "id": "geo.jp-40",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "福冈县",
+      "name_local": "Fukuoka / 福岡県",
+      "code": "JP-40",
+      "sort_order": 39
+    },
+    {
+      "id": "geo.jp-41",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "佐贺县",
+      "name_local": "Saga / 佐賀県",
+      "code": "JP-41",
+      "sort_order": 40
+    },
+    {
+      "id": "geo.jp-42",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "长崎县",
+      "name_local": "Nagasaki / 長崎県",
+      "code": "JP-42",
+      "sort_order": 41
+    },
+    {
+      "id": "geo.jp-43",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "熊本县",
+      "name_local": "Kumamoto / 熊本県",
+      "code": "JP-43",
+      "sort_order": 42
+    },
+    {
+      "id": "geo.jp-44",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "大分县",
+      "name_local": "Oita / 大分県",
+      "code": "JP-44",
+      "sort_order": 43
+    },
+    {
+      "id": "geo.jp-45",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "宫崎县",
+      "name_local": "Miyazaki / 宮崎県",
+      "code": "JP-45",
+      "sort_order": 44
+    },
+    {
+      "id": "geo.jp-46",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "鹿儿岛县",
+      "name_local": "Kagoshima / 鹿児島県",
+      "code": "JP-46",
+      "sort_order": 45
+    },
+    {
+      "id": "geo.jp-47",
+      "parent_id": "geo.jp",
+      "realm": "geo",
+      "kind": "admin1",
+      "name": "冲绳县",
+      "name_local": "Okinawa / 沖縄県",
+      "code": "JP-47",
+      "sort_order": 46
+    },
+    {
+      "id": "geo.jp-01-sapporo",
+      "parent_id": "geo.jp-01",
+      "realm": "geo",
+      "kind": "city",
+      "name": "札幌市",
+      "name_local": "Sapporo / 札幌市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-04-sendai",
+      "parent_id": "geo.jp-04",
+      "realm": "geo",
+      "kind": "city",
+      "name": "仙台市",
+      "name_local": "Sendai / 仙台市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-11-saitama",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "埼玉市",
+      "name_local": "Saitama / さいたま市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-12-chiba",
+      "parent_id": "geo.jp-12",
+      "realm": "geo",
+      "kind": "city",
+      "name": "千叶市",
+      "name_local": "Chiba / 千葉市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-14-yokohama",
+      "parent_id": "geo.jp-14",
+      "realm": "geo",
+      "kind": "city",
+      "name": "横滨市",
+      "name_local": "Yokohama / 横浜市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-14-kawasaki",
+      "parent_id": "geo.jp-14",
+      "realm": "geo",
+      "kind": "city",
+      "name": "川崎市",
+      "name_local": "Kawasaki / 川崎市",
+      "sort_order": 1
+    },
+    {
+      "id": "geo.jp-14-sagamihara",
+      "parent_id": "geo.jp-14",
+      "realm": "geo",
+      "kind": "city",
+      "name": "相模原市",
+      "name_local": "Sagamihara / 相模原市",
+      "sort_order": 2
+    },
+    {
+      "id": "geo.jp-15-niigata",
+      "parent_id": "geo.jp-15",
+      "realm": "geo",
+      "kind": "city",
+      "name": "新潟市",
+      "name_local": "Niigata / 新潟市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-22-shizuoka",
+      "parent_id": "geo.jp-22",
+      "realm": "geo",
+      "kind": "city",
+      "name": "静冈市",
+      "name_local": "Shizuoka / 静岡市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-22-hamamatsu",
+      "parent_id": "geo.jp-22",
+      "realm": "geo",
+      "kind": "city",
+      "name": "滨松市",
+      "name_local": "Hamamatsu / 浜松市",
+      "sort_order": 1
+    },
+    {
+      "id": "geo.jp-23-nagoya",
+      "parent_id": "geo.jp-23",
+      "realm": "geo",
+      "kind": "city",
+      "name": "名古屋市",
+      "name_local": "Nagoya / 名古屋市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-26-kyoto",
+      "parent_id": "geo.jp-26",
+      "realm": "geo",
+      "kind": "city",
+      "name": "京都市",
+      "name_local": "Kyoto / 京都市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-27-osaka",
+      "parent_id": "geo.jp-27",
+      "realm": "geo",
+      "kind": "city",
+      "name": "大阪市",
+      "name_local": "Osaka / 大阪市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-27-sakai",
+      "parent_id": "geo.jp-27",
+      "realm": "geo",
+      "kind": "city",
+      "name": "堺市",
+      "name_local": "Sakai / 堺市",
+      "sort_order": 1
+    },
+    {
+      "id": "geo.jp-28-kobe",
+      "parent_id": "geo.jp-28",
+      "realm": "geo",
+      "kind": "city",
+      "name": "神户市",
+      "name_local": "Kobe / 神戸市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-33-okayama",
+      "parent_id": "geo.jp-33",
+      "realm": "geo",
+      "kind": "city",
+      "name": "冈山市",
+      "name_local": "Okayama / 岡山市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-34-hiroshima",
+      "parent_id": "geo.jp-34",
+      "realm": "geo",
+      "kind": "city",
+      "name": "广岛市",
+      "name_local": "Hiroshima / 広島市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-40-kitakyushu",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "北九州市",
+      "name_local": "Kitakyushu / 北九州市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-40-fukuoka",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "福冈市",
+      "name_local": "Fukuoka / 福岡市",
+      "sort_order": 1
+    },
+    {
+      "id": "geo.jp-43-kumamoto",
+      "parent_id": "geo.jp-43",
+      "realm": "geo",
+      "kind": "city",
+      "name": "熊本市",
+      "name_local": "Kumamoto / 熊本市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-02-aomori",
+      "parent_id": "geo.jp-02",
+      "realm": "geo",
+      "kind": "city",
+      "name": "青森市",
+      "name_local": "Aomori / 青森市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-03-morioka",
+      "parent_id": "geo.jp-03",
+      "realm": "geo",
+      "kind": "city",
+      "name": "盛冈市",
+      "name_local": "Morioka / 盛岡市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-05-akita",
+      "parent_id": "geo.jp-05",
+      "realm": "geo",
+      "kind": "city",
+      "name": "秋田市",
+      "name_local": "Akita / 秋田市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-06-yamagata",
+      "parent_id": "geo.jp-06",
+      "realm": "geo",
+      "kind": "city",
+      "name": "山形市",
+      "name_local": "Yamagata / 山形市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-07-fukushima",
+      "parent_id": "geo.jp-07",
+      "realm": "geo",
+      "kind": "city",
+      "name": "福岛市",
+      "name_local": "Fukushima / 福島市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-08-mito",
+      "parent_id": "geo.jp-08",
+      "realm": "geo",
+      "kind": "city",
+      "name": "水户市",
+      "name_local": "Mito / 水戸市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-09-utsunomiya",
+      "parent_id": "geo.jp-09",
+      "realm": "geo",
+      "kind": "city",
+      "name": "宇都宫市",
+      "name_local": "Utsunomiya / 宇都宮市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-10-maebashi",
+      "parent_id": "geo.jp-10",
+      "realm": "geo",
+      "kind": "city",
+      "name": "前桥市",
+      "name_local": "Maebashi / 前橋市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-16-toyama",
+      "parent_id": "geo.jp-16",
+      "realm": "geo",
+      "kind": "city",
+      "name": "富山市",
+      "name_local": "Toyama / 富山市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-17-kanazawa",
+      "parent_id": "geo.jp-17",
+      "realm": "geo",
+      "kind": "city",
+      "name": "金泽市",
+      "name_local": "Kanazawa / 金沢市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-18-fukui",
+      "parent_id": "geo.jp-18",
+      "realm": "geo",
+      "kind": "city",
+      "name": "福井市",
+      "name_local": "Fukui / 福井市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-19-kofu",
+      "parent_id": "geo.jp-19",
+      "realm": "geo",
+      "kind": "city",
+      "name": "甲府市",
+      "name_local": "Kofu / 甲府市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-20-nagano",
+      "parent_id": "geo.jp-20",
+      "realm": "geo",
+      "kind": "city",
+      "name": "长野市",
+      "name_local": "Nagano / 長野市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-21-gifu",
+      "parent_id": "geo.jp-21",
+      "realm": "geo",
+      "kind": "city",
+      "name": "岐阜市",
+      "name_local": "Gifu / 岐阜市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-24-tsu",
+      "parent_id": "geo.jp-24",
+      "realm": "geo",
+      "kind": "city",
+      "name": "津市",
+      "name_local": "Tsu / 津市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-25-otsu",
+      "parent_id": "geo.jp-25",
+      "realm": "geo",
+      "kind": "city",
+      "name": "大津市",
+      "name_local": "Otsu / 大津市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-29-nara",
+      "parent_id": "geo.jp-29",
+      "realm": "geo",
+      "kind": "city",
+      "name": "奈良市",
+      "name_local": "Nara / 奈良市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-30-wakayama",
+      "parent_id": "geo.jp-30",
+      "realm": "geo",
+      "kind": "city",
+      "name": "和歌山市",
+      "name_local": "Wakayama / 和歌山市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-31-tottori",
+      "parent_id": "geo.jp-31",
+      "realm": "geo",
+      "kind": "city",
+      "name": "鸟取市",
+      "name_local": "Tottori / 鳥取市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-32-matsue",
+      "parent_id": "geo.jp-32",
+      "realm": "geo",
+      "kind": "city",
+      "name": "松江市",
+      "name_local": "Matsue / 松江市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-35-yamaguchi",
+      "parent_id": "geo.jp-35",
+      "realm": "geo",
+      "kind": "city",
+      "name": "山口市",
+      "name_local": "Yamaguchi / 山口市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-36-tokushima",
+      "parent_id": "geo.jp-36",
+      "realm": "geo",
+      "kind": "city",
+      "name": "德岛市",
+      "name_local": "Tokushima / 徳島市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-37-takamatsu",
+      "parent_id": "geo.jp-37",
+      "realm": "geo",
+      "kind": "city",
+      "name": "高松市",
+      "name_local": "Takamatsu / 高松市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-38-matsuyama",
+      "parent_id": "geo.jp-38",
+      "realm": "geo",
+      "kind": "city",
+      "name": "松山市",
+      "name_local": "Matsuyama / 松山市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-39-kochi",
+      "parent_id": "geo.jp-39",
+      "realm": "geo",
+      "kind": "city",
+      "name": "高知市",
+      "name_local": "Kochi / 高知市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-41-saga",
+      "parent_id": "geo.jp-41",
+      "realm": "geo",
+      "kind": "city",
+      "name": "佐贺市",
+      "name_local": "Saga / 佐賀市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-42-nagasaki",
+      "parent_id": "geo.jp-42",
+      "realm": "geo",
+      "kind": "city",
+      "name": "长崎市",
+      "name_local": "Nagasaki / 長崎市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-44-oita",
+      "parent_id": "geo.jp-44",
+      "realm": "geo",
+      "kind": "city",
+      "name": "大分市",
+      "name_local": "Oita / 大分市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-45-miyazaki",
+      "parent_id": "geo.jp-45",
+      "realm": "geo",
+      "kind": "city",
+      "name": "宫崎市",
+      "name_local": "Miyazaki / 宮崎市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-46-kagoshima",
+      "parent_id": "geo.jp-46",
+      "realm": "geo",
+      "kind": "city",
+      "name": "鹿儿岛市",
+      "name_local": "Kagoshima / 鹿児島市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-47-naha",
+      "parent_id": "geo.jp-47",
+      "realm": "geo",
+      "kind": "city",
+      "name": "那霸市",
+      "name_local": "Naha / 那覇市",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-13-chiyoda",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "千代田区",
+      "name_local": "Chiyoda / 千代田区",
+      "sort_order": 0
+    },
+    {
+      "id": "geo.jp-13-chuo",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "中央区",
+      "name_local": "Chuo / 中央区",
+      "sort_order": 1
+    },
+    {
+      "id": "geo.jp-13-minato",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "港区",
+      "name_local": "Minato / 港区",
+      "sort_order": 2
+    },
+    {
+      "id": "geo.jp-13-shinjuku",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "新宿区",
+      "name_local": "Shinjuku / 新宿区",
+      "sort_order": 3
+    },
+    {
+      "id": "geo.jp-13-bunkyo",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "文京区",
+      "name_local": "Bunkyo / 文京区",
+      "sort_order": 4
+    },
+    {
+      "id": "geo.jp-13-taito",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "台东区",
+      "name_local": "Taito / 台東区",
+      "sort_order": 5
+    },
+    {
+      "id": "geo.jp-13-sumida",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "墨田区",
+      "name_local": "Sumida / 墨田区",
+      "sort_order": 6
+    },
+    {
+      "id": "geo.jp-13-koto",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "江东区",
+      "name_local": "Koto / 江東区",
+      "sort_order": 7
+    },
+    {
+      "id": "geo.jp-13-shinagawa",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "品川区",
+      "name_local": "Shinagawa / 品川区",
+      "sort_order": 8
+    },
+    {
+      "id": "geo.jp-13-meguro",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "目黑区",
+      "name_local": "Meguro / 目黒区",
+      "sort_order": 9
+    },
+    {
+      "id": "geo.jp-13-ota",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "大田区",
+      "name_local": "Ota / 大田区",
+      "sort_order": 10
+    },
+    {
+      "id": "geo.jp-13-setagaya",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "世田谷区",
+      "name_local": "Setagaya / 世田谷区",
+      "sort_order": 11
+    },
+    {
+      "id": "geo.jp-13-shibuya",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "涩谷区",
+      "name_local": "Shibuya / 渋谷区",
+      "sort_order": 12
+    },
+    {
+      "id": "geo.jp-13-nakano",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "中野区",
+      "name_local": "Nakano / 中野区",
+      "sort_order": 13
+    },
+    {
+      "id": "geo.jp-13-suginami",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "杉并区",
+      "name_local": "Suginami / 杉並区",
+      "sort_order": 14
+    },
+    {
+      "id": "geo.jp-13-toshima",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "丰岛区",
+      "name_local": "Toshima / 豊島区",
+      "sort_order": 15
+    },
+    {
+      "id": "geo.jp-13-kita",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "北区",
+      "name_local": "Kita / 北区",
+      "sort_order": 16
+    },
+    {
+      "id": "geo.jp-13-arakawa",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "荒川区",
+      "name_local": "Arakawa / 荒川区",
+      "sort_order": 17
+    },
+    {
+      "id": "geo.jp-13-itabashi",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "板桥区",
+      "name_local": "Itabashi / 板橋区",
+      "sort_order": 18
+    },
+    {
+      "id": "geo.jp-13-nerima",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "练马区",
+      "name_local": "Nerima / 練馬区",
+      "sort_order": 19
+    },
+    {
+      "id": "geo.jp-13-adachi",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "足立区",
+      "name_local": "Adachi / 足立区",
+      "sort_order": 20
+    },
+    {
+      "id": "geo.jp-13-katsushika",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "葛饰区",
+      "name_local": "Katsushika / 葛飾区",
+      "sort_order": 21
+    },
+    {
+      "id": "geo.jp-13-edogawa",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "江户川区",
+      "name_local": "Edogawa / 江戸川区",
+      "sort_order": 22
+    },
+    {
+      "id": "geo.jp-11-saitama-11101",
+      "parent_id": "geo.jp-11-saitama",
+      "realm": "geo",
+      "kind": "district",
+      "name": "西区",
+      "sort_order": 0,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "11101",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11-saitama-11102",
+      "parent_id": "geo.jp-11-saitama",
+      "realm": "geo",
+      "kind": "district",
+      "name": "北区",
+      "sort_order": 1,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "11102",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11-saitama-11103",
+      "parent_id": "geo.jp-11-saitama",
+      "realm": "geo",
+      "kind": "district",
+      "name": "大宫区",
+      "name_local": "大宮区",
+      "sort_order": 2,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "11103",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11-saitama-11104",
+      "parent_id": "geo.jp-11-saitama",
+      "realm": "geo",
+      "kind": "district",
+      "name": "见沼区",
+      "name_local": "見沼区",
+      "sort_order": 3,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "11104",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11-saitama-11105",
+      "parent_id": "geo.jp-11-saitama",
+      "realm": "geo",
+      "kind": "district",
+      "name": "中央区",
+      "sort_order": 4,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "11105",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11-saitama-11106",
+      "parent_id": "geo.jp-11-saitama",
+      "realm": "geo",
+      "kind": "district",
+      "name": "樱区",
+      "name_local": "桜区",
+      "sort_order": 5,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "11106",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11-saitama-11107",
+      "parent_id": "geo.jp-11-saitama",
+      "realm": "geo",
+      "kind": "district",
+      "name": "浦和区",
+      "sort_order": 6,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "11107",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11-saitama-11108",
+      "parent_id": "geo.jp-11-saitama",
+      "realm": "geo",
+      "kind": "district",
+      "name": "南区",
+      "sort_order": 7,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "11108",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11-saitama-11109",
+      "parent_id": "geo.jp-11-saitama",
+      "realm": "geo",
+      "kind": "district",
+      "name": "绿区",
+      "name_local": "緑区",
+      "sort_order": 8,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "11109",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11-saitama-11110",
+      "parent_id": "geo.jp-11-saitama",
+      "realm": "geo",
+      "kind": "district",
+      "name": "岩槻区",
+      "sort_order": 9,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "11110",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40-kitakyushu-40101",
+      "parent_id": "geo.jp-40-kitakyushu",
+      "realm": "geo",
+      "kind": "district",
+      "name": "门司区",
+      "name_local": "門司区",
+      "sort_order": 0,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "40101",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40-kitakyushu-40103",
+      "parent_id": "geo.jp-40-kitakyushu",
+      "realm": "geo",
+      "kind": "district",
+      "name": "若松区",
+      "sort_order": 1,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "40103",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40-kitakyushu-40105",
+      "parent_id": "geo.jp-40-kitakyushu",
+      "realm": "geo",
+      "kind": "district",
+      "name": "户畑区",
+      "name_local": "戸畑区",
+      "sort_order": 2,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "40105",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40-kitakyushu-40106",
+      "parent_id": "geo.jp-40-kitakyushu",
+      "realm": "geo",
+      "kind": "district",
+      "name": "小仓北区",
+      "name_local": "小倉北区",
+      "sort_order": 3,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "40106",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40-kitakyushu-40107",
+      "parent_id": "geo.jp-40-kitakyushu",
+      "realm": "geo",
+      "kind": "district",
+      "name": "小仓南区",
+      "name_local": "小倉南区",
+      "sort_order": 4,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "40107",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40-kitakyushu-40108",
+      "parent_id": "geo.jp-40-kitakyushu",
+      "realm": "geo",
+      "kind": "district",
+      "name": "八幡东区",
+      "name_local": "八幡東区",
+      "sort_order": 5,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "40108",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40-kitakyushu-40109",
+      "parent_id": "geo.jp-40-kitakyushu",
+      "realm": "geo",
+      "kind": "district",
+      "name": "八幡西区",
+      "sort_order": 6,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "40109",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40-fukuoka-40131",
+      "parent_id": "geo.jp-40-fukuoka",
+      "realm": "geo",
+      "kind": "district",
+      "name": "东区",
+      "name_local": "東区",
+      "sort_order": 0,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "40131",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40-fukuoka-40132",
+      "parent_id": "geo.jp-40-fukuoka",
+      "realm": "geo",
+      "kind": "district",
+      "name": "博多区",
+      "sort_order": 1,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "40132",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40-fukuoka-40133",
+      "parent_id": "geo.jp-40-fukuoka",
+      "realm": "geo",
+      "kind": "district",
+      "name": "中央区",
+      "sort_order": 2,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "40133",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40-fukuoka-40134",
+      "parent_id": "geo.jp-40-fukuoka",
+      "realm": "geo",
+      "kind": "district",
+      "name": "南区",
+      "sort_order": 3,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "40134",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40-fukuoka-40135",
+      "parent_id": "geo.jp-40-fukuoka",
+      "realm": "geo",
+      "kind": "district",
+      "name": "西区",
+      "sort_order": 4,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "40135",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40-fukuoka-40136",
+      "parent_id": "geo.jp-40-fukuoka",
+      "realm": "geo",
+      "kind": "district",
+      "name": "城南区",
+      "sort_order": 5,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "40136",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40-fukuoka-40137",
+      "parent_id": "geo.jp-40-fukuoka",
+      "realm": "geo",
+      "kind": "district",
+      "name": "早良区",
+      "sort_order": 6,
+      "detail": {
+        "类型": "区",
+        "行政区划代码": "40137",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11201",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "川越市",
+      "sort_order": 1,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11201",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11202",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "熊谷市",
+      "sort_order": 2,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11202",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11203",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "川口市",
+      "sort_order": 3,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11203",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11206",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "行田市",
+      "sort_order": 4,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11206",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11207",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "秩父市",
+      "sort_order": 5,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11207",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11208",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "所沢市",
+      "sort_order": 6,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11208",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11209",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "飯能市",
+      "sort_order": 7,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11209",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11210",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "加須市",
+      "sort_order": 8,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11210",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11211",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "本庄市",
+      "sort_order": 9,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11211",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11212",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "東松山市",
+      "sort_order": 10,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11212",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11214",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "春日部市",
+      "sort_order": 11,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11214",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11215",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "狭山市",
+      "sort_order": 12,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11215",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11216",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "羽生市",
+      "sort_order": 13,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11216",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11217",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "鴻巣市",
+      "sort_order": 14,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11217",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11218",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "深谷市",
+      "sort_order": 15,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11218",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11219",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "上尾市",
+      "sort_order": 16,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11219",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11221",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "草加市",
+      "sort_order": 17,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11221",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11222",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "越谷市",
+      "sort_order": 18,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11222",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11223",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "蕨市",
+      "sort_order": 19,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11223",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11224",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "戸田市",
+      "sort_order": 20,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11224",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11225",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "入間市",
+      "sort_order": 21,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11225",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11227",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "朝霞市",
+      "sort_order": 22,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11227",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11228",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "志木市",
+      "sort_order": 23,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11228",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11229",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "和光市",
+      "sort_order": 24,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11229",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11230",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "新座市",
+      "sort_order": 25,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11230",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11231",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "桶川市",
+      "sort_order": 26,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11231",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11232",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "久喜市",
+      "sort_order": 27,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11232",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11233",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "北本市",
+      "sort_order": 28,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11233",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11234",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "八潮市",
+      "sort_order": 29,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11234",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11235",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "富士見市",
+      "sort_order": 30,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11235",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11237",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "三郷市",
+      "sort_order": 31,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11237",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11238",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "蓮田市",
+      "sort_order": 32,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11238",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11239",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "坂戸市",
+      "sort_order": 33,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11239",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11240",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "幸手市",
+      "sort_order": 34,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11240",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11241",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "鶴ヶ島市",
+      "sort_order": 35,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11241",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11242",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "日高市",
+      "sort_order": 36,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11242",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11243",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "吉川市",
+      "sort_order": 37,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11243",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11245",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "ふじみ野市",
+      "sort_order": 38,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11245",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11246",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "city",
+      "name": "白岡市",
+      "sort_order": 39,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "11246",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11301",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "伊奈町",
+      "sort_order": 40,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11301",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11324",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "三芳町",
+      "sort_order": 41,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11324",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11326",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "毛呂山町",
+      "sort_order": 42,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11326",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11327",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "越生町",
+      "sort_order": 43,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11327",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11341",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "滑川町",
+      "sort_order": 44,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11341",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11342",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "嵐山町",
+      "sort_order": 45,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11342",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11343",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "小川町",
+      "sort_order": 46,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11343",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11346",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "川島町",
+      "sort_order": 47,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11346",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11347",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "吉見町",
+      "sort_order": 48,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11347",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11348",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "鳩山町",
+      "sort_order": 49,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11348",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11349",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "ときがわ町",
+      "sort_order": 50,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11349",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11361",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "横瀬町",
+      "sort_order": 51,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11361",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11362",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "皆野町",
+      "sort_order": 52,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11362",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11363",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "長瀞町",
+      "sort_order": 53,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11363",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11365",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "小鹿野町",
+      "sort_order": 54,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11365",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11369",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "東秩父村",
+      "sort_order": 55,
+      "detail": {
+        "类型": "村",
+        "行政区划代码": "11369",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11381",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "美里町",
+      "sort_order": 56,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11381",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11383",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "神川町",
+      "sort_order": 57,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11383",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11385",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "上里町",
+      "sort_order": 58,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11385",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11408",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "寄居町",
+      "sort_order": 59,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11408",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11442",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "宮代町",
+      "sort_order": 60,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11442",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11464",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "杉戸町",
+      "sort_order": 61,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11464",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-11465",
+      "parent_id": "geo.jp-11",
+      "realm": "geo",
+      "kind": "district",
+      "name": "松伏町",
+      "sort_order": 62,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "11465",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13201",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "八王子市",
+      "sort_order": 1,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13201",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13202",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "立川市",
+      "sort_order": 2,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13202",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13203",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "武蔵野市",
+      "sort_order": 3,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13203",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13204",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "三鷹市",
+      "sort_order": 4,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13204",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13205",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "青梅市",
+      "sort_order": 5,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13205",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13206",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "府中市",
+      "sort_order": 6,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13206",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13207",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "昭島市",
+      "sort_order": 7,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13207",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13208",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "調布市",
+      "sort_order": 8,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13208",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13209",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "町田市",
+      "sort_order": 9,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13209",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13210",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "小金井市",
+      "sort_order": 10,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13210",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13211",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "小平市",
+      "sort_order": 11,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13211",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13212",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "日野市",
+      "sort_order": 12,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13212",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13213",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "東村山市",
+      "sort_order": 13,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13213",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13214",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "国分寺市",
+      "sort_order": 14,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13214",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13215",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "国立市",
+      "sort_order": 15,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13215",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13218",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "福生市",
+      "sort_order": 16,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13218",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13219",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "狛江市",
+      "sort_order": 17,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13219",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13220",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "東大和市",
+      "sort_order": 18,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13220",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13221",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "清瀬市",
+      "sort_order": 19,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13221",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13222",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "東久留米市",
+      "sort_order": 20,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13222",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13223",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "武蔵村山市",
+      "sort_order": 21,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13223",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13224",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "多摩市",
+      "sort_order": 22,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13224",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13225",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "稲城市",
+      "sort_order": 23,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13225",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13227",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "羽村市",
+      "sort_order": 24,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13227",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13228",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "あきる野市",
+      "sort_order": 25,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13228",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13229",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "city",
+      "name": "西東京市",
+      "sort_order": 26,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "13229",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13303",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "瑞穂町",
+      "sort_order": 27,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "13303",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13305",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "日の出町",
+      "sort_order": 28,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "13305",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13307",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "檜原村",
+      "sort_order": 29,
+      "detail": {
+        "类型": "村",
+        "行政区划代码": "13307",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13308",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "奥多摩町",
+      "sort_order": 30,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "13308",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13361",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "大島町",
+      "sort_order": 31,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "13361",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13362",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "利島村",
+      "sort_order": 32,
+      "detail": {
+        "类型": "村",
+        "行政区划代码": "13362",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13363",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "新島村",
+      "sort_order": 33,
+      "detail": {
+        "类型": "村",
+        "行政区划代码": "13363",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13364",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "神津島村",
+      "sort_order": 34,
+      "detail": {
+        "类型": "村",
+        "行政区划代码": "13364",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13381",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "三宅村",
+      "sort_order": 35,
+      "detail": {
+        "类型": "村",
+        "行政区划代码": "13381",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13382",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "御蔵島村",
+      "sort_order": 36,
+      "detail": {
+        "类型": "村",
+        "行政区划代码": "13382",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13401",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "八丈町",
+      "sort_order": 37,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "13401",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13402",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "青ヶ島村",
+      "sort_order": 38,
+      "detail": {
+        "类型": "村",
+        "行政区划代码": "13402",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-13421",
+      "parent_id": "geo.jp-13",
+      "realm": "geo",
+      "kind": "district",
+      "name": "小笠原村",
+      "sort_order": 39,
+      "detail": {
+        "类型": "村",
+        "行政区划代码": "13421",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-35-shimonoseki",
+      "parent_id": "geo.jp-35",
+      "realm": "geo",
+      "kind": "city",
+      "name": "下关市",
+      "name_local": "下関市",
+      "sort_order": 1,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "35201",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40202",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "大牟田市",
+      "sort_order": 1,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40202",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40203",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "久留米市",
+      "sort_order": 2,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40203",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40204",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "直方市",
+      "sort_order": 3,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40204",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40205",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "飯塚市",
+      "sort_order": 4,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40205",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40206",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "田川市",
+      "sort_order": 5,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40206",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40207",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "柳川市",
+      "sort_order": 6,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40207",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40210",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "八女市",
+      "sort_order": 7,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40210",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40211",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "筑後市",
+      "sort_order": 8,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40211",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40212",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "大川市",
+      "sort_order": 9,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40212",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40213",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "行橋市",
+      "sort_order": 10,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40213",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40214",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "豊前市",
+      "sort_order": 11,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40214",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40215",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "中間市",
+      "sort_order": 12,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40215",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40216",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "小郡市",
+      "sort_order": 13,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40216",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40217",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "筑紫野市",
+      "sort_order": 14,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40217",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40218",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "春日市",
+      "sort_order": 15,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40218",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40219",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "大野城市",
+      "sort_order": 16,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40219",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40220",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "宗像市",
+      "sort_order": 17,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40220",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40221",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "太宰府市",
+      "sort_order": 18,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40221",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40223",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "古賀市",
+      "sort_order": 19,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40223",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40224",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "福津市",
+      "sort_order": 20,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40224",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40225",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "うきは市",
+      "sort_order": 21,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40225",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40226",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "宮若市",
+      "sort_order": 22,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40226",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40227",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "嘉麻市",
+      "sort_order": 23,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40227",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40228",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "朝倉市",
+      "sort_order": 24,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40228",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40229",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "みやま市",
+      "sort_order": 25,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40229",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40230",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "糸島市",
+      "sort_order": 26,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40230",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40231",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "city",
+      "name": "那珂川市",
+      "sort_order": 27,
+      "detail": {
+        "类型": "市",
+        "行政区划代码": "40231",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40341",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "宇美町",
+      "sort_order": 28,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40341",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40342",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "篠栗町",
+      "sort_order": 29,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40342",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40343",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "志免町",
+      "sort_order": 30,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40343",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40344",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "須恵町",
+      "sort_order": 31,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40344",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40345",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "新宮町",
+      "sort_order": 32,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40345",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40348",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "久山町",
+      "sort_order": 33,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40348",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40349",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "粕屋町",
+      "sort_order": 34,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40349",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40381",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "芦屋町",
+      "sort_order": 35,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40381",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40382",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "水巻町",
+      "sort_order": 36,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40382",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40383",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "岡垣町",
+      "sort_order": 37,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40383",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40384",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "遠賀町",
+      "sort_order": 38,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40384",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40401",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "小竹町",
+      "sort_order": 39,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40401",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40402",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "鞍手町",
+      "sort_order": 40,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40402",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40421",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "桂川町",
+      "sort_order": 41,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40421",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40447",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "筑前町",
+      "sort_order": 42,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40447",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40448",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "東峰村",
+      "sort_order": 43,
+      "detail": {
+        "类型": "村",
+        "行政区划代码": "40448",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40503",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "大刀洗町",
+      "sort_order": 44,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40503",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40522",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "大木町",
+      "sort_order": 45,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40522",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40544",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "広川町",
+      "sort_order": 46,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40544",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40601",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "香春町",
+      "sort_order": 47,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40601",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40602",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "添田町",
+      "sort_order": 48,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40602",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40604",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "糸田町",
+      "sort_order": 49,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40604",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40605",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "川崎町",
+      "sort_order": 50,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40605",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40608",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "大任町",
+      "sort_order": 51,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40608",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40609",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "赤村",
+      "sort_order": 52,
+      "detail": {
+        "类型": "村",
+        "行政区划代码": "40609",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40610",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "福智町",
+      "sort_order": 53,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40610",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40621",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "苅田町",
+      "sort_order": 54,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40621",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40625",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "みやこ町",
+      "sort_order": 55,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40625",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40642",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "吉富町",
+      "sort_order": 56,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40642",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40646",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "上毛町",
+      "sort_order": 57,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40646",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
+    },
+    {
+      "id": "geo.jp-40647",
+      "parent_id": "geo.jp-40",
+      "realm": "geo",
+      "kind": "district",
+      "name": "築上町",
+      "sort_order": 58,
+      "detail": {
+        "类型": "町",
+        "行政区划代码": "40647",
+        "画面说明": "行政区划轮廓：国土交通省 国土数値情報（行政区域データ N03，2024-01-01）を加工して作成；名称为日文汉字（区名已改简体写法的除外）；边界为简化示意。"
+      }
     }
   ]
 }

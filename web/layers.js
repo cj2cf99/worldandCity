@@ -5,6 +5,8 @@
 import { geoConicEqualArea, geoPath, geoBounds, geoCentroid, geoArea } from 'd3-geo';
 import { countries, ISO2_TO_NUM, viewRect, mainFeature } from './geo.js';
 import { bindGestures } from './gesture.js';
+import { labels, typeColor, firstChar } from './labels.js';
+import { tileFor, TILE_URL, tilesAt, tileCorners, zoomForView } from './tiles.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 const el = (n, a = {}) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
@@ -27,7 +29,7 @@ const hash = (s) => [...String(s)].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >
 const fill = (name, dim = 0) => { const h = hash(name); return `hsl(${[92, 108, 76, 128, 52, 38][h % 6]} ${26 + (h >>> 3) % 12}% ${30 + (h >>> 5) % 12 - dim}%)`; };
 
 const tri = (name, loc) => (loc ? `${name} / ${loc}` : name); // 地图互动展示位：中文 / English / 日本語（菜单固定中文）
-export function createLayers({ getKids, countryIdByNum, countryNameByNum, onPick, onEnter, onHover }) {
+export function createLayers({ getKids, countryIdByNum, countryNameByNum, onPick, onEnter, onHover, onLabelPlace, onLabelEdit, onLabelMove }) {
   const svg = el('svg', { id: 'layers' });
   const g = el('g'), zg = el('g', { class: 'zoomg' }); // zg：主动放大（滑块）只缩放地图内容，海洋底色始终铺满整屏
   zg.append(g); svg.append(zg);
@@ -43,17 +45,17 @@ export function createLayers({ getKids, countryIdByNum, countryNameByNum, onPick
   let lastDepth = -1, seq = 0, ctx = null, last = null, lastCtx = null;
   const groups = new Map(); // 已绘制的层级组（同一国家内复用）
 
-  svg.addEventListener('pointerover', (e) => { const p = e.target.closest('path[data-name]'); onHover(p ? { name: p.dataset.name, hit: !!p.dataset.id } : null, e.clientX, e.clientY); });
-  svg.addEventListener('pointermove', (e) => { const p = e.target.closest('path[data-name]'); if (p) onHover({ name: p.dataset.name, hit: !!p.dataset.id }, e.clientX, e.clientY); });
+  svg.addEventListener('pointerover', (e) => { if (labelMode) return; const p = e.target.closest('path[data-name], g.lab'); onHover(p ? { name: p.dataset.name, hit: !!p.dataset.id || p.classList.contains('lab') } : null, e.clientX, e.clientY); });
+  svg.addEventListener('pointermove', (e) => { if (labelMode) return; const p = e.target.closest('path[data-name], g.lab'); if (p) onHover({ name: p.dataset.name, hit: !!p.dataset.id || p.classList.contains('lab') }, e.clientX, e.clientY); });
   svg.addEventListener('pointerout', () => onHover(null));
   // 拖拽平移：超过 5 像素才算拖（不影响点选）；平移量限制在邻国底图覆盖范围内；每次换对象／换级自动回正
   let dragged = false, dn = null, pan = { x: 0, y: 0 }, focusS = 1;
   const setPan = (x, y) => {
     const f = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--zf')) || 1, kx = 1.7 * innerWidth * f * focusS - 0.5 * innerWidth, ky = 1.7 * innerHeight * f * focusS - 0.5 * innerHeight;
     pan = { x: Math.max(-kx, Math.min(kx, x)), y: Math.max(-ky, Math.min(ky, y)) };
-    svg.style.setProperty('--px', pan.x + 'px'); svg.style.setProperty('--py', pan.y + 'px');
+    svg.style.setProperty('--px', pan.x + 'px'); svg.style.setProperty('--py', pan.y + 'px'); scheduleTiles();
   };
-  svg.addEventListener('pointerdown', (e) => { if (e.isPrimary && e.button === 0) { dn = { x: e.clientX, y: e.clientY, px: pan.x, py: pan.y, id: e.pointerId, on: false }; dragged = false; } });
+  svg.addEventListener('pointerdown', (e) => { if (labelMode || e.target.closest?.('g.lab')) return; if (e.isPrimary && e.button === 0) { dn = { x: e.clientX, y: e.clientY, px: pan.x, py: pan.y, id: e.pointerId, on: false }; dragged = false; } });
   svg.addEventListener('pointermove', (e) => {
     if (!dn || e.pointerId !== dn.id) return;
     const dx = e.clientX - dn.x, dy = e.clientY - dn.y;
@@ -64,7 +66,7 @@ export function createLayers({ getKids, countryIdByNum, countryNameByNum, onPick
   const endDrag = () => { dn = null; svg.classList.remove('dragging'); };
   // 手势统一（见 gesture.js）：单击＝聚焦选中；双击／连点／长按＝进入下一层；邻国始终是“进入”（换国家）
   const pathAt = (pt) => document.elementFromPoint(pt.clientX, pt.clientY)?.closest?.('path[data-id]');
-  bindGestures(svg, { hit: (pt) => pathAt(pt)?.dataset.id ?? null, focus: (id) => { if (!id) return; (svg.querySelector(`path.nb[data-id="${id}"]`) ? onEnter : onPick)(id); }, enter: (id) => onEnter(id), moved: () => dragged });
+  bindGestures(svg, { ready: () => !labelMode, hit: (pt) => pathAt(pt)?.dataset.id ?? null, focus: (id) => { if (!id) return; (svg.querySelector(`path.nb[data-id="${id}"]`) ? onEnter : onPick)(id); }, enter: (id) => onEnter(id), moved: () => dragged });
   svg.addEventListener('pointerup', endDrag); svg.addEventListener('pointercancel', endDrag);
 
   /** 可用区域：左侧面板半透明压在上面，顶部留出顶栏。 */
@@ -76,7 +78,7 @@ export function createLayers({ getKids, countryIdByNum, countryNameByNum, onPick
     const fm = mainFeature(f); // 取景只看国家主体（去掉远方小岛）
     const [[w, s], [e, n]] = geoBounds(fm), [lon, lat] = geoCentroid(fm), r = rect();
     const proj = geoConicEqualArea().rotate([-lon, 0]).center([0, lat]).parallels([s + (n - s) / 6, n - (n - s) / 6]);
-    const path = geoPath(proj).digits(1), cache = new Map();
+    const path = geoPath(proj).digits(3), cache = new Map();
     const d = (feat) => { if (!cache.has(feat)) cache.set(feat, path(feat)); return cache.get(feat); };
     const c = { code: country.code, feat: f, proj, path, d, rect: r, W: innerWidth, H: innerHeight, box: null, backdrop: null, refit: false };
     // 取景：对象在可用区域里占 50%（扁长的最多 80%）——先按整个区域拟合量出长宽占比，再缩到对应的居中小矩形里；邻国底图范围随之重算
@@ -112,7 +114,90 @@ export function createLayers({ getKids, countryIdByNum, countryNameByNum, onPick
   }
 
   // 进入下一层：用笔把内部 SVG 的边缘画出来（1 秒）——笔尖沿各区域轮廓依次移动，边缘随笔尖从无到有；画完区域填色淡入
-  let inkFinish = null, pendingInk = null, lastDeepKey = null;
+  // ---- 指定地区的现势地图底图（OSM 瓦片，见 tiles.js）：放在轮廓下面；放大／平移后按可见范围补更细一级的瓦片 ----
+  let tileState = null, curT = { tx: 0, ty: 0, s: 1 }, tTimer = 0;
+  const tg = el('g', { class: 'tiles' }), tgBase = el('g'), tgDetail = el('g'); tg.append(tgBase, tgDetail);
+  const attr = Object.assign(document.createElement('div'), { id: 'mapAttr', textContent: '底图 © OpenStreetMap contributors' }); document.body.append(attr);
+  const tileEls = new Map(); // key → <image>
+  function putTiles(group, list, c, gcj) {
+    const keep = new Set(list.tiles.map((t) => `${t.z}/${t.x}/${t.y}`));
+    for (const [k, e] of tileEls) if (e.parentNode === group && !keep.has(k)) { e.remove(); tileEls.delete(k); }
+    for (const t of list.tiles) {
+      const k = `${t.z}/${t.x}/${t.y}`; if (tileEls.has(k)) continue;
+      const { nw, ne, sw } = tileCorners(t, gcj), a = c.proj(nw), b = c.proj(ne), d = c.proj(sw); if (!a || !b || !d) continue;
+      const m = [(b[0] - a[0]) / 256, (b[1] - a[1]) / 256, (d[0] - a[0]) / 256, (d[1] - a[1]) / 256, a[0], a[1]];
+      const im = el('image', { href: TILE_URL(t.z, t.x, t.y), width: 257, height: 257, transform: `matrix(${m.join(' ')})`, preserveAspectRatio: 'none' }); // 257：相邻瓦片略重叠，避免缝隙
+      group.append(im); tileEls.set(k, im);
+    }
+  }
+  function refreshTiles() {
+    if (!tileState) return;
+    const { c, gcj } = tileState;
+    // 可见范围（屏幕四角反算回经纬度）：按它选瓦片级别，使每块瓦片在屏幕上约 256 像素；底下再垫一层低 2 级的瓦片，放大／平移时先有东西可看
+    const f = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--zf')) || 1, O = [(c.rect.x0 + c.rect.x1) / 2, (c.rect.y0 + c.rect.y1) / 2];
+    const ll = []; for (const [sx, sy] of [[0, 0], [innerWidth, 0], [0, innerHeight], [innerWidth, innerHeight], [innerWidth / 2, innerHeight / 2]]) { const gx = (sx - pan.x - O[0]) / f + O[0], gy = (sy - pan.y - O[1]) / f + O[1], p = c.proj.invert([(gx - curT.tx) / curT.s, (gy - curT.ty) / curT.s]); if (p && isFinite(p[0]) && isFinite(p[1])) ll.push(p); }
+    if (ll.length < 3) return;
+    let vw = Math.min(...ll.map((p) => p[0])), ve = Math.max(...ll.map((p) => p[0])), vs = Math.min(...ll.map((p) => p[1])), vn = Math.max(...ll.map((p) => p[1]));
+    const z = zoomForView(ve - vw, innerWidth), px = (ve - vw) * 0.15, py = (vn - vs) * 0.15; vw -= px; ve += px; vs -= py; vn += py; // 四周多取 15%，平移时少重载
+    putTiles(tgBase, tilesAt([vw, vs, ve, vn], z - 2), c, gcj);
+    putTiles(tgDetail, tilesAt([vw, vs, ve, vn], z), c, gcj);
+  }
+  const scheduleTiles = () => { clearTimeout(tTimer); tTimer = setTimeout(refreshTiles, 220); };
+  addEventListener('viewzoom', scheduleTiles);
+  // ---- 标签：垂直于地图表面的向下箭头（尾部图标＝内容第一个字，上下弹跳，悬浮显示内容）；只在创建它的那一层显示，按经纬度固定 ----
+  let labelMode = false, lastDeepKey = null;
+  const tgLab = el('g', { class: 'labs' });
+  const labF = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--zf')) || 1;
+  const toContent = (sx, sy) => { const O = ctx ? [(ctx.rect.x0 + ctx.rect.x1) / 2, (ctx.rect.y0 + ctx.rect.y1) / 2] : [0, 0], f = labF(); return [((sx - pan.x - O[0]) / f + O[0] - curT.tx) / curT.s, ((sy - pan.y - O[1]) / f + O[1] - curT.ty) / curT.s]; };
+  function makeLab(item) {
+    const ge = el('g', { class: 'lab', 'data-name': item.text || '' }); ge.dataset.lid = item.id || ''; ge.style.setProperty('--c', typeColor(item.type));
+    ge.innerHTML = '<g class="bob"><path class="halo" d="M0 -9V-34"/><path class="stem" d="M0 -9V-34"/><path class="head" d="M-7.5 -12L0 0L7.5 -12Z"/><circle class="ico" cx="0" cy="-52.6" r="19.6"/><text x="0" y="-52" text-anchor="middle" dominant-baseline="central"></text></g>';
+    ge.querySelector('text').textContent = firstChar(item.text);
+    return ge;
+  }
+  const placeLab = (ge, x, y) => { ge._p = [x, y]; ge.setAttribute('transform', `translate(${x},${y}) scale(${1 / (curT.s * labF())})`); };
+  function updateLabScale() { for (const ge of tgLab.querySelectorAll('g.lab')) if (ge._p) placeLab(ge, ge._p[0], ge._p[1]); }
+  function renderLabels() {
+    tgLab.replaceChildren();
+    if (!ctx || !labels.visible || !lastDeepKey) return;
+    for (const it of labels.forLevel(lastDeepKey)) { const p = ctx.proj([it.lon, it.lat]); if (!p) continue; const ge = makeLab(it); placeLab(ge, p[0], p[1]); tgLab.append(ge); }
+  }
+  addEventListener('viewzoom', updateLabScale); addEventListener('labelschange', renderLabels);
+  let labMoved = false, ld = null;
+  svg.addEventListener('click', (e) => { const lb = e.target.closest('g.lab'); if (labMoved) { labMoved = false; return; } if (lb && lb.dataset.lid && !labelMode && !dragged) onLabelEdit?.(lb.dataset.lid); });
+  // 已有标签：按住拖动可重新定位；松开后先二次确认（防误触），确认才更新位置，取消则回到原处
+  svg.addEventListener('pointerdown', (e) => { const lb = e.target.closest?.('g.lab:not(.ghost)'); if (!lb || labelMode || !e.isPrimary || e.button !== 0 || !lb.dataset.lid) return; ld = { el: lb, id: lb.dataset.lid, x: e.clientX, y: e.clientY, on: false, pid: e.pointerId }; });
+  svg.addEventListener('pointermove', (e) => {
+    if (!ld || e.pointerId !== ld.pid) return;
+    if (!ld.on && Math.hypot(e.clientX - ld.x, e.clientY - ld.y) < 6) return;
+    if (!ld.on) { ld.on = true; labMoved = true; try { svg.setPointerCapture(e.pointerId); } catch { /* 忽略 */ } ld.el.classList.add('moving'); onHover(null); }
+    const [x, y] = toContent(e.clientX, e.clientY); placeLab(ld.el, x, y);
+  });
+  const endLabMove = async (e) => {
+    if (!ld) return; const cur = ld; ld = null; if (!cur.on) return;
+    cur.el.classList.remove('moving');
+    if (e.type === 'pointercancel' || !ctx) { renderLabels(); return; }
+    const ll = ctx.proj.invert(toContent(e.clientX, e.clientY));
+    const ok = ll && isFinite(ll[0]) && isFinite(ll[1]) && (await onLabelMove?.(cur.id, { lon: ll[0], lat: ll[1] }));
+    renderLabels(); // 确认后位置已更新；取消则按原坐标重画（回到原处）
+  };
+  svg.addEventListener('pointerup', endLabMove); svg.addEventListener('pointercancel', endLabMove);
+  // 标签模式：按住拖拽把箭头放到想要的位置，松开即弹出输入框
+  let ghost = null;
+  svg.addEventListener('pointerdown', (e) => {
+    if (!labelMode || !e.isPrimary || e.button !== 0) return;
+    e.preventDefault(); try { svg.setPointerCapture(e.pointerId); } catch { /* 忽略 */ }
+    ghost = makeLab({ text: '＋', type: '' }); ghost.classList.add('ghost'); tgLab.append(ghost); const [x, y] = toContent(e.clientX, e.clientY); placeLab(ghost, x, y);
+  });
+  svg.addEventListener('pointermove', (e) => { if (labelMode && ghost) { const [x, y] = toContent(e.clientX, e.clientY); placeLab(ghost, x, y); } });
+  const dropGhost = (e) => {
+    if (!ghost) return; ghost.remove(); ghost = null;
+    if (e.type === 'pointercancel' || !ctx) return;
+    const ll = ctx.proj.invert(toContent(e.clientX, e.clientY)); if (!ll || !isFinite(ll[0]) || !isFinite(ll[1])) return;
+    onLabelPlace?.({ lon: ll[0], lat: ll[1], level: lastDeepKey, node: (lastDeepKey || '').slice(3) });
+  };
+  svg.addEventListener('pointerup', dropGhost); svg.addEventListener('pointercancel', dropGhost);
+  let inkFinish = null, pendingInk = null;
   function startInk(lg) {
     const ps = [...lg.querySelectorAll('path')], lens = ps.map((p) => p.getTotalLength?.() || 0), total = lens.reduce((a, b) => a + b, 0);
     if (!ps.length || !total) { lg.classList.remove('inking'); return; }
@@ -136,6 +221,9 @@ export function createLayers({ getKids, countryIdByNum, countryNameByNum, onPick
   }
 
   return {
+    /** 标签模式开关：开启后按住拖拽放置箭头，松开触发 onLabelPlace。 */
+    setLabelMode(on) { labelMode = !!on; svg.classList.toggle('labeling', labelMode); if (!labelMode && ghost) { ghost.remove(); ghost = null; } },
+    renderLabels,
     /** 局部地图淡入时调用：开始画等待中的那一级。 */
     playPending() { if (pendingInk) { const lg = pendingInk; pendingInk = null; startInk(lg); } },
     clear() { g.replaceChildren(); },
@@ -214,21 +302,29 @@ export function createLayers({ getKids, countryIdByNum, countryNameByNum, onPick
       g.append(eg); appear(eg);
 
       // 聚焦：把目标对象的全范围放进可用区域（CSS 变换过渡，正对屏幕）
-      let t = 'translate(0px,0px) scale(1)';
-      if (focus) {
-        const [[bx0, by0], [bx1, by1]] = c.path.bounds(mainPart(focus)), r = c.rect;
-        const fxx = (bx1 - bx0) / (r.x1 - r.x0), fyy = (by1 - by0) / (r.y1 - r.y0), s = Math.min(48, Math.max(0.5, showFrac(fxx, fyy) / Math.max(fxx, fyy))); // 同样 50%（扁长的最多 80%）
+      let t = 'translate(0px,0px) scale(1)', tT = { tx: 0, ty: 0, s: 1 };
+      const tn = tileFor(S.id); // 现势地图底图：undefined＝不启用；null＝用该节点自己轮廓的范围；数组＝手工范围（没有自己轮廓的日本市）
+      let box = null;
+      if (Array.isArray(tn)) { const q = [[tn[0], tn[1]], [tn[2], tn[1]], [tn[0], tn[3]], [tn[2], tn[3]]].map((p) => c.proj(p)); box = [[Math.min(...q.map((p) => p[0])), Math.min(...q.map((p) => p[1]))], [Math.max(...q.map((p) => p[0])), Math.max(...q.map((p) => p[1]))]]; }
+      if (focus || box) {
+        const [[bx0, by0], [bx1, by1]] = box ?? c.path.bounds(mainPart(focus)), r = c.rect;
+        const fxx = (bx1 - bx0) / (r.x1 - r.x0), fyy = (by1 - by0) / (r.y1 - r.y0), s = Math.min(3000, Math.max(0.5, showFrac(fxx, fyy) / Math.max(fxx, fyy))); // 同样 50%（扁长的最多 80%）
         const tx = (r.x0 + r.x1) / 2 - s * (bx0 + bx1) / 2, ty = (r.y0 + r.y1) / 2 - s * (by0 + by1) / 2;
-        t = `translate(${tx}px,${ty}px) scale(${s})`;
+        t = `translate(${tx}px,${ty}px) scale(${s})`; tT = { tx, ty, s };
       }
-      g.style.transform = t; focusS = focus ? Math.min(48, Math.max(0.5, parseFloat(/scale\(([\d.]+)\)/.exec(t)?.[1]) || 1)) : 1;
+      g.style.transform = t; focusS = focus || box ? Math.min(3000, Math.max(0.5, tT.s)) : 1; curT = tT;
       setPan(0, 0); // 换对象／换级：回正（带过渡）
+      if (tn !== undefined && (Array.isArray(tn) || focus)) { // 嵌入现势地图底图
+        const gb = Array.isArray(tn) ? tn : (([[w, s], [e, n]]) => [w, s, e, n])(geoBounds(focus));
+        tileState = { c, bbox: gb, gcj: c.code === 'CN' }; g.prepend(tg); svg.classList.add('tiled'); attr.style.display = 'block'; refreshTiles();
+      } else { tileState = null; tg.remove(); tgBase.replaceChildren(); tgDetail.replaceChildren(); tileEls.clear(); svg.classList.remove('tiled'); attr.style.display = 'none'; }
       if (levels.length) lastDeepKey = `lv:${levels.at(-1).owner.id}`;
+      g.append(tgLab); renderLabels(); // 标签在最上层；只显示创建它的那一层的
       if (inkG) { if (!document.body.classList.contains('local')) pendingInk = inkG; else startInk(inkG); } // 局部地图尚未显示（从 3D 世界图刚进入）：等它淡入时再开始画
       return { local: true };
     },
     refresh() { if (last) this.update(last); },
     /** 进入宇宙系：移除 SVG、释放缓存（地球侧不再保留）。 */
-    dispose() { seq++; svg.remove(); files.clear(); groups.clear(); inkFinish?.(); pendingInk = null; ctx = lastCtx = last = null; lastDepth = -1; lastDeepKey = null; },
+    dispose() { seq++; attr.remove(); svg.remove(); files.clear(); groups.clear(); inkFinish?.(); pendingInk = null; ctx = lastCtx = last = null; lastDepth = -1; lastDeepKey = null; },
   };
 }

@@ -9,7 +9,8 @@ const devApi = {
     const db = openDb('data/local/worldandcity-dev.sqlite');
     server.middlewares.use(async (req, res, next) => {
       if (!req.url.startsWith('/api/v1/')) return next();
-      const r = await handle(new Request(new URL(req.url, 'http://localhost')), db);
+      const chunks = []; if (req.method !== 'GET' && req.method !== 'HEAD') for await (const c of req) chunks.push(c);
+      const r = await handle(new Request(new URL(req.url, 'http://localhost'), { method: req.method, ...(chunks.length ? { body: Buffer.concat(chunks) } : {}) }), db);
       res.statusCode = r.status;
       r.headers.forEach((v, k) => res.setHeader(k, v));
       res.end(await r.text());

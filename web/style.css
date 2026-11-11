@@ -197,3 +197,37 @@ body.incosmos #cstage::after{content:'';position:absolute;inset:0;pointer-events
 /* 地球内部地图：触屏不弹长按菜单、不选中文字、不触发浏览器手势（长按＝进入下一层） */
 #stage,#stage canvas,#layers,#layers *{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
 #stage canvas{touch-action:none}
+/* 指定地区的现势地图底图（OSM 瓦片）：轮廓只留淡淡的填色与边线，底图透出来；右下角署名 */
+#layers g.tiles image{pointer-events:none}
+#layers.tiled g.lv:not(.inking) path{fill-opacity:.22}
+#mapAttr{position:fixed;right:10px;bottom:6px;z-index:6;display:none;font:11px/1.2 system-ui,sans-serif;color:#dbe6ff;background:rgba(8,12,28,.55);padding:2px 7px;border-radius:6px;pointer-events:none}
+
+/* 标签：按钮、箭头、输入框 */
+#labBox{position:fixed;right:14px;top:calc(50% - 168px);z-index:6;display:none;flex-direction:column;gap:8px}
+body.local #labBox{display:flex}
+#labBox button{all:unset;cursor:pointer;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(8px)}
+#labBox button svg{width:18px;height:18px;fill:none;stroke:var(--a);stroke-width:1.8;stroke-linejoin:round;stroke-linecap:round}
+#labBox button.on{background:var(--a);box-shadow:0 0 14px var(--a)} #labBox button.on svg{stroke:#0b1226}
+#labBox button.off{opacity:.45}
+#layers.labeling{cursor:crosshair} #layers.labeling path{cursor:crosshair}
+#layers g.lab{cursor:pointer;pointer-events:auto}
+#layers g.lab path{vector-effect:none;transition:none;fill-opacity:1}
+#layers g.lab .halo{stroke:#fff;stroke-width:8;stroke-linecap:round;fill:none}
+#layers g.lab .stem{stroke:var(--c);stroke-width:4.5;stroke-linecap:round;fill:none}
+#layers g.lab .head{fill:var(--c);stroke:#fff;stroke-width:2.5;stroke-linejoin:round;paint-order:stroke}
+#layers g.lab .ico{fill:#fff;stroke:var(--c);stroke-width:5}
+#layers g.lab text{fill:#0b1226;font:800 26px/1 'Microsoft YaHei','PingFang SC','Noto Sans CJK SC',system-ui,sans-serif;pointer-events:none;user-select:none}
+#layers g.lab{filter:drop-shadow(0 1px 2px rgba(0,0,0,.55))}
+#layers g.lab .bob{animation:labBob .9s ease-in-out infinite}
+#layers g.lab.ghost{opacity:.75;pointer-events:none} #layers g.lab.ghost .bob{animation:none}
+@keyframes labBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+#labDlg{position:fixed;inset:0;z-index:80;display:grid;place-items:center;background:rgba(4,8,20,.45);backdrop-filter:blur(3px)}
+#labDlg form{width:300px;padding:16px 18px;border-radius:14px;background:rgba(14,22,46,.96);border:1px solid var(--line);box-shadow:0 12px 40px #000a;color:#e8f0ff;display:flex;flex-direction:column;gap:10px}
+#labDlg h3{margin:0;font-size:15px;color:var(--a)}
+#labDlg label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:#9fb4d8}
+#labDlg input{all:unset;box-sizing:border-box;width:100%;padding:7px 9px;border-radius:8px;background:rgba(255,255,255,.07);border:1px solid var(--line);color:#fff;font-size:14px}
+#labDlg input:focus{border-color:var(--a)}
+#labDlg .row{display:flex;gap:8px;justify-content:flex-end}
+#labDlg button{all:unset;cursor:pointer;padding:6px 14px;border-radius:8px;background:rgba(255,255,255,.1);font-size:13px}
+#labDlg .ok{background:var(--a);color:#0b1226;font-weight:600} #labDlg .del{background:#7a2a33}
+#layers g.lab{touch-action:none} #layers g.lab.moving{opacity:.8;cursor:grabbing} #layers g.lab.moving .bob{animation:none}

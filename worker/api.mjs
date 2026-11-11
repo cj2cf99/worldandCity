@@ -1,6 +1,7 @@
-// 节点读取路由（设计 §6.2）。纯函数 handle(request, db)：Vite 开发中间件与 Worker 入口共用。
-// 鉴权／Origin 校验属 M1，不在此处；本路由只读。
+// 节点读取路由（设计 §6.2）＋标签读写（独立于节点）。纯函数 handle(request, db)：Vite 开发中间件与 Worker 入口共用。
+// 鉴权／Origin 校验属 M1，不在此处。
 import { AppError } from './errors.mjs';
+import { listLabels, createLabel, updateLabel, deleteLabel } from './labels.mjs';
 import { getNode, listChildren, getAncestors, listByKind } from './nodes.mjs';
 
 const STATUS = { E_VALIDATION: 400, E_NOT_FOUND: 404 };
@@ -14,6 +15,17 @@ function fail(e) {
 
 export async function handle(request, db) {
   const url = new URL(request.url);
+  const lb = /^\/api\/v1\/labels(?:\/([^/]+))?$/.exec(url.pathname);
+  if (lb) {
+    try {
+      const id = lb[1] && decodeURIComponent(lb[1]), body = () => request.json().catch(() => { throw new AppError('E_VALIDATION', '请求体不是 JSON'); });
+      if (!id && request.method === 'GET') return json(await listLabels(db));
+      if (!id && request.method === 'POST') return json(await createLabel(db, await body()), 201);
+      if (id && request.method === 'PATCH') return json(await updateLabel(db, id, await body()));
+      if (id && request.method === 'DELETE') return json(await deleteLabel(db, id));
+    } catch (e) { return fail(e); }
+    return json({ error: { code: 'E_NOT_FOUND', message: '未知端点' } }, 404);
+  }
   if (url.pathname === '/api/v1/nodes' && request.method === 'GET') {
     try { return json(await listByKind(db, url.searchParams.get('kind'))); } catch (e) { return fail(e); }
   }

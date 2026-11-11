@@ -1,5 +1,6 @@
 // 应用壳：层级导航、详情卡、深链接、纯观赏。3D 场景懒加载（设计 §8.1、§8.3）。
 import { viewZoom } from './zoom.js';
+import { labels, askLabel, askConfirm } from './labels.js';
 import { FX, saveFX, applyPreset, SIM, JUMPS, nowYr } from './fx.js';
 const $ = (s) => document.querySelector(s);
 import { ISO2_TO_NUM } from './iso.js'; // 小表（由 scripts/build-countries.mjs 生成），首屏壳也能用，不必引入底图数据
@@ -27,10 +28,8 @@ const ICON = {
   nebula: '<path d="M5 15c0-5 5-9 9-7 4 1 6 6 3 9-3 3-8 2-12-2z"/>',
   star_cluster: '<circle cx="8" cy="9" r="1"/><circle cx="14" cy="7" r="1"/><circle cx="16" cy="13" r="1.2"/><circle cx="10" cy="15" r="1.2"/><circle cx="12" cy="11" r="1"/>',
   district: '<path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
-  town: '<path d="M4 20V11l8-6 8 6v9z"/><path d="M9 20v-5h6v5"/>',
-  village: '<path d="M3 20l5-8 4 5 3-4 6 7z"/><circle cx="17" cy="7" r="2"/>',
 };
-const KIND_ZH = { galactic_region: '银河区域', black_hole: '黑洞', nebula: '星云', star_cluster: '星团', void: '空洞', cosmic_web: '宇宙网', planet: '行星', dwarf_planet: '矮行星', asteroid_belt: '小行星带', comet_group: '彗星', comet: '彗星', shell: '球壳层', bubble: '星际泡', galactic_arm: '旋臂', superstructure: '超级结构', supercluster_complex: '超星系团复合体', supercluster: '超星系团', great_wall: '巨型长城', galaxy_group: '星系群', galaxy_cluster: '星系团', universe: '宇宙', galaxy: '星系', stellar_neighborhood: '恒星邻域', star_system: '恒星系统', star: '恒星', system: '天体系统', moon: '卫星', world: '世界', continent: '大洲', country: '国家', admin1: '一级行政区', city: '城市', district: '区', town: '街道／乡镇／町', village: '村／社区／丁目' };
+const KIND_ZH = { galactic_region: '银河区域', black_hole: '黑洞', nebula: '星云', star_cluster: '星团', void: '空洞', cosmic_web: '宇宙网', planet: '行星', dwarf_planet: '矮行星', asteroid_belt: '小行星带', comet_group: '彗星', comet: '彗星', shell: '球壳层', bubble: '星际泡', galactic_arm: '旋臂', superstructure: '超级结构', supercluster_complex: '超星系团复合体', supercluster: '超星系团', great_wall: '巨型长城', galaxy_group: '星系群', galaxy_cluster: '星系团', universe: '宇宙', galaxy: '星系', stellar_neighborhood: '恒星邻域', star_system: '恒星系统', star: '恒星', system: '天体系统', moon: '卫星', world: '世界', continent: '大洲', country: '国家', admin1: '一级行政区', city: '城市', district: '区' };
 const icon = (k) => `<svg class="ic" viewBox="0 0 24 24">${ICON[k] || '<circle cx="12" cy="12" r="3"/>'}</svg>`;
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
@@ -144,6 +143,7 @@ async function select(id, { push = false, peek = false } = {}) {
     // 显示分工：世界／大洲在地球仪上；国家及以下一律自动展开为平面地图
     if (n.kind !== 'world' && n.kind !== 'continent') document.body.classList.add('map'); // 不展开 3D 世界图：由 setLocal 俯冲接替
     if (peek) peeked = n.id;
+    viewZoom.setMax(n.realm === 'geo' && (n.kind === 'city' || n.kind === 'district') ? 1000 : 200); // 到市内容级别（详细查看）：最大放大 1000%
     const lay = n.kind === 'world' || n.kind === 'continent' ? null : await (await ensureLayers())?.update([...anc, n], { peek }); // 局部地图模块与下一级几何：只有真正进入国家及以下时才加载
     if (seq !== navSeq) return;
     scene?.select(num || null);
@@ -250,6 +250,17 @@ async function initEarth() { // 地球侧：3D 地球仪＋局部地图图层（
     countryNameByNum: (num) => { const c = countryNodes.find((n) => ISO2_TO_NUM[n.code] === num); return c && tri(c); },
     onPick: (id) => select(id, { push: true, peek: true }), // 单击：聚焦选中
     onEnter: (id) => enterOnce(id), // 双击／连点／长按：进入下一层
+    onLabelPlace: async (pos) => { // 标签：拖拽放置后立即弹出输入（类型＋内容），其余字段自动填
+      layers?.setLabelMode(false); $('#labAdd').classList.remove('on');
+      const r = await askLabel({ title: '新标签' });
+      if (r && !r.del) labels.add({ ...pos, type: r.type, text: r.text }); else layers?.renderLabels();
+    },
+    onLabelMove: async (id, pos) => { // 拖动重定位：二次确认后才写入新位置
+      const it = labels.get(id); if (!it) return false;
+      if (!(await askConfirm(`把标签「${it.text}」移到这个新位置吗？`, { ok: '移到这里', no: '取消' }))) return false;
+      labels.update(id, pos); return true;
+    },
+    onLabelEdit: async (id) => { const it = labels.get(id); if (!it) return; const r = await askLabel({ title: '编辑标签', type: it.type, text: it.text, canDelete: true }); if (!r) return; if (r.del) { if (await askConfirm(`删除标签「${it.text}」？此操作不能撤销。`, { ok: '删除', no: '取消' })) labels.remove(id); } else labels.update(id, { type: r.type, text: r.text }); }, // 删除也要二次确认
     onHover: (h, x, y) => hover(h && (h.hit ? h.name : `${h.name}（暂无数据）`), x, y),
   };
   scene = await createScene($('#stage'), {
@@ -332,7 +343,9 @@ let rz = 0; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout
 boot().catch((e) => { $('#loader p').textContent = `启动失败：${e.message}`; console.error(e); });
 
 // 主动放大滑块（右侧竖向，-200%…+200%；正：放大 1…3 倍，负：缩小 1…1/3，对称）；点数值复位
-{ const rng = $("#zoomRng"), val = $("#zoomVal"); const set = (v) => { rng.value = v; viewZoom.f = v >= 0 ? 1 + v / 100 : 1 / (1 - v / 100); document.documentElement.style.setProperty('--zf', viewZoom.f); val.textContent = (v > 0 ? "+" : "") + v + "%"; rng.style.setProperty("--p", ((v + 200) / 400) * 100 + "%"); }; rng.addEventListener("input", () => set(+rng.value)); val.addEventListener("click", () => set(0)); set(0); }
+{ const rng = $("#zoomRng"), val = $("#zoomVal"); const set = (v) => { rng.value = v; viewZoom.f = v >= 0 ? 1 + v / 100 : 1 / (1 - v / 100); document.documentElement.style.setProperty('--zf', viewZoom.f); dispatchEvent(new Event('viewzoom')); val.textContent = (v > 0 ? "+" : "") + v + "%"; rng.style.setProperty("--p", ((v - rng.min) / (rng.max - rng.min)) * 100 + "%"); }; rng.addEventListener("input", () => set(+rng.value)); val.addEventListener("click", () => set(0)); set(0);
+  viewZoom.setMax = (mx) => { if (+rng.max === mx) return; rng.max = mx; if (+rng.value > mx) set(mx); else set(+rng.value); }; // 放大上限：一般 200%，市内容级别 500% 
+}
 
 // 视觉特效设置面板：参考系统（预设/标签/距离环/坐标轴/网格…）、模式、星云、辉光、闪烁、动态强度、质量（记住上次设置）
 { const pop = $('#fxPop'), btn = $('#fxBtn'); const row = (k, name) => '<div class="r"><span>' + name + '</span><button data-k="' + k + '"></button></div>';
@@ -352,3 +365,11 @@ boot().catch((e) => { $('#loader p').textContent = `启动失败：${e.message}`
     else if (k === 'quality') FX.quality = { auto: 'high', high: 'mid', mid: 'low', low: 'auto' }[FX.quality]; else { FX[k] = !FX[k]; if (k === 'basinRef') FX.preset = 'custom'; }
     saveFX(); paint(); });
   btn.addEventListener('click', () => { pop.hidden = !pop.hidden; }); paint(); }
+
+// 标签：打标签按钮（进入国家内部的地图后可用）、整体显示／隐藏开关
+{ const add = $('#labAdd'), vis = $('#labVis'), syncVis = () => vis.classList.toggle('off', !labels.visible);
+  syncVis();
+  add.addEventListener('click', async () => { if (!document.body.classList.contains('local')) return; const L = await ensureLayers(); if (!L) return; const on = !add.classList.contains('on'); add.classList.toggle('on', on); L.setLabelMode(on); });
+  vis.addEventListener('click', () => { labels.setVisible(!labels.visible); syncVis(); });
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && add.classList.contains('on')) { add.classList.remove('on'); layers?.setLabelMode(false); } });
+}
