@@ -36,7 +36,7 @@
 | `node scripts/db.mjs migrate` | 对开发库应用迁移 |
 | `node scripts/db.mjs seed` | 迁移并导入公开种子（幂等） |
 | `node scripts/guard.mjs --all` | 对全部已跟踪文件运行提交守卫 |
-| `git config core.hooksPath .githooks` | 启用 pre-commit 守卫（克隆后需执行一次；CI 也会运行同一守卫） |
+| `git config core.hooksPath .githooks` | 启用 pre-commit 守卫（克隆后需执行一次；无 CI，需要全量检查时手动运行 `node scripts/guard.mjs --all`） |
 
 ## 部署与数据约束（2026-11-10 确认）
 
