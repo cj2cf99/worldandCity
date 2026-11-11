@@ -24,8 +24,8 @@ test('getNode：区分"确无子节点"与"有子节点但未加载"（FR-N2）'
   const db = await seeded();
   assert.deepEqual((await getNode(db, 'geo.fr')).children, { state: 'none' });
   assert.deepEqual((await getNode(db, 'geo.cn-sn-xa-wy')).children, { state: 'none' });
-  assert.deepEqual((await getNode(db, 'geo.cn')).children, { state: 'not_loaded', count: 1 });
-  assert.deepEqual((await getNode(db, 'geo.world')).children, { state: 'not_loaded', count: 2 });
+  assert.deepEqual((await getNode(db, 'geo.cn')).children, { state: 'not_loaded', count: 34 });
+  assert.deepEqual((await getNode(db, 'geo.world')).children, { state: 'not_loaded', count: 6 });
 });
 
 test('getNode：detail 解析为对象；不暴露 path／origin／search_norm／时间戳，也无关注类字段（FR-N3）', async () => {
@@ -46,9 +46,9 @@ test('getNode：不存在返回 E_NOT_FOUND', async () => {
 test('listChildren：按 sort_order 排序，子节点自带 children 状态', async () => {
   const db = await seeded();
   const r = await listChildren(db, 'geo.world');
-  assert.deepEqual(r.items.map((x) => x.id), ['geo.asia', 'geo.europe']);
+  assert.deepEqual(r.items.map((x) => x.id), ['geo.asia', 'geo.europe', 'geo.africa', 'geo.north-america', 'geo.south-america', 'geo.oceania']);
   assert.equal(r.next_cursor, null);
-  assert.deepEqual(r.items[1].children, { state: 'not_loaded', count: 1 });
+  assert.deepEqual(r.items[1].children, { state: 'not_loaded', count: 45 });
   const none = await listChildren(db, 'geo.fr');
   assert.deepEqual(none, { items: [], next_cursor: null });
 });
@@ -101,6 +101,8 @@ test('查询计划：子节点列表与祖先查询不做全表扫描（设计 �
 test('listByKind：列出国家；非法 kind 拒绝', async () => {
   const db = await seeded();
   const { items } = await listByKind(db, 'country');
-  assert.deepEqual(items.map((n) => n.code).sort(), ['CN', 'FR']);
+  const codes = items.map((n) => n.code);
+  assert.equal(codes.length, 196);
+  assert.ok(['CN', 'FR', 'JP', 'US', 'BR'].every((c) => codes.includes(c)));
   assert.equal(await code(listByKind(db, 'Bad Kind')), 'E_VALIDATION');
 });

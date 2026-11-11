@@ -1,6 +1,8 @@
 // 应用壳：层级导航、详情卡、深链接、纯观赏。3D 场景懒加载（设计 §8.1、§8.3）。
+import { viewZoom } from './zoom.js';
+import { FX, saveFX, applyPreset, SIM, JUMPS, nowYr } from './fx.js';
 const $ = (s) => document.querySelector(s);
-const ISO2_TO_NUM = { CN: '156', FR: '250' }; // 与 geo.js 一致；此处重复只为不在首屏壳里引入底图数据
+import { ISO2_TO_NUM } from './iso.js'; // 小表（由 scripts/build-countries.mjs 生成），首屏壳也能用，不必引入底图数据
 const ICON = {
   world: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',
   continent: '<path d="M3 18l6-10 4 6 3-4 5 8z"/>',
@@ -19,9 +21,14 @@ const ICON = {
   star: '<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>',
   system: '<circle cx="9" cy="12" r="4"/><circle cx="18" cy="8" r="1.6"/>',
   moon: '<path d="M20 14A8 8 0 1110 4a6 6 0 0010 10z"/>',
+  galactic_region: '<circle cx="12" cy="12" r="8" stroke-dasharray="2 3"/><circle cx="12" cy="12" r="2.5"/>',
+  black_hole: '<circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="9" ry="3.5"/>',
+  void: '<circle cx="12" cy="12" r="8" stroke-dasharray="1 3"/>',
+  nebula: '<path d="M5 15c0-5 5-9 9-7 4 1 6 6 3 9-3 3-8 2-12-2z"/>',
+  star_cluster: '<circle cx="8" cy="9" r="1"/><circle cx="14" cy="7" r="1"/><circle cx="16" cy="13" r="1.2"/><circle cx="10" cy="15" r="1.2"/><circle cx="12" cy="11" r="1"/>',
   district: '<path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
 };
-const KIND_ZH = { cosmic_web: '宇宙网', planet: '行星', dwarf_planet: '矮行星', asteroid_belt: '小行星带', comet_group: '彗星', comet: '彗星', shell: '球壳层', bubble: '星际泡', galactic_arm: '旋臂', superstructure: '超级结构', supercluster_complex: '超星系团复合体', supercluster: '超星系团', great_wall: '巨型长城', galaxy_group: '星系群', galaxy_cluster: '星系团', universe: '宇宙', galaxy: '星系', stellar_neighborhood: '恒星邻域', star_system: '恒星系统', star: '恒星', system: '天体系统', moon: '卫星', world: '世界', continent: '大洲', country: '国家', admin1: '一级行政区', city: '城市', district: '区' };
+const KIND_ZH = { galactic_region: '银河区域', black_hole: '黑洞', nebula: '星云', star_cluster: '星团', void: '空洞', cosmic_web: '宇宙网', planet: '行星', dwarf_planet: '矮行星', asteroid_belt: '小行星带', comet_group: '彗星', comet: '彗星', shell: '球壳层', bubble: '星际泡', galactic_arm: '旋臂', superstructure: '超级结构', supercluster_complex: '超星系团复合体', supercluster: '超星系团', great_wall: '巨型长城', galaxy_group: '星系群', galaxy_cluster: '星系团', universe: '宇宙', galaxy: '星系', stellar_neighborhood: '恒星邻域', star_system: '恒星系统', star: '恒星', system: '天体系统', moon: '卫星', world: '世界', continent: '大洲', country: '国家', admin1: '一级行政区', city: '城市', district: '区' };
 const icon = (k) => `<svg class="ic" viewBox="0 0 24 24">${ICON[k] || '<circle cx="12" cy="12" r="3"/>'}</svg>`;
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
@@ -71,19 +78,13 @@ async function toggle(id, force) {
       rec.kids = document.createElement('ul'); rec.kids.className = 'kids'; rec.li.append(rec.kids);
       items.forEach((c) => mountNode(c, rec.kids)); rec.loaded = true; rec.row.classList.remove('err');
     } catch { rec.row.classList.add('err'); rec.row.classList.remove('open'); }
-    rec.row.classList.remove('loading'); fitNav(); return;
+    rec.row.classList.remove('loading'); return;
   }
   rec.row.classList.toggle('open', open);
   if (rec.kids) rec.kids.style.display = open ? '' : 'none';
-  fitNav();
+ 
 }
-// 面板宽度随树展开自动加宽（上限为视口宽），保证名称完整、可选择；窄屏由 CSS 接管
-function fitNav() {
-  if (innerWidth <= 820) return;
-  const tree = $('#tree'), w = Math.min(innerWidth - 40, Math.max(250, tree.scrollWidth + 32));
-  document.documentElement.style.setProperty('--panel', `${Math.ceil(w)}px`);
-}
-async function revealPath(chain) { for (const id of chain) { if (!rows.has(id)) break; await toggle(id, true); } fitNav(); }
+async function revealPath(chain) { for (const id of chain) { if (!rows.has(id)) break; await toggle(id, true); } }
 
 // ---- 详情卡 ----
 function renderCard(n, anc, hasGeom) {
@@ -136,14 +137,20 @@ async function select(id, { push = false } = {}) {
     history[push ? 'pushState' : 'replaceState']({}, '', url);
   } catch (e) {
     if (e.name === 'AbortError' || seq !== navSeq) return;
+    console.error(e);
     $('#card').innerHTML = `<div class="cardhead"><h2>加载失败</h2><small>${esc(e.message)}</small></div>`;
   }
 }
 
-$('#nav .ph').addEventListener('click', () => $('#nav').classList.toggle('min'));
-if (innerWidth <= 820) $('#nav').classList.add('min'); // 窄屏默认收起，地图为主
+// 两个框体各自独立的隐藏／打开（记住上次状态；窄屏第一次默认隐藏导航，地图为主）
+{ let ui = {}; try { ui = JSON.parse(localStorage.getItem('wc.ui') || '{}'); } catch { /* 隐私模式等：用默认值 */ }
+  if (ui.nav === undefined && innerWidth <= 820) ui.nav = false;
+  const apply = () => { for (const [k, id] of [['nav', '#navBtn'], ['card', '#cardBtn']]) { const on = ui[k] !== false; document.body.classList.toggle('hide-' + k, !on); $(id).classList.toggle('off', !on); } try { localStorage.setItem('wc.ui', JSON.stringify(ui)); } catch { /* 忽略 */ } };
+  for (const [k, id] of [['nav', '#navBtn'], ['card', '#cardBtn']]) $(id).addEventListener('click', () => { ui[k] = ui[k] === false; apply(); });
+  apply(); }
 
 // ---- 手势：滚轮／触摸缩放 = 上一级／默认下一级（放大进入第一个子节点，缩小回父节点；世界处缩小回到地球仪）----
+const DEFAULT_KID = { 'geo.asia': 'geo.cn', 'geo.europe': 'geo.fr', 'geo.africa': 'geo.eg', 'geo.north-america': 'geo.us', 'geo.south-america': 'geo.br', 'geo.oceania': 'geo.au' };
 let cur = null, stepAt = 0;
 async function step(dir) {
   const now = performance.now();
@@ -151,9 +158,11 @@ async function step(dir) {
   stepAt = now;
   if (dir > 0) {
     if (cur.id === 'cel.earth-moon') return select('geo.world', { push: true }); // 向内放大回到地球
+    if (cur.id === 'geo.world' && !document.body.classList.contains('map')) return enterMap(); // 地球仪 → 先展开成世界平面图，再逐级进入
     if (cur.children.state === 'none') return;
     const { items } = await getKids(cur.id);
-    if (items[0]) select(items[0].id, { push: true });
+    const pick = items.find((k) => k.id === DEFAULT_KID[cur.id]) ?? items[0]; // 大洲默认进入一个有代表性的国家，而不是拼音第一个
+    if (pick) select(pick.id, { push: true });
   } else if (cur.parent_id) select(cur.parent_id, { push: true });
   else if (cur.id === 'geo.world') { if (document.body.classList.contains('map')) exitMap(); else select('cel.earth-moon', { push: true }); } // 地球仪处继续缩小 → 宇宙系
 }
@@ -296,3 +305,25 @@ document.addEventListener('visibilitychange', () => {
 });
 let rz = 0; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => document.body.classList.contains('local') && layers?.refresh(), 250); });
 boot().catch((e) => { $('#loader p').textContent = `启动失败：${e.message}`; console.error(e); });
+
+// 主动放大滑块（右侧竖向，-50%…+200%）；点数值复位
+{ const rng = $("#zoomRng"), val = $("#zoomVal"); const set = (v) => { rng.value = v; viewZoom.f = 1 + v / 100; document.documentElement.style.setProperty('--zf', viewZoom.f); val.textContent = (v > 0 ? "+" : "") + v + "%"; rng.style.setProperty("--p", ((v + 50) / 250) * 100 + "%"); }; rng.addEventListener("input", () => set(+rng.value)); val.addEventListener("click", () => set(0)); set(0); }
+
+// 视觉特效设置面板：参考系统（预设/标签/距离环/坐标轴/网格…）、模式、星云、辉光、闪烁、动态强度、质量（记住上次设置）
+{ const pop = $('#fxPop'), btn = $('#fxBtn'); const row = (k, name) => '<div class="r"><span>' + name + '</span><button data-k="' + k + '"></button></div>';
+  pop.innerHTML = row('preset', '参考系统') + row('labels', '标签') + row('refOn', '参考线') + row('ref.cut', '剖切观察') + row('ref.orbit', '彗星轨道演示') + row('atmo', '氛围背景') + row('dyn', '动态效果')
+    + row('band', '创生之柱波段') + row('gals', '星系分布') + row('flow', '引力流线') + row('basinRef', '流域参考轮廓') + row('moons', '卫星') + row('belt', '小行星带') + row('comets', '彗星') + row('tails', '彗尾') + row('parker', '帕克螺旋') + row('simSpeed', '模拟时间') + row('simJump', '历史日期') + row('mode', '模式') + row('rich', '色彩丰富度') + row('star', '星光亮度') + row('bloom', 'Bloom 强度') + row('glowK', '辉光强度') + row('twinkle', '闪烁') + row('spike', '星芒') + row('neb', '星云') + row('dust', '暗尘') + row('glow', '辉光') + row('wind', '太阳风') + row('auto', '镜头自动运动') + row('quality', '性能质量') + '<small>浪漫观赏模式的闪烁、星芒与呼吸是艺术效果：太空里的恒星并不会这样闪烁，也不代表天体在数秒内的真实变化；科学模式关闭它们并减弱着色。「参考线」一个开关管理所有层级的辅助线（距离环、坐标轴、网格、边界、轨道线等，拉尼亚凯亚的引力流线除外）；剖切仅为观察手段。大尺度结构的颜色是密度/族群的可视化编码，不是真实发光颜色。</small>';
+  const L3 = ['低', '标准', '高'], LBL = { mode: { view: '浪漫观赏', sci: '科学' }, preset: { view: '纯观赏', std: '标准', sci: '科学', custom: '自定义' }, labels: ['隐藏', '简洁', '全部'], atmo: ['低', '中', '高'], dyn: ['关', '标准', '增强'], quality: { auto: '自动', low: '低', mid: '中', high: '高' }, rich: L3, star: L3, bloom: L3, glowK: L3, wind: ['关', '标准', '增强'], spike: ['关', '0.3', '0.6', '0.9', '1.2'], simSpeed: ['暂停', '正常', '加速', '高速'], flow: ['关', '静态', '动态'], band: ['可见光（哈勃）', '近红外（韦伯）', '中红外（韦伯）', '艺术增强'], simJump: JUMPS.map((j) => j[0]) };
+  const MULTI = ['band', 'flow', 'dyn', 'wind', 'spike', 'rich', 'star', 'bloom', 'glowK', 'labels', 'atmo'], N = { spike: 5, labels: 3, atmo: 3, flow: 3, band: 4 };
+  const get = (k) => (k.startsWith('ref.') ? FX.ref[k.slice(4)] : k === 'simSpeed' ? SIM.speed : k === 'simJump' ? SIM.jump : FX[k]);
+  const paint = () => pop.querySelectorAll('button').forEach((b) => { const k = b.dataset.k, v = get(k); b.textContent = LBL[k] ? LBL[k][v] : v ? '开' : '关'; b.classList.toggle('on', k === 'mode' ? v === 'view' : k === 'preset' ? v !== 'custom' : k === 'quality' ? v !== 'low' : k === 'simSpeed' || k === 'simJump' ? v > 0 : MULTI.includes(k) ? (k === 'labels' ? v > 0 : v > (k === 'atmo' ? -1 : 0)) : !!v); });
+  pop.addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; const k = b.dataset.k;
+    if (k === 'preset') applyPreset({ view: 'std', std: 'sci', sci: 'view', custom: 'view' }[FX.preset]);
+    else if (k.startsWith('ref.')) { const n = k.slice(4); FX.ref[n] = FX.ref[n] ? 0 : 1; if (n !== 'cut' && n !== 'orbit') FX.preset = 'custom'; }
+    else if (k === 'simSpeed') SIM.speed = (SIM.speed + 1) % 4;
+    else if (k === 'simJump') { SIM.jump = (SIM.jump + 1) % JUMPS.length; SIM.yr = JUMPS[SIM.jump][1] ?? nowYr(); }
+    else if (k === 'refOn') { FX.refOn = FX.refOn ? 0 : 1; FX.preset = 'custom'; }
+    else if (k === 'mode') FX.mode = FX.mode === 'view' ? 'sci' : 'view'; else if (MULTI.includes(k)) { FX[k] = ((FX[k] ?? 1) + 1) % (N[k] || 3); if (k === 'labels' || k === 'atmo' || k === 'flow') FX.preset = 'custom'; }
+    else if (k === 'quality') FX.quality = { auto: 'high', high: 'mid', mid: 'low', low: 'auto' }[FX.quality]; else { FX[k] = !FX[k]; if (k === 'basinRef') FX.preset = 'custom'; }
+    saveFX(); paint(); });
+  btn.addEventListener('click', () => { pop.hidden = !pop.hidden; }); paint(); }

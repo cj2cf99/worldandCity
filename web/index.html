@@ -14,7 +14,10 @@
   <div class="brand"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg><b>World<i>&amp;</i>City</b></div>
   <div class="chips">
     <span class="chip" id="clock" title="东京时间 (Asia/Tokyo)">--:--:-- JST</span>
+    <button class="chip btn" id="navBtn" title="显示／隐藏层级导航"><svg viewBox="0 0 24 24"><path d="M4 6h16M8 12h12M12 18h8"/></svg></button>
+    <button class="chip btn" id="cardBtn" title="显示／隐藏介绍"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 10h8M8 14h5"/></svg></button>
     <button class="chip btn" id="qBtn" title="画质档位"><svg viewBox="0 0 24 24"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg><span id="qTxt">–</span></button>
+    <button class="chip btn" id="fxBtn" title="视觉特效设置"><svg viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3"/></svg></button>
     <button class="chip btn" id="zenBtn" title="纯观赏模式"><svg viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
     <button class="chip btn accent" id="backBtn" title="返回地球仪"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg><span>地球仪</span></button>
   </div>
@@ -36,6 +39,8 @@
   <svg class="el fire" viewBox="0 0 48 48"><path d="M24 5c2 8 11 11 11 22a11 11 0 01-22 0c0-5 3-7 4-11 3 2 4 4 4 6 3-4 3-10 3-17z"/></svg>
 </div>
 
+<div id="zoomBox" title="主动放大（-50% … +200%）"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M8 10.5h5M10.5 8v5"/></svg><input id="zoomRng" type="range" min="-50" max="200" step="5" value="0" aria-label="放大倍数"><button id="zoomVal" title="点击复位">0%</button></div>
+<div id="fxPop" hidden></div>
 <div id="tip"></div>
 <div id="loader"><div class="orb"></div><p>正在唤醒地球仪…</p></div>
 <script type="module" src="/main.js"></script>

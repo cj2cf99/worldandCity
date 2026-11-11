@@ -2,11 +2,12 @@
 import { feature } from 'topojson-client';
 import { geoEquirectangular, geoPath, geoContains, geoCentroid, geoBounds, geoGraticule10 } from 'd3-geo';
 import topo from 'world-atlas/countries-50m.json';
+import { ISO2_TO_NUM } from './iso.js';
 
 // 底图：world-atlas（Natural Earth 派生），来源登记于 web/SOURCES.md。去掉南极洲以保持展平后的轮廓整洁。
 export const countries = feature(topo, topo.objects.countries).features.filter((f) => f.id !== '010');
 // 节点 code(ISO 3166-1 alpha-2) → 底图数字编码；随种子国家增加而补充。
-export const ISO2_TO_NUM = { CN: '156', FR: '250' };
+export { ISO2_TO_NUM };
 const byId = new Map(countries.map((f) => [f.id, f]));
 
 const hash = (s) => [...s].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);

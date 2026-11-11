@@ -4,6 +4,7 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { viewZoom } from './zoom.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { drawLand, drawMask, countryView, hitCountry, mollweide, mollweideInv, MOLL_W, MOLL_H, FS, viewRect } from './geo.js';
 
@@ -396,7 +397,7 @@ export async function createScene(host, hooks = {}) {
     pointer: { x: 0, y: 0 }, camYaw: 0, camPitch: 0,
     swellT: 6, swellPhase: 0, swell: 0, running: false, ids: new Set(), frames: 0, acc: 0,
   };
-  let raf = 0, last = performance.now(), dist = 4.4;
+  let raf = 0, last = performance.now(), dist = 4.4, zS = viewZoom.f;
 
   function resize() {
     const w = host.clientWidth, h = host.clientHeight;
@@ -582,7 +583,7 @@ export async function createScene(host, hooks = {}) {
     }
     const fd = flatDist();
     const base = 4.4 + (fd - 4.4) * ease(seg(p, 0.08, 1));
-    dist = base * (1 - dv) + S.diveDist * dv;
+    dist = base * (1 - dv) + S.diveDist * dv; zS += (viewZoom.f - zS) * Math.min(1, dt * 6); dist /= zS; // 主动放大
     if (dv > 0.001) { camera.setViewOffset(host.clientWidth, host.clientHeight, -S.off.dx * dv, -S.off.dy * dv, host.clientWidth, host.clientHeight); S.vo = true; }
     else if (S.vo) { camera.clearViewOffset(); S.vo = false; }
     if (S.cb && !S.mapTween && Math.abs(S.dive - S.diveT) < 0.002 && Math.abs(S.p - S.pTarget) < 0.002) { const cb = S.cb; S.cb = null; cb(); }

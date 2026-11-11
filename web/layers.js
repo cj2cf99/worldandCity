@@ -7,13 +7,15 @@ import { countries, ISO2_TO_NUM, viewRect } from './geo.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 const el = (n, a = {}) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
-const ROOT = { CN: '100000' }; // 国家 code → 其下一级几何文件
+const ROOT = { CN: ['cn', '100000'], JP: ['jp', '392'] }; // 国家 code → [几何目录, 其下一级几何文件]；没有几何的国家只画底图
 const byNum = new Map(countries.map((f) => [f.id, f]));
 
 // d3-geo 的外环绕向与 RFC 7946（DataV 数据）相反：不翻转会被当成“整个球面减去该区域”
 const flip = (c) => (typeof c[0][0] === 'number' ? c.slice().reverse() : c.map(flip));
 const rewind = (fc) => { for (const f of fc.features) if (geoArea(f) > 2 * Math.PI) f.geometry.coordinates = flip(f.geometry.coordinates); return fc; };
 
+// 聚焦用：多部分区域（如东京都含远在南方的小笠原诸岛、海南省含岛礁）只取面积最大的一块，避免镜头被边远岛屿拉远
+const mainPart = (f) => (f.geometry.type === 'MultiPolygon' && f.geometry.coordinates.length > 1 ? { type: 'Feature', geometry: { type: 'Polygon', coordinates: f.geometry.coordinates.reduce((a, b) => (geoArea({ type: 'Polygon', coordinates: b }) > geoArea({ type: 'Polygon', coordinates: a }) ? b : a)) } } : f);
 const hash = (s) => [...String(s)].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
 /** 现实系自然色；dim 用于无数据／非当前层，直接降亮度（不用滤镜）。 */
 const fill = (name, dim = 0) => { const h = hash(name); return `hsl(${[92, 108, 76, 128, 52, 38][h % 6]} ${26 + (h >> 3) % 12}% ${30 + (h >> 5) % 12 - dim}%)`; };
@@ -24,9 +26,10 @@ export function createLayers({ getKids, countryIdByNum, onPick, onHover }) {
   svg.append(g);
   document.body.append(svg);
   const files = new Map();
-  const load = (code) => {
-    if (!files.has(code)) files.set(code, fetch(`/geo/cn/${code}.json`).then((r) => (r.ok && /json/.test(r.headers.get('content-type') || '') ? r.json().then(rewind) : null)).catch(() => null));
-    return files.get(code);
+  const load = (dir, code) => {
+    const key = `${dir}/${code}`;
+    if (!files.has(key)) files.set(key, fetch(`/geo/${dir}/${code}.json`).then((r) => (r.ok && /json/.test(r.headers.get('content-type') || '') ? r.json().then(rewind) : null)).catch(() => null));
+    return files.get(key);
   };
   // 先以透明状态入文档，同步刷新一次样式后移除 pre：由 opacity 过渡完成淡入（不依赖 rAF，后台标签页也能正确收尾）
   const appear = (e) => { e.classList.add('pre'); void getComputedStyle(e).opacity; e.classList.remove('pre'); };
@@ -80,15 +83,17 @@ export function createLayers({ getKids, countryIdByNum, onPick, onHover }) {
       if (!ctx || ctx.code !== country.code || ctx.W !== innerWidth || ctx.H !== innerHeight) { ctx = buildContext(country); }
       const c = ctx;
       if (!c) return { local: false };
+      svg.style.setProperty('--zo', `${(c.rect.x0 + c.rect.x1) / 2}px ${(c.rect.y0 + c.rect.y1) / 2}px`);
 
       // 逐级加载：有子节点才下钻
       const levels = [];
-      let code = ROOT[country.code] ?? null;
+      const dir = ROOT[country.code]?.[0] ?? null;
+      let code = ROOT[country.code]?.[1] ?? null;
       for (let i = chain.indexOf(country); i < chain.length && code; i++) {
         const n = chain[i];
         if (i > chain.indexOf(country)) { const f = levels.at(-1)?.fc.features.find((x) => x.properties.name === n.name); code = f?.properties.adcode ?? null; if (!code) break; }
         if (n.children.state === 'none') break;
-        const fc = await load(code);
+        const fc = await load(dir, code);
         if (!fc) break;
         levels.push({ owner: n, fc, next: chain[i + 1] });
       }
@@ -125,6 +130,7 @@ export function createLayers({ getKids, countryIdByNum, onPick, onHover }) {
         }
         keep.add(key);
       });
+      if (focus === undefined && edges.length) focus = edges.at(-1); // 选中的节点没有自己的几何（如日本的市）：聚焦到它所属的最深一级有几何的区域
       for (const [k, lg] of groups) if (!keep.has(k)) fadeOut(lg, k);
       // 勾边：宽而淡的光晕 + 清晰细线（静态，无滤镜无脉冲）；旧勾边淡出、新勾边淡入
       g.querySelectorAll(':scope > g.edges:not(.out)').forEach((e) => fadeOut(e));
@@ -136,7 +142,7 @@ export function createLayers({ getKids, countryIdByNum, onPick, onHover }) {
       // 聚焦：把目标对象的全范围放进可用区域（CSS 变换过渡，正对屏幕）
       let t = 'translate(0px,0px) scale(1)';
       if (focus) {
-        const [[bx0, by0], [bx1, by1]] = c.path.bounds(focus), r = c.rect;
+        const [[bx0, by0], [bx1, by1]] = c.path.bounds(mainPart(focus)), r = c.rect;
         const s = Math.min(48, Math.max(1, 0.8 * Math.min((r.x1 - r.x0) / (bx1 - bx0), (r.y1 - r.y0) / (by1 - by0))));
         const tx = (r.x0 + r.x1) / 2 - s * (bx0 + bx1) / 2, ty = (r.y0 + r.y1) / 2 - s * (by0 + by1) / 2;
         t = `translate(${tx}px,${ty}px) scale(${s})`;

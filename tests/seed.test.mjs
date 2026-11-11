@@ -33,7 +33,7 @@ test('导入后节点齐全，path 由父链计算，origin 全为 seed', async 
   const r = await importNodeSeed(db, SEED);
   assert.equal(r.skipped, false);
   const rows = await dump(db);
-  assert.equal(rows.length, 47); // 8 个地理节点 + 39 个宇宙系天体节点
+  assert.equal(rows.length, 944); // 834 个地理节点（世界／6 大洲／196 国／中国 34 省＋地级／日本 47 都道府县＋主要城市）+ 110 个宇宙系天体节点
   const by = Object.fromEntries(rows.map((x) => [x.id, x]));
   assert.equal(by['geo.cn-sn-xa-wy'].path, '/geo.world/geo.asia/geo.cn/geo.cn-sn/geo.cn-sn-xa/geo.cn-sn-xa-wy/');
   assert.equal(by['geo.fr'].path, '/geo.world/geo.europe/geo.fr/');
@@ -119,4 +119,37 @@ test('种子节点数据不含个人关注标记与敏感形态（PRD §0-4、§
   const nodes = JSON.stringify(JSON.parse(text).nodes);
   assert.doesNotMatch(nodes, /follow|favorite|focus|关注|收藏/i, '仅检查节点数据；说明性 _note 允许提到"不记录关注偏好"');
   assert.doesNotMatch(text, /@[\w.-]+\.\w+|\b1[3-9]\d{9}\b|-----BEGIN/);
+});
+test('版本升级时删除种子里已移除的叶子节点，不动 user 节点', async () => {
+  const db = fresh();
+  await importNodeSeed(db, SEED);
+  await db
+    .prepare("INSERT INTO wc_nodes (id,parent_id,path,realm,kind,name,origin,created_at,updated_at) VALUES ('u2','geo.fr','/geo.world/geo.europe/geo.fr/u2/','geo','city','我的节点','user',1,1)")
+    .run();
+  await withSeedFile(
+    (d) => {
+      d._version += 1;
+      d.nodes = d.nodes.filter((n) => n.id !== 'cel.hcb-wall'); // 种子里移除一个叶子节点
+    },
+    (f) => importNodeSeed(db, f),
+  );
+  const ids = (await db.prepare('SELECT id FROM wc_nodes').all()).results.map((r) => r.id);
+  assert.ok(!ids.includes('cel.hcb-wall'), '已移除的种子叶子节点被删除');
+  assert.ok(ids.includes('u2'), 'user 节点保留');
+});
+
+test('清理已移除的整条种子分支：数量超过单批上限（D1 每条语句 ≤100 个绑定参数），父子都被删净', async () => {
+  const db = fresh();
+  await importNodeSeed(db, SEED);
+  const extra = [{ id: 'geo.zz', parent_id: 'geo.asia', realm: 'geo', kind: 'country', name: '测试国', code: 'ZZ', sort_order: 999 }];
+  for (let i = 0; i < 250; i++) extra.push({ id: `geo.zz-${i}`, parent_id: 'geo.zz', realm: 'geo', kind: 'admin1', name: `测试省${i}`, sort_order: i });
+  for (let i = 0; i < 120; i++) extra.push({ id: `geo.zz-0-${i}`, parent_id: 'geo.zz-0', realm: 'geo', kind: 'city', name: `测试市${i}`, sort_order: i });
+  await withSeedFile((d) => { d._version += 1; d.nodes.push(...extra); }, (f) => importNodeSeed(db, f)); // 先导入 371 个额外节点
+  const count = async () => (await db.prepare("SELECT COUNT(*) AS n FROM wc_nodes WHERE id LIKE 'geo.zz%'").first()).n;
+  assert.equal(await count(), 371);
+  let maxBinds = 0; const prep = db.prepare.bind(db);
+  db.prepare = (sql) => { const st = prep(sql), bind = st.bind.bind(st); if (/^\s*DELETE/.test(sql)) st.bind = (...args) => { maxBinds = Math.max(maxBinds, args.length); return bind(...args); }; return st; };
+  await withSeedFile((d) => { d._version += 2; }, (f) => importNodeSeed(db, f)); // 再导入不含它们的种子
+  assert.equal(await count(), 0, '整条分支（父、子、孙）被清干净');
+  assert.ok(maxBinds > 0 && maxBinds <= 100, `每条删除语句的绑定参数 ≤100（实际最大 ${maxBinds}）`);
 });
