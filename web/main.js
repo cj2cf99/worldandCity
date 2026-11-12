@@ -222,14 +222,8 @@ function setLocal(on) {
   } else { if (b.classList.contains('local')) { b.classList.remove('local'); scene?.resume(); } scene?.dive(false); }
 }
 function exitMap() { setLocal(false); document.body.classList.remove('map'); scene?.exitMap(); history.replaceState({}, '', location.pathname); }
-
-// ---- 纯观赏：手动 + 空闲自动进入（空闲时长为默认常量，后续进入 cfg:public 的 ui.idleSeconds）----
-const IDLE_MS = 90_000, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-let idle = 0;
-const zen = (on) => document.body.classList.toggle('zen', on);
-const wake = () => { clearTimeout(idle); if (document.body.classList.contains('zen') && !wake.manual) zen(false); if (!reduce) idle = setTimeout(() => { wake.manual = false; zen(true); }, IDLE_MS); };
-['pointermove', 'keydown', 'wheel', 'touchstart'].forEach((e) => addEventListener(e, wake, { passive: true }));
-$('#zenBtn').addEventListener('click', (ev) => { ev.stopPropagation(); const on = !document.body.classList.contains('zen'); wake.manual = on; zen(on); });
+// ---- 纯观赏：手动开关（按钮再按一次退出）----
+$('#zenBtn').addEventListener('click', (ev) => { ev.stopPropagation(); document.body.classList.toggle('zen'); });
 
 // ---- 时钟（东京时间）----
 const fmt = new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Tokyo', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -265,12 +259,10 @@ async function initEarth() { // 地球侧：3D 地球仪＋局部地图图层（
   };
   scene = await createScene($('#stage'), {
     onEnter: enterMap,
-    onQuality: (q) => { $('#qTxt').textContent = q; },
     onHover: (num, x, y) => hover(num && (c => c && tri(c))(countryNodes.find((n) => ISO2_TO_NUM[n.code] === num)), x, y),
     onPick: (num) => { tip.classList.remove('on'); const c = num && countryNodes.find((n) => ISO2_TO_NUM[n.code] === num); if (c) select(c.id, { push: true, peek: true }); }, // 单击：聚焦
     onEnterCountry: (num) => { tip.classList.remove('on'); const c = countryNodes.find((n) => ISO2_TO_NUM[n.code] === num); if (c) enterOnce(c.id); }, // 双击：进入国家内部
   });
-  $('#qTxt').textContent = scene.quality();
   if (countriesP) countryNodes = (await countriesP).items;
   scene.setConfigured(countryNodes.map((n) => ISO2_TO_NUM[n.code]).filter(Boolean));
 }
@@ -331,10 +323,8 @@ async function boot() {
   await select(startId);
   if (realm === 'geo' && wantMap && !document.body.classList.contains('local')) enterMap();
   $('#loader').classList.add('done');
-  wake();
 }
 $('#backBtn').addEventListener('click', () => (realm === 'celestial' ? select('geo.world', { push: true }) : exitMap()));
-$('#qBtn').addEventListener('click', () => { if (!scene) return; const o = ['high', 'mid', 'low'], q = o[(o.indexOf(scene.quality()) + 1) % 3]; scene.setQuality(q); $('#qTxt').textContent = q; });
 document.addEventListener('visibilitychange', () => {
   const hid = document.hidden;
   hid ? (scene?.pause(), cosmos?.pause()) : (document.body.classList.contains('local') ? 0 : scene?.resume(), cosmos?.resume());
@@ -350,7 +340,7 @@ boot().catch((e) => { $('#loader p').textContent = `启动失败：${e.message}`
 // 视觉特效设置面板：参考系统（预设/标签/距离环/坐标轴/网格…）、模式、星云、辉光、闪烁、动态强度、质量（记住上次设置）
 { const pop = $('#fxPop'), btn = $('#fxBtn'); const row = (k, name) => '<div class="r"><span>' + name + '</span><button data-k="' + k + '"></button></div>';
   pop.innerHTML = row('preset', '参考系统') + row('labels', '标签') + row('refOn', '参考线') + row('ref.cut', '剖切观察') + row('ref.orbit', '彗星轨道演示') + row('atmo', '氛围背景') + row('dyn', '动态效果')
-    + row('band', '创生之柱波段') + row('gals', '星系分布') + row('flow', '引力流线') + row('basinRef', '流域参考轮廓') + row('moons', '卫星') + row('belt', '小行星带') + row('comets', '彗星') + row('tails', '彗尾') + row('parker', '帕克螺旋') + row('simSpeed', '模拟时间') + row('simJump', '历史日期') + row('mode', '模式') + row('rich', '色彩丰富度') + row('star', '星光亮度') + row('bloom', 'Bloom 强度') + row('glowK', '辉光强度') + row('twinkle', '闪烁') + row('spike', '星芒') + row('neb', '星云') + row('dust', '暗尘') + row('glow', '辉光') + row('wind', '太阳风') + row('auto', '镜头自动运动') + row('quality', '性能质量') + '<small>浪漫观赏模式的闪烁、星芒与呼吸是艺术效果：太空里的恒星并不会这样闪烁，也不代表天体在数秒内的真实变化；科学模式关闭它们并减弱着色。「参考线」一个开关管理所有层级的辅助线（距离环、坐标轴、网格、边界、轨道线等，拉尼亚凯亚的引力流线除外）；剖切仅为观察手段。大尺度结构的颜色是密度/族群的可视化编码，不是真实发光颜色。</small>';
+    + row('band', '创生之柱波段') + row('gals', '星系分布') + row('flow', '引力流线') + row('basinRef', '流域参考轮廓') + row('moons', '卫星') + row('belt', '小行星带') + row('comets', '彗星') + row('tails', '彗尾') + row('parker', '帕克螺旋') + row('simSpeed', '模拟时间') + row('simJump', '历史日期') + row('neb', '星云') + row('dust', '暗尘') + row('glow', '辉光') + row('wind', '太阳风') + row('auto', '镜头自动运动') + row('quality', '性能质量') + '<small>浪漫观赏模式的闪烁、星芒与呼吸是艺术效果：太空里的恒星并不会这样闪烁，也不代表天体在数秒内的真实变化；科学模式关闭它们并减弱着色。「参考线」一个开关管理所有层级的辅助线（距离环、坐标轴、网格、边界、轨道线等，拉尼亚凯亚的引力流线除外）；剖切仅为观察手段。大尺度结构的颜色是密度/族群的可视化编码，不是真实发光颜色。</small>';
   const L3 = ['低', '标准', '高'], LBL = { mode: { view: '浪漫观赏', sci: '科学' }, preset: { view: '纯观赏', std: '标准', sci: '科学', custom: '自定义' }, labels: ['隐藏', '简洁', '全部'], atmo: ['低', '中', '高'], dyn: ['关', '标准', '增强'], quality: { auto: '自动', low: '低', mid: '中', high: '高' }, rich: L3, star: L3, bloom: L3, glowK: L3, wind: ['关', '标准', '增强'], spike: ['关', '0.3', '0.6', '0.9', '1.2'], simSpeed: ['暂停', '正常', '加速', '高速'], flow: ['关', '静态', '动态'], band: ['可见光（哈勃）', '近红外（韦伯）', '中红外（韦伯）', '艺术增强'], simJump: JUMPS.map((j) => j[0]) };
   const MULTI = ['band', 'flow', 'dyn', 'wind', 'spike', 'rich', 'star', 'bloom', 'glowK', 'labels', 'atmo'], N = { spike: 5, labels: 3, atmo: 3, flow: 3, band: 4 };
   const get = (k) => (k.startsWith('ref.') ? FX.ref[k.slice(4)] : k === 'simSpeed' ? SIM.speed : k === 'simJump' ? SIM.jump : FX[k]);

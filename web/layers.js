@@ -3,7 +3,7 @@
 // 聚焦用 CSS 变换过渡，不逐帧同步、不用滤镜与脉冲动画（避免整屏重绘闪烁）。
 // 只有“有子节点”的节点才加载下一级几何（/geo/cn/{adcode}.json，由 scripts/fetch-geo.mjs 生成）；节点按名称匹配要素。
 import { geoConicEqualArea, geoPath, geoBounds, geoCentroid, geoArea } from 'd3-geo';
-import { countries, ISO2_TO_NUM, viewRect, mainFeature } from './geo.js';
+import { countries, loadFull, ISO2_TO_NUM, viewRect, mainFeature } from './geo.js';
 import { bindGestures } from './gesture.js';
 import { labels, typeColor, firstChar } from './labels.js';
 import { tileFor, TILE_URL, tilesAt, tileCorners, zoomForView } from './tiles.js';
@@ -11,6 +11,7 @@ import { tileFor, TILE_URL, tilesAt, tileCorners, zoomForView } from './tiles.js
 const NS = 'http://www.w3.org/2000/svg';
 const el = (n, a = {}) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
 const ROOT = { CN: ['cn', '100000'], JP: ['jp', '392'] }; // 国家 code → [几何目录, 其下一级几何文件]；没有几何的国家只画底图
+await loadFull(); // 平面地图需要精版底图（国家级以下才会进到这里）
 const byNum = new Map(countries.map((f) => [f.id, f]));
 
 // d3-geo 的外环绕向与 RFC 7946（DataV 数据）相反：不翻转会被当成“整个球面减去该区域”
@@ -37,7 +38,7 @@ export function createLayers({ getKids, countryIdByNum, countryNameByNum, onPick
   const files = new Map();
   const load = (dir, code) => {
     const key = `${dir}/${code}`;
-    if (!files.has(key)) files.set(key, fetch(`/geo/${dir}/${code}.json`).then((r) => (r.ok && /json/.test(r.headers.get('content-type') || '') ? r.json().then(rewind) : null)).catch(() => null));
+    if (!files.has(key)) files.set(key, fetch(`/geo/${dir}/${code}.json`).then((r) => (r.ok && /json/.test(r.headers.get('content-type') || '') ? r.json().then((fc) => (fc.rewound ? fc : rewind(fc))) : null)).catch(() => null));
     return files.get(key);
   };
   // 先以透明状态入文档，同步刷新一次样式后移除 pre：由 opacity 过渡完成淡入（不依赖 rAF，后台标签页也能正确收尾）
@@ -117,7 +118,7 @@ export function createLayers({ getKids, countryIdByNum, countryNameByNum, onPick
   // ---- 指定地区的现势地图底图（OSM 瓦片，见 tiles.js）：放在轮廓下面；放大／平移后按可见范围补更细一级的瓦片 ----
   let tileState = null, curT = { tx: 0, ty: 0, s: 1 }, tTimer = 0;
   const tg = el('g', { class: 'tiles' }), tgBase = el('g'), tgDetail = el('g'); tg.append(tgBase, tgDetail);
-  const attr = Object.assign(document.createElement('div'), { id: 'mapAttr', textContent: '底图 © OpenStreetMap contributors' }); document.body.append(attr);
+  const attr = Object.assign(document.createElement('div'), { id: 'mapAttr', textContent: '底图 © OpenStreetMap contributors · 日本轮廓：国土交通省 国土数値情報を加工して作成' }); document.body.append(attr);
   const tileEls = new Map(); // key → <image>
   function putTiles(group, list, c, gcj) {
     const keep = new Set(list.tiles.map((t) => `${t.z}/${t.x}/${t.y}`));

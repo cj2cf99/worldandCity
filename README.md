@@ -34,14 +34,14 @@
 |---|---|
 | `node --test` | 运行全部测试（内存库／临时目录，不改动开发库） |
 | `node scripts/db.mjs migrate` | 对开发库应用迁移 |
-| `node scripts/db.mjs seed` | 迁移并导入公开种子（幂等） |
+| `node scripts/db.mjs seed` | 迁移并导入公开种子（幂等）；对页面实际使用的运行库加 `--db data/private/worldandcity.sqlite` |
 | `node scripts/guard.mjs --all` | 对全部已跟踪文件运行提交守卫 |
 | `git config core.hooksPath .githooks` | 启用 pre-commit 守卫（克隆后需执行一次；无 CI，需要全量检查时手动运行 `node scripts/guard.mjs --all`） |
 
 ## 部署与数据约束（2026-11-10 确认）
 
 - 线上：Cloudflare D1（SQLite）存结构化数据，KV 存恒定设置，R2（私有桶）存文件。
-- 本地：开发库为仓库内的 `data/local/worldandcity-dev.sqlite`（本项目新建的空库，允许入库，只放通用／示例数据；真实数据严禁写入）。测试在内存库上运行。
+- 本地：`npm run dev` 的页面读写 `data/private/worldandcity.sqlite`（不入库，含个人标签；缺失时由下面的开发库复制）。开发库为仓库内的 `data/local/worldandcity-dev.sqlite`（本项目新建的空库，允许入库，只放通用／示例数据；真实数据严禁写入）。测试在内存库上运行。
 - 本项目不依赖、不引用、不复制任何其他项目的代码或数据文件。
 
 ## 许可证

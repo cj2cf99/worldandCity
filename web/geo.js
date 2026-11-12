@@ -1,17 +1,23 @@
 // 底图数据与投影工具。内部数据始终为经纬度（设计 §8.2）；Mollweide 只在渲染层使用，最终投影未锁定，可替换。
 import { feature } from 'topojson-client';
 import { geoEquirectangular, geoPath, geoContains, geoCentroid, geoBounds, geoGraticule10, geoArea } from 'd3-geo';
-import topo from 'world-atlas/countries-50m.json';
+import topo110 from 'world-atlas/countries-110m.json'; // 首屏用粗版（约 100 KB）；精版 50m 由 loadFull() 按需拉取
 import { ISO2_TO_NUM } from './iso.js';
 
 // 底图：world-atlas（Natural Earth 派生），来源登记于 web/SOURCES.md。去掉南极洲以保持展平后的轮廓整洁。
 // 去掉南极洲；底图里个别要素共用同一个数字编码（澳大利亚与“阿什莫尔和卡捷岛”都是 036，后者在 Map 里会顶掉澳大利亚，导致点不了、取景错）：同编码只留面积最大的一个
-const all = feature(topo, topo.objects.countries).features.filter((f) => f.id !== '010'), big = new Map();
-for (const f of all) if (f.id != null && (!big.has(f.id) || geoArea(f) > geoArea(big.get(f.id)))) big.set(f.id, f);
-export const countries = all.filter((f) => f.id == null || big.get(f.id) === f);
+const build = (topo) => {
+  const all = feature(topo, topo.objects.countries).features.filter((f) => f.id !== '010'), big = new Map();
+  for (const f of all) if (f.id != null && (!big.has(f.id) || geoArea(f) > geoArea(big.get(f.id)))) big.set(f.id, f);
+  return all.filter((f) => f.id == null || big.get(f.id) === f);
+};
+export let countries = build(topo110); // ES 实时绑定：loadFull() 完成后即为 50m 精版
 // 节点 code(ISO 3166-1 alpha-2) → 底图数字编码；随种子国家增加而补充。
 export { ISO2_TO_NUM };
-const byId = new Map(countries.map((f) => [f.id, f]));
+let byId = new Map(countries.map((f) => [f.id, f]));
+let fullP = null;
+/** 拉取 50m 精版（含 110m 缺少的小国），替换底图；多次调用只加载一次。调用方应在完成后重绘。 */
+export const loadFull = () => (fullP ??= import('world-atlas/countries-50m.json').then((m) => { countries = build(m.default); byId = new Map(countries.map((f) => [f.id, f])); }));
 
 const hash = (s) => [...s].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
 

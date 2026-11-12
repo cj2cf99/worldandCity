@@ -114,7 +114,7 @@ body.map #elem{opacity:1} body.zen #elem{opacity:0}
   #card{bottom:10px;height:15vh}
   #card .kv,#card .tags .tag:nth-child(n+3){display:none}
   #elem{display:none}
-  #qTxt,#clock{display:none}
+  #clock{display:none}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important;transition-delay:0s!important}
@@ -152,7 +152,7 @@ body.cosmic .panel{border-radius:4px;box-shadow:0 0 0 4px rgba(214,182,120,.05),
 body.cosmic.zen .panel{opacity:0;transform:translateX(-30px);pointer-events:none;transition-delay:0s}
 body.cosmic .row.sel{background:linear-gradient(90deg,rgba(226,194,126,.2),rgba(165,139,255,.1));box-shadow:inset 2px 0 var(--a)}
 body.cosmic .tag.warn{color:var(--c);border-color:rgba(255,217,160,.4)}
-body.cosmic #elem,body.cosmic #hint,body.cosmic #qBtn{display:none}
+body.cosmic #elem,body.cosmic #hint{display:none}
 body.cosmic #backBtn{display:inline-flex;animation:pop 1.2s .6s both}
 body.cosmic .brand svg{color:var(--a);filter:drop-shadow(0 0 8px var(--a))}
 body.incosmos #cstage::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 48%,transparent 52%,rgba(1,1,10,.62) 100%)}

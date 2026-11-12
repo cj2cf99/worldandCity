@@ -2,16 +2,12 @@
 // 瓦片是浏览器按需加载的普通地图图片，不进仓库；© OpenStreetMap contributors（ODbL／CC BY-SA）。
 // 中国的行政区轮廓来自高德（GCJ-02 坐标），OSM 瓦片是 WGS84：放置瓦片时把四角换算成 GCJ-02 再投影，二者才对得上。
 export const TILE_URL = (z, x, y) => `https://tile.openstreetmap.org/${z}/${x}/${y}.png`;
-// 启用底图的节点：值为 null＝用该节点自己轮廓的范围；数组＝手工给定范围 [西, 南, 东, 北]（没有自己轮廓的日本市）
-export const TILE_NODES = {
-  'geo.cn-610400': null, 'geo.cn-610426': null, 'geo.cn-610423': null,                                                                                         // 咸阳市、永寿县、泾阳县
-  'geo.cn-sn-xa': null, 'geo.cn-610102': null, 'geo.cn-610103': null, 'geo.cn-610104': null, 'geo.cn-610111': null, 'geo.cn-sn-xa-wy': null, 'geo.cn-610113': null, 'geo.cn-610117': null, // 西安市及 7 区
-  'geo.cn-320200': null, 'geo.cn-320205': null, 'geo.cn-320206': null, 'geo.cn-320211': null, 'geo.cn-320213': null, 'geo.cn-320214': null, 'geo.cn-320281': null, 'geo.cn-320282': null, // 无锡市及各区
-  'geo.cn-150100': null, 'geo.cn-150102': null, 'geo.cn-150103': null, 'geo.cn-150104': null, 'geo.cn-150105': null, 'geo.cn-150121': null, 'geo.cn-150122': null, 'geo.cn-150123': null, 'geo.cn-150124': null, 'geo.cn-150125': null, // 呼和浩特市及各区县旗
-  // 日本：埼玉市（含川口、浦和一带）、东京（全都的本岛部分）、福冈市、北九州（含对岸的下关）；其余埼玉／东京／福冈／山口的市区町村用自己的轮廓范围（见 tileFor）
+// 手工给定范围 [西, 南, 东, 北] 的节点（没有自己轮廓的日本市／都）：埼玉市（含川口、浦和一带）、东京（全都的本岛部分）、福冈市、北九州（含对岸的下关）
+const TILE_BOX = {
   'geo.jp-11-saitama': [139.5, 35.76, 139.86, 36.0], 'geo.jp-13': [138.9, 35.45, 139.95, 35.92], 'geo.jp-40-kitakyushu': [130.5, 33.7, 131.22, 34.12], 'geo.jp-40-fukuoka': [130.2, 33.45, 130.62, 33.76],
-  'geo.jp-11': null, 'geo.jp-40': null, 'geo.jp-35': null, 'geo.jp-35-shimonoseki': null,
 };
+// 其余启用底图的节点（用自己轮廓的范围）：日本埼玉／东京／福冈县及其市区町村、山口县下关；中国西安／咸阳／无锡／呼和浩特各区县
+const TILE_RULE = /^geo\.(jp-(11|13|40)(\d{3}|-|$)|jp-35(-shimonoseki)?$|cn-(6101|6104|3202|1501)\d\d$|cn-sn-xa(-wy)?$)/;
 const A = 6378245.0, EE = 0.00669342162296594323, PI = Math.PI;
 const tLat = (x, y) => { let r = -100 + 2 * x + 3 * y + 0.2 * y * y + 0.1 * x * y + 0.2 * Math.sqrt(Math.abs(x)); r += ((20 * Math.sin(6 * x * PI) + 20 * Math.sin(2 * x * PI)) * 2) / 3; r += ((20 * Math.sin(y * PI) + 40 * Math.sin((y / 3) * PI)) * 2) / 3; r += ((160 * Math.sin((y / 12) * PI) + 320 * Math.sin((y * PI) / 30)) * 2) / 3; return r; };
 const tLon = (x, y) => { let r = 300 + x + 2 * y + 0.1 * x * x + 0.1 * x * y + 0.1 * Math.sqrt(Math.abs(x)); r += ((20 * Math.sin(6 * x * PI) + 20 * Math.sin(2 * x * PI)) * 2) / 3; r += ((20 * Math.sin(x * PI) + 40 * Math.sin((x / 3) * PI)) * 2) / 3; r += ((150 * Math.sin((x / 12) * PI) + 300 * Math.sin((x / 30) * PI)) * 2) / 3; return r; };
@@ -50,5 +46,5 @@ export function tilesAt([w, s, e, n], z) {
 /** 选瓦片级别：让每块瓦片在屏幕上至少约 340 像素宽（OSM 瓦片里的街道、地名文字约 11～12 像素，放大到 1.3 倍以上，地图上的字才不小于导航菜单的 13 像素）。viewLonSpan＝屏幕宽度对应的经度跨度，W＝屏幕宽度（像素）。 */
 export const MIN_TILE_PX = 340;
 export const zoomForView = (viewLonSpan, W) => Math.floor(Math.log2(((W / MIN_TILE_PX) * 360) / Math.max(1e-6, viewLonSpan)));
-/** 节点是否启用底图：undefined＝否；null＝用自己轮廓的范围；数组＝手工范围。日本埼玉／东京／福冈／山口下关的各市区町村、西安市（6101xx）的全部区县按编号自动启用。 */
-export const tileFor = (id) => (id in TILE_NODES ? TILE_NODES[id] : /^geo\.jp-(11|13|40)(\d{3}|-)/.test(id) || /^geo\.cn-6101\d\d$/.test(id) ? null : undefined);
+/** 节点是否启用底图：undefined＝否；null＝用自己轮廓的范围；数组＝手工范围。 */
+export const tileFor = (id) => (id in TILE_BOX ? TILE_BOX[id] : TILE_RULE.test(id) ? null : undefined);

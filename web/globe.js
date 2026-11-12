@@ -7,7 +7,7 @@ import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { viewZoom } from './zoom.js';
 import { bindGestures } from './gesture.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { drawLand, drawMask, countryView, hitCountry, flatXY, flatInv, FLAT_W, FLAT_H, FS, viewRect } from './geo.js';
+import { loadFull, drawLand, drawMask, countryView, hitCountry, flatXY, flatInv, FLAT_W, FLAT_H, FS, viewRect } from './geo.js';
 
 const TAU = Math.PI * 2;
 const WATER_Y = -1 / 3; // 球内约 1/3 高度（PRD §4.1）
@@ -301,10 +301,9 @@ function buildArmillary(env) {
 // ---- 场景 ----
 export async function createScene(host, hooks = {}) {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let quality = (navigator.hardwareConcurrency || 4) <= 4 || innerWidth < 700 ? 'mid' : 'high';
+  const quality = (navigator.hardwareConcurrency || 4) <= 4 || innerWidth < 700 ? 'mid' : 'high';
   const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
-  const applyPR = () => renderer.setPixelRatio(Math.min(devicePixelRatio, quality === 'high' ? 2 : quality === 'mid' ? 1.5 : 1));
-  applyPR();
+  renderer.setPixelRatio(Math.min(devicePixelRatio, quality === 'high' ? 2 : 1.5)); // 画质档在启动时按核心数／屏宽定一次，不再运行时调整
   renderer.setClearColor(0x03040c);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.0;
@@ -370,6 +369,8 @@ export async function createScene(host, hooks = {}) {
   const landC = Object.assign(document.createElement('canvas'), { width: LW, height: LW / 2 });
   const maskC = Object.assign(document.createElement('canvas'), { width: LW, height: LW / 2 });
   drawLand(landC); drawMask(maskC, null);
+  let curMask = null; // 首屏先用 110m 粗版出图；精版到位后后台重绘（补上小国、边界更细）
+  loadFull().then(() => { drawLand(landC); landT.needsUpdate = true; drawMask(maskC, curMask); maskT.needsUpdate = true; }).catch(() => {});
   const landT = new THREE.CanvasTexture(landC); landT.colorSpace = THREE.SRGBColorSpace; landT.anisotropy = Math.min(16, renderer.capabilities.getMaxAnisotropy());
   const maskT = new THREE.CanvasTexture(maskC); maskT.anisotropy = 8;
   const earthU = { uMap: { value: landT }, uMask: { value: maskT }, uU: { value: 0 }, uTime: uni.uTime, uHasSel: { value: 0 } };
@@ -398,7 +399,7 @@ export async function createScene(host, hooks = {}) {
     dragT: -1e9, vYaw: 0, vTilt: 0, p: 0, pTarget: 0, dive: 0, diveT: 0, diveDist: 2.4, off: { dx: 0, dy: 0 }, cb: null, vo: false, baseYaw: 0.5, baseTilt: 0.18, focus: null, // 地球仪朝向
     mapView: { s: 1, cx: 0, cy: 0 }, mapTween: null, panelPx: 0, sc: 1, k: 1, maxCy: 1,
     pointer: { x: 0, y: 0 }, camYaw: 0, camPitch: 0,
-    swellT: 6, swellPhase: 0, swell: 0, running: false, ids: new Set(), frames: 0, acc: 0,
+    swellT: 6, swellPhase: 0, swell: 0, running: false, ids: new Set(),
   };
   let raf = 0, last = performance.now(), dist = 4.4, zS = viewZoom.f;
 
@@ -427,8 +428,6 @@ export async function createScene(host, hooks = {}) {
 
   // ---- 对外 API ----
   const api = {
-    quality: () => quality,
-    setQuality(q) { quality = q; applyPR(); stars.material.uniforms.uPR.value = renderer.getPixelRatio(); bloom.enabled = q !== 'low'; resize(); },
     setConfigured(numIds) { S.ids = new Set(numIds); },
     enterMap() { S.pTarget = 1; },
     /** 俯冲：地球仪转向已选国家、镜头推近、展品退场（之后由局部地图淡入接替）。 */
@@ -440,7 +439,7 @@ export async function createScene(host, hooks = {}) {
     get progress() { return S.p; },
     /** 选中国家（数字编码）或清除；center 为无独立几何的节点沿用父国家。 */
     select(numId, view, fill = 'auto') { // fill：国家范围占可用区域的比例（单击聚焦 0.5；进入国家内部 'auto'）
-      drawMask(maskC, numId); maskT.needsUpdate = true; earthU.uHasSel.value = numId ? 1 : 0;
+      curMask = numId; drawMask(maskC, numId); maskT.needsUpdate = true; earthU.uHasSel.value = numId ? 1 : 0;
       const v = view || (numId && countryView(numId));
       if (!v) { S.focus = null; marker.visible = false; tween({ s: 1, cx: 0, cy: 0 }); return false; }
       S.focus = { lon: (v.lon * Math.PI) / 180, lat: (v.lat * Math.PI) / 180 };
@@ -532,8 +531,6 @@ export async function createScene(host, hooks = {}) {
     const now = performance.now(); const dt = Math.min(0.05, (now - last) / 1000); last = now;
     const t = (uni.uTime.value += dt);
 
-    // 帧率探测：前 90 帧平均过慢则降档
-    if (S.frames < 90) { S.frames++; S.acc += dt; if (S.frames === 90 && S.acc / 90 > 0.03 && quality !== 'low') { api.setQuality(quality === 'high' ? 'mid' : 'low'); hooks.onQuality?.(quality); } }
 
     // 转场进度
     const speed = reduce ? 6 : S.pTarget > S.p ? 0.42 : 0.55;
@@ -618,9 +615,8 @@ export async function createScene(host, hooks = {}) {
     camera.lookAt(0, 0, 0);
     nebula.position.copy(camera.position);
 
-    if (bloom.enabled) { bloom.strength = 0.22 * f + 0.05; composer.render(); } else renderer.render(scene, camera);
+    bloom.strength = 0.22 * f + 0.05; composer.render();
   }
-  bloom.enabled = quality !== 'low';
   api.resume();
   return api;
 }

@@ -1,22 +1,16 @@
 // 地图标签（独立于节点树的小系统）：存在本地数据库 wc_labels（经 /api/v1/labels），页面里留一份内存副本，读同步、写即时更新再异步同步到库。
 // 每个标签记下“所在层级 + 经纬度 + 类型 + 内容”，只在创建它的那一层显示，位置按经纬度固定；经纬度是该层地图自己的坐标系（中国是高德 GCJ-02），原样存、原样读。
-// 显示/隐藏开关只是视图偏好，仍放浏览器 localStorage（wc.labels.v1.visible）。旧版存在 localStorage 里的标签，首次加载时自动迁到库里。
+// 显示/隐藏开关只是视图偏好，仍放浏览器 localStorage（wc.labels.v1.visible）。
 const KEY = 'wc.labels.v1', API = '/api/v1/labels';
-let items = [], visible = true, legacy = [];
-try { const s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s) { visible = s.visible !== false; legacy = Array.isArray(s.items) ? s.items : []; } } catch { /* 隐私模式等：用默认值 */ }
-const saveView = () => { try { localStorage.setItem(KEY, JSON.stringify({ visible, items: legacy })); } catch { /* 忽略 */ } };
+let items = [], visible = true;
+try { const s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s) visible = s.visible !== false; } catch { /* 忽略 */ }
+const saveView = () => { try { localStorage.setItem(KEY, JSON.stringify({ visible })); } catch { /* 忽略 */ } };
 const changed = () => dispatchEvent(new Event('labelschange'));
 const api = (method, path = '', body) => fetch(API + path, { method, ...(body ? { headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) } : {}) }).then((r) => { if (!r.ok) throw new Error(method + ' ' + r.status); return r.json(); });
 const sync = (p) => p.catch((e) => console.warn('标签同步失败：', e.message));
 
-// 启动：读库；有旧的本地标签就搬进库，成功后清掉本地副本
-(async () => {
-  try {
-    items = (await api('GET')).items;
-    if (legacy.length) { for (const l of legacy) items.push(await api('POST', '', l)); legacy = []; saveView(); }
-    changed();
-  } catch (e) { console.warn('标签读取失败：', e.message); }
-})();
+// 启动：读库
+api('GET').then((r) => { items = r.items; changed(); }).catch((e) => console.warn('标签读取失败：', e.message));
 
 export const TYPES = ['地点', '景点', '美食', '住宿', '交通', '工作', '活动', '其他'];
 const hash = (s) => [...String(s)].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);

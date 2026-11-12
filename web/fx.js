@@ -3,6 +3,7 @@
 const KEY = 'wc.fx.v2', DEF = { mode: 'view', neb: true, dust: true, glow: true, twinkle: true, dyn: 1, preset: 'std', band: 3, gals: 1, basinRef: 0, flow: 2, moons: 1, belt: 1, comets: 1, tails: 1, parker: 0, labels: 1, atmo: 1, refOn: 1, ref: { cut: 0, orbit: 0, xray: 0 }, quality: 'auto', rich: 1, star: 1, spike: 3, bloom: 1, glowK: 1, auto: true, wind: 1 };
 export const FX = { ...DEF };
 try { Object.assign(FX, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch { /* 隐私模式等：用默认值 */ }
+Object.assign(FX, { rich: DEF.rich, star: DEF.star, spike: DEF.spike, bloom: DEF.bloom, glowK: DEF.glowK, twinkle: DEF.twinkle }); // 这几项已从面板移除，固定为默认值（不再读取旧的本地设置）
 export const NAV = { cur: '', zsel: -1, vz: 1 }; // 当前场景与缩放选择（场景内部读取，如 AT2019qiz 的阶段跳转）
 export const FXU = { uBr: { value: 1 } }; // 星云“呼吸”幅度（着色器共享）
 export const saveFX = () => { try { localStorage.setItem(KEY, JSON.stringify(FX)); } catch { /* 忽略 */ } };
