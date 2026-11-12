@@ -21,7 +21,7 @@
 
 | 编号 | 级别 | 问题 | 证据 | 处理 |
 |---|---|---|---|---|
-| C1 | **阻断（已处理）** | 入库的开发库里被写入了 23 条个人标签（家、亲属住处等地点标注），一旦提交就会进入公开仓库 | `data/local/worldandcity-dev.sqlite` 工作区 `wc_labels` 23 行；`HEAD`／`origin/ui-f3.3-cosmos` 为 0 行（即**尚未泄露**）；守卫测试 `guard.test.mjs` 失败正是因为该表有数据、无规则——守卫起作用了 | ① 先把整份库复制到 `data/private/worldandcity.sqlite`（被 `.gitignore` 排除），并导出 `labels-export.json`／`labels-import.sql`（均在 `data/private/`）；② `vite.config.mjs` 让页面读写该私有库，缺失时才从示例库复制；③ 用 `git checkout` 把入库开发库还原为 `HEAD`（0 个标签）。复核：私有库 23 条，API 返回 23 条；入库库 0 条；守卫与测试通过 |
+| C1 | **阻断（已处理）** | 入库的开发库里被写入了 23 条个人标签（个人地点标注），一旦提交就会进入公开仓库 | `data/local/worldandcity-dev.sqlite` 工作区 `wc_labels` 23 行；`HEAD`／`origin/ui-f3.3-cosmos` 为 0 行（即**尚未泄露**）；守卫测试 `guard.test.mjs` 失败正是因为该表有数据、无规则——守卫起作用了 | ① 先把整份库复制到 `data/private/worldandcity.sqlite`（被 `.gitignore` 排除），并导出 `labels-export.json`／`labels-import.sql`（均在 `data/private/`）；② `vite.config.mjs` 让页面读写该私有库，缺失时才从示例库复制；③ 用 `git checkout` 把入库开发库还原为 `HEAD`（0 个标签）。复核：私有库 23 条，API 返回 23 条；入库库 0 条；守卫与测试通过 |
 | C2 | **阻断（上线）** | 目前不具备「上线」条件 | 仓库没有 `wrangler.jsonc`、没有 D1/KV/R2 绑定；`docs/decisions/0003` 的 B5–B8（部署、绑定、Worker 契约测试、线上种子导入）全部「未开始」；本机不安装 wrangler | **本次未上线**。需要先有可用的 Cloudflare 环境与部署步骤（见第 5 节） |
 | C3 | **高（上线前必须解决）** | 没有任何访问控制：`/api/v1/labels` 可被任何访问者读写，上线后个人标签会暴露 | `worker/api.mjs` 无认证；设计文档要求 `workers.dev` 关闭、私有访问，但尚未实现 | 上线前必须加访问保护（如 Cloudflare Access 只允许本人），并把 `labels-import.sql` 只导入受保护的线上库 |
 | C4 | **高（上线前必须解决）** | 公开托管＝再分发第三方数据，其中两类许可未确认 | `web/SOURCES.md`：中国几何来自阿里云 DataV（高德来源），「许可未明确允许再分发」；`web/public/nebula/`、`referpic/` 的图片来源与许可「未核实」（`docs/07-cosmos-freeze-status.md` §2.5） | 上线版本不要打包 `web/public/nebula/` 与 `referpic/`；中国几何要么确认许可，要么线上只给本人访问（与 C3 同一措施），要么上线时去掉。本次**没有把这些文件加入提交** |
