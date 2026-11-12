@@ -31,7 +31,7 @@ export function createWorldCityHandler({ authorize }) {
         const out = new Headers(res.headers);
         for (const [k, v] of Object.entries(headers)) out.set(k, v);
         out.delete('ETag'); out.delete('Content-Length');
-        if (file === 'index.html') out.set('Content-Security-Policy', csp);
+        if (file === 'index.html') { out.set('Content-Security-Policy', csp); out.set('Referrer-Policy', 'strict-origin-when-cross-origin'); } // OSM 瓦片政策要求请求带 Referer：页面只向外部发送站点来源（不含路径），其余响应仍为 no-referrer
         return new Response(method === 'HEAD' ? null : res.body, { status: res.status, headers: out });
       }
       if (method !== 'GET' && ((request.headers.get('origin') && request.headers.get('origin') !== url.origin) || request.headers.get('sec-fetch-site') === 'cross-site')) {

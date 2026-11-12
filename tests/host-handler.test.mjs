@@ -25,11 +25,12 @@ test('不属于本模块的路径返回 null，未登录返回 401', async () =>
 test('页面与深链接回到同一个 index.html；静态文件只放行白名单；页面带 CSP', async () => {
   const { call, fetched } = await fixture();
   for (const p of ['/worldandcity/', '/worldandcity/n/geo.jp-40']) {
-    const r = await call(p); assert.equal(r.status, 200); assert.match(r.headers.get('content-security-policy'), /default-src 'self'/); assert.equal(r.headers.get('etag'), null);
+    const r = await call(p); assert.equal(r.status, 200); assert.match(r.headers.get('content-security-policy'), /default-src 'self'/); assert.equal(r.headers.get('etag'), null); assert.equal(r.headers.get('referrer-policy'), 'strict-origin-when-cross-origin');
   }
   assert.equal(fetched.at(-1), '/worldandcity/index.html');
   assert.equal((await call('/worldandcity')).status, 308);
   assert.equal((await call('/worldandcity/assets/main-abc12345.js')).status, 200);
+  assert.equal((await call('/worldandcity/assets/main-abc12345.js')).headers.get('referrer-policy'), 'no-referrer');
   assert.equal((await call('/worldandcity/geo/jp/JP-40.json')).status, 200);
   for (const bad of ['/worldandcity/nebula/a.jpg', '/worldandcity/geo/jp/japan.topojson', '/worldandcity/assets/../x.js', '/worldandcity/n/a/b', '/worldandcity/index.html']) assert.equal((await call(bad)).status, 404, bad);
   assert.equal((await call('/worldandcity/', { method: 'POST' })).status, 405);
