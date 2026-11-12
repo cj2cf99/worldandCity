@@ -48,7 +48,7 @@ export function createLayers({ getKids, countryIdByNum, countryNameByNum, onPick
   const groups = new Map(); // 已绘制的层级组（同一国家内复用）
 
   svg.addEventListener('pointerover', (e) => { if (labelMode) return; const p = e.target.closest('path[data-name], g.lab'); onHover(p ? { name: p.dataset.name, hit: !!p.dataset.id || p.classList.contains('lab') } : null, e.clientX, e.clientY); });
-  svg.addEventListener('pointermove', (e) => { if (labelMode) return; const p = e.target.closest('path[data-name], g.lab'); if (p) onHover({ name: p.dataset.name, hit: !!p.dataset.id || p.classList.contains('lab') }, e.clientX, e.clientY); });
+  svg.addEventListener('pointermove', (e) => { if (labelMode) return; const p = e.target.closest('path[data-name], g.lab'); onHover(p ? { name: p.dataset.name, hit: !!p.dataset.id || p.classList.contains('lab') } : null, e.clientX, e.clientY); }); // 移到没有名字的地方（海面等）也要收起提示
   svg.addEventListener('pointerout', () => onHover(null));
   // 拖拽平移：超过 5 像素才算拖（不影响点选）；平移量限制在邻国底图覆盖范围内；每次换对象／换级自动回正
   let dragged = false, dn = null, pan = { x: 0, y: 0 }, focusS = 1;

@@ -29,12 +29,16 @@ function rdp(pts, tol) {
   }
   return pts.filter((_, i) => keep[i]);
 }
-// 闭合环：以最远点为界拆成两段分别简化，避免起点被强行保留成尖角
+// 闭合环：以最远点为界拆成两段分别简化，避免起点被强行保留成尖角。
+// 简化后若环的球面面积变化超过 2%（或绕向被弄反：细长环简化后可能自交），就保留原环，宁可不简化也不能画错。
+const ringArea = (r) => geoArea({ type: 'Polygon', coordinates: [r] });
 function simpRing(r, tol) {
-  if (r.length < 8) return r;
+  if (r.length < 8 || tol === 0) return r;
   let k = 0, md = -1; for (let i = 1; i < r.length - 1; i++) { const d = Math.hypot(r[i][0] - r[0][0], r[i][1] - r[0][1]); if (d > md) { md = d; k = i; } }
   const q = [...rdp(r.slice(0, k + 1), tol), ...rdp(r.slice(k), tol).slice(1)];
-  return q.length >= 4 ? q : r;
+  if (q.length < 4) return r;
+  const a0 = ringArea(r), a1 = ringArea(q);
+  return (a0 > 2 * Math.PI) === (a1 > 2 * Math.PI) && Math.abs(a1 - a0) <= 0.02 * Math.max(a0, 1e-12) ? q : r;
 }
 const simpPoly = (p, tol) => p.map((r, i) => { const q = simpRing(r, tol); return i === 0 || q.length >= 4 ? q : null; }).filter(Boolean);
 
@@ -51,6 +55,7 @@ for (const dir of ['jp', 'cn', 'adm1']) {
       if (g.type === 'Polygon') g.coordinates = simpPoly(fixPoly(g.coordinates), tol);
       else g.coordinates = g.coordinates.map((p) => simpPoly(fixPoly(p), tol));
     }
+    for (const ft of fc.features) if (ft.geometry && geoArea(ft) > 2 * Math.PI) throw new Error(`${dir}/${f} ${ft.properties?.name}：优化后绕向仍是反的，停止（不写入）`); // 自检：任何要素面积超过半个球面就是画错了
     fc.rewound = true;
     const out = JSON.stringify(fc); writeFileSync(u, out);
     before += raw.length; after += out.length;

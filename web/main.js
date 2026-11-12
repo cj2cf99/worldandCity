@@ -113,6 +113,7 @@ let enterAt = 0;
 const enterOnce = (id) => { const now = performance.now(); if (now - enterAt < 900) return; enterAt = now; select(id, { push: true }); }; // 触屏上连点／长按可能连发多个事件：900ms 内只进入一次
 let peeked = null; // 平面世界图上“单击聚焦、尚未进入”的国家节点 id
 async function select(id, { push = false, peek = false } = {}) {
+  $('#tip').classList.remove('on'); // 换对象时旧提示一定收起（被换掉的图形不会再触发 pointerout）
   const seq = ++navSeq; if (!peek) peeked = null; ac?.abort(); ac = new AbortController();
   selId = id;
   document.querySelectorAll('.row.sel').forEach((r) => r.classList.remove('sel'));
