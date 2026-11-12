@@ -1,7 +1,8 @@
 // 地图标签（独立于节点树的小系统）：存在本地数据库 wc_labels（经 /api/v1/labels），页面里留一份内存副本，读同步、写即时更新再异步同步到库。
 // 每个标签记下“所在层级 + 经纬度 + 类型 + 内容”，只在创建它的那一层显示，位置按经纬度固定；经纬度是该层地图自己的坐标系（中国是高德 GCJ-02），原样存、原样读。
 // 显示/隐藏开关只是视图偏好，仍放浏览器 localStorage（wc.labels.v1.visible）。
-const KEY = 'wc.labels.v1', API = '/api/v1/labels';
+import { API as A } from './base.js';
+const KEY = 'wc.labels.v1', API = `${A}/labels`;
 let items = [], visible = true;
 try { const s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s) visible = s.visible !== false; } catch { /* 忽略 */ }
 const saveView = () => { try { localStorage.setItem(KEY, JSON.stringify({ visible })); } catch { /* 忽略 */ } };

@@ -13,6 +13,7 @@
     "guard": "node scripts/guard.mjs --all",
     "dev": "vite",
     "build": "vite build",
+    "build:cloud": "node scripts/build-cloud.mjs",
     "hooks:install": "git config core.hooksPath .githooks"
   },
   "devDependencies": {

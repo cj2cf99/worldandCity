@@ -6,6 +6,7 @@ import { geoConicEqualArea, geoPath, geoBounds, geoCentroid, geoArea } from 'd3-
 import { countries, loadFull, ISO2_TO_NUM, viewRect, mainFeature } from './geo.js';
 import { bindGestures } from './gesture.js';
 import { labels, typeColor, firstChar } from './labels.js';
+import { BASE } from './base.js';
 import { tileFor, TILE_URL, tilesAt, tileCorners, zoomForView } from './tiles.js';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -38,7 +39,7 @@ export function createLayers({ getKids, countryIdByNum, countryNameByNum, onPick
   const files = new Map();
   const load = (dir, code) => {
     const key = `${dir}/${code}`;
-    if (!files.has(key)) files.set(key, fetch(`/geo/${dir}/${code}.json`).then((r) => (r.ok && /json/.test(r.headers.get('content-type') || '') ? r.json().then((fc) => (fc.rewound ? fc : rewind(fc))) : null)).catch(() => null));
+    if (!files.has(key)) files.set(key, fetch(`${BASE}geo/${dir}/${code}.json`).then((r) => (r.ok && /json/.test(r.headers.get('content-type') || '') ? r.json().then((fc) => (fc.rewound ? fc : rewind(fc))) : null)).catch(() => null));
     return files.get(key);
   };
   // 先以透明状态入文档，同步刷新一次样式后移除 pre：由 opacity 过渡完成淡入（不依赖 rAF，后台标签页也能正确收尾）

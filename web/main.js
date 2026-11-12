@@ -1,4 +1,5 @@
 // 应用壳：层级导航、详情卡、深链接、纯观赏。3D 场景懒加载（设计 §8.1、§8.3）。
+import { BASE, API, HOSTED } from './base.js';
 import { viewZoom } from './zoom.js';
 import { labels, askLabel, askConfirm } from './labels.js';
 import { FX, saveFX, applyPreset, SIM, JUMPS, nowYr } from './fx.js';
@@ -38,7 +39,7 @@ const inflight = new Map(), cache = new Map();
 function api(path, signal) {
   if (cache.has(path)) return Promise.resolve(cache.get(path));
   if (!inflight.has(path)) {
-    inflight.set(path, fetch(`/api/v1${path}`, { signal }).then(async (r) => {
+    inflight.set(path, fetch(`${API}${path}`, { signal }).then(async (r) => {
       const j = await r.json();
       if (!r.ok) throw new Error(j.error?.message || r.status);
       cache.set(path, j); return j;
@@ -131,13 +132,13 @@ async function select(id, { push = false, peek = false } = {}) {
       await revealPath(anc.map((a) => a.id));
       rows.get(id)?.row.classList.add('sel');
       rows.get(id)?.row.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-      history[push ? 'pushState' : 'replaceState']({}, '', `/n/${encodeURIComponent(id)}`);
+      history[push ? 'pushState' : 'replaceState']({}, '', `${BASE}n/${encodeURIComponent(id)}`);
       return;
     }
     if (peek && n.kind === 'country' && !document.body.classList.contains('local')) { // 单击：只聚焦（平移到屏幕正中、国家占约 50%），不进入国家内部
       document.body.classList.add('map'); peeked = n.id; scene?.select(num || null, null, 0.5);
       await revealPath(anc.map((a) => a.id)); rows.get(id)?.row.classList.add('sel'); rows.get(id)?.row.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-      history[push ? 'pushState' : 'replaceState']({}, '', `/n/${encodeURIComponent(id)}?s=geo`);
+      history[push ? 'pushState' : 'replaceState']({}, '', `${BASE}n/${encodeURIComponent(id)}?s=geo`);
       return;
     }
     // 显示分工：世界／大洲在地球仪上；国家及以下一律自动展开为平面地图
@@ -151,7 +152,7 @@ async function select(id, { push = false, peek = false } = {}) {
     await revealPath(anc.map((a) => a.id));
     rows.get(id)?.row.classList.add('sel');
     rows.get(id)?.row.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-    const url = `/n/${encodeURIComponent(id)}${document.body.classList.contains('map') ? '?s=geo' : ''}`;
+    const url = `${BASE}n/${encodeURIComponent(id)}${document.body.classList.contains('map') ? '?s=geo' : ''}`;
     history[push ? 'pushState' : 'replaceState']({}, '', url);
   } catch (e) {
     if (e.name === 'AbortError' || seq !== navSeq) return;
@@ -222,6 +223,9 @@ function setLocal(on) {
   } else { if (b.classList.contains('local')) { b.classList.remove('local'); scene?.resume(); } scene?.dive(false); }
 }
 function exitMap() { setLocal(false); document.body.classList.remove('map'); scene?.exitMap(); history.replaceState({}, '', location.pathname); }
+// ---- 挂进主站时：只多一个“返回首页”按钮（不加主站页头）----
+if (HOSTED) $('#homeBtn').hidden = false;
+
 // ---- 纯观赏：手动开关（按钮再按一次退出）----
 $('#zenBtn').addEventListener('click', (ev) => { ev.stopPropagation(); document.body.classList.toggle('zen'); });
 
@@ -305,7 +309,7 @@ async function switchRealm(r) {
 
 // ---- 启动 ----
 async function boot() {
-  const m = /^\/n\/([^/]+)/.exec(location.pathname);
+  const m = new RegExp(`^${BASE}n/([^/]+)`).exec(location.pathname);
   const startId = m ? decodeURIComponent(m[1]) : 'geo.world';
   const start = await getNode(startId);
   realm = start.realm;

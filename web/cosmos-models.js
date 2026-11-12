@@ -1,5 +1,6 @@
 // 宇宙系的专题模型：太阳系内的行星／卫星／小行星带／彗星、重做的本超星系团与拉尼亚凯亚，以及可观测宇宙层的彩蛋。
 // 由 cosmos.js 注入共用的着色器与几何助手（避免循环依赖）。天体走写实风格；距离与比例以画面表现优先。
+import { BASE } from './base.js';
 import { FX, SIM, SIM_RATE, NAV } from './fx.js';
 export function createModels(kit) {
   const { pulseGlow, FXU, THREE, V, TAU, rng, gauss, ease, NOISE, SPHERE_VS, ATMO_FS, SUN_FS, RING_VS, RING_FS, POINTS_VS, POINTS_FS, smat, sphereMat, sphere, circle, lineMat, pointsOf, glow, blob, PLANETS } = kit;
@@ -574,13 +575,13 @@ void main(){
     return g;
   }
   const PH_NOTE = '以公开观测图为主体的 2.5D 分层重建：环境、后层气体、前层暗尘、亮星分在不同深度，只允许小角度观察；背面与未观测的角度不做补全；亮度与颜色按观测图，只做分层与柔化';
-  const buildPillars = (uPR) => photoNebula({ src: '/nebula/pillars_hst.jpg', srcAlt: '/nebula/pillars_jwst.jpg', H: 12, fit: 4.6, camLimit: [0.3, 0.2], dust: { lo: 0.18, hi: 0.38, a: 0.5 }, star: { lo: 0.12, hi: 0.3 },
+  const buildPillars = (uPR) => photoNebula({ src: BASE + 'nebula/pillars_hst.jpg', srcAlt: BASE + 'nebula/pillars_jwst.jpg', H: 12, fit: 4.6, camLimit: [0.3, 0.2], dust: { lo: 0.18, hi: 0.38, a: 0.5 }, star: { lo: 0.12, hi: 0.3 },
     labels: (px) => [{ p: px(0.37, 0.14).add(V(0, 0.4, 0)), text: '主柱', when: () => FX.band !== 1 && FX.band !== 2 }, { p: px(0.59, 0.27).add(V(0, 0.4, 0)), text: '次柱', when: () => FX.band !== 1 && FX.band !== 2 }, { p: px(0.69, 0.42).add(V(0, 0.4, 0)), text: '小柱', when: () => FX.band !== 1 && FX.band !== 2 }],
     notes: ['创生之柱：约 6,500–7,000 光年，柱高数光年；主图为哈勃 2014 年影像，“近红外／中红外”档切换为韦伯影像（来源与署名见开发记录，待确认）', PH_NOTE, '主柱／次柱／小柱只是应用内的展示标签；NGC 6611 的年轻大质量恒星位于画面上方之外，是电离并侵蚀柱子的光源'] }, uPR);
-  const buildM20 = (uPR) => photoNebula({ src: '/nebula/m20_main.jpg', H: 12, fit: 4.6, camLimit: [0.3, 0.2], dust: { lo: 0.1, hi: 0.32 }, star: { lo: 0.1, hi: 0.26 },
+  const buildM20 = (uPR) => photoNebula({ src: BASE + 'nebula/m20_main.jpg', H: 12, fit: 4.6, camLimit: [0.3, 0.2], dust: { lo: 0.1, hi: 0.32 }, star: { lo: 0.1, hi: 0.26 },
     labels: (px) => [{ p: px(0.5, 0.97).add(V(0, 0.2, 0)), text: '三叶星云 M20 · 约 5,200 光年' }, { p: px(0.64, 0.57), text: '红色发射区', k: 'minor' }, { p: px(0.55, 0.2), text: '蓝色反射云', k: 'minor' }, { p: px(0.7, 0.53), text: '暗尘带', k: 'minor' }],
     notes: ['M20：红色发射气体、三条不规则暗尘带与上方的蓝色反射云；暗尘是对后方发光气体的吸收，不是实体', PH_NOTE] }, uPR);
-  const buildHorsehead = (uPR) => photoNebula({ src: '/nebula/horsehead_main.jpg', H: 12, fit: 4.6, camLimit: [0.3, 0.2], dust: { lo: 0.08, hi: 0.26 }, star: { lo: 0.1, hi: 0.26 }, maxS: 1024, feather: 0.14, deBox: true, zoom: { u: 0.47, v: 0.5, s: 3.2 }, detail: { src: '/nebula/horsehead_hst.jpg', u: 0.472, v: 0.497, w: 0.1, rot: -0.35 },
+  const buildHorsehead = (uPR) => photoNebula({ src: BASE + 'nebula/horsehead_main.jpg', H: 12, fit: 4.6, camLimit: [0.3, 0.2], dust: { lo: 0.08, hi: 0.26 }, star: { lo: 0.1, hi: 0.26 }, maxS: 1024, feather: 0.14, deBox: true, zoom: { u: 0.47, v: 0.5, s: 3.2 }, detail: { src: BASE + 'nebula/horsehead_hst.jpg', u: 0.472, v: 0.497, w: 0.1, rot: -0.35 },
     labels: (px) => [{ p: px(0.47, 0.6).add(V(0, -0.5, 0)), text: '马头星云 B33 · 约 1,375 光年（点击放大马头）', zoom: 0 }, { p: px(0.8, 0.5), text: 'IC 434（背景发射星云）', k: 'minor' }],
     notes: ['马头本体是冷尘埃（暗），后面的红色是发射星云 IC 434；下方连着更大的暗分子云', PH_NOTE] }, uPR);
 
