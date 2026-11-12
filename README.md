@@ -36,6 +36,7 @@
 | `node scripts/db.mjs migrate` | 对开发库应用迁移 |
 | `node scripts/db.mjs seed` | 迁移并导入公开种子（幂等）；对页面实际使用的运行库加 `--db data/private/worldandcity.sqlite` |
 | `node scripts/guard.mjs --all` | 对全部已跟踪文件运行提交守卫 |
+| `npm run build:cloud` | 生成挂进主站所需产物（dist/hosted 页面包、dist/cloud 的建表与种子 SQL）；主站用 `scripts/import-worldandcity.mjs` 导入，要求本仓库已提交 |
 | `git config core.hooksPath .githooks` | 启用 pre-commit 守卫（克隆后需执行一次；无 CI，需要全量检查时手动运行 `node scripts/guard.mjs --all`） |
 
 ## 部署与数据约束（2026-11-10 确认）
